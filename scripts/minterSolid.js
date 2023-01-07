@@ -1,39 +1,39 @@
-let week = 1;
-const emission = 98;
-const tail_emission = 2;
-const target_base = 100;
-const tail_base = 1000;
-let weekly = 20000000;
-let totalSupply = 0;
+let week = 1
+const emission = 98
+const tail_emission = 2
+const target_base = 100
+const tail_base = 1000
+let weekly = 20000000
+let totalSupply = 0
 
-function circulating_supply() {
-  return totalSupply;
+function circulating_supply () {
+  return totalSupply
 }
 
-function calculate_emission() {
-  return (weekly * emission) / target_base;
+function calculate_emission () {
+  return (weekly * emission) / target_base
 }
 
-function weekly_emission() {
-  return Math.max(calculate_emission(), circulating_emission());
+function weekly_emission () {
+  return MathDunks.max(calculate_emission(), circulating_emission())
 }
 
-function circulating_emission() {
-  return (circulating_supply() * tail_emission) / tail_base;
+function circulating_emission () {
+  return (circulating_supply() * tail_emission) / tail_base
 }
 
 while (week < 50) {
-  weekly = weekly_emission();
-  totalSupply += weekly;
+  weekly = weekly_emission()
+  totalSupply += weekly
   console.log(
-    "week: ",
+    'week: ',
     week,
-    " minted: ",
+    ' minted: ',
     weekly,
-    " weekly: ",
+    ' weekly: ',
     weekly,
-    " totalSupply: ",
+    ' totalSupply: ',
     totalSupply
-  );
-  week++;
+  )
+  week++
 }
