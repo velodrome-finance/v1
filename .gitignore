@@ -28,3 +28,7 @@ build
 scripts/xbribes
 # for verify
 Flattened.sol
+lib/openzeppelin-contracts
+lib/forge-std
+lib/LayerZero
+lib/forge-std
