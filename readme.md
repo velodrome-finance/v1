@@ -1,5 +1,11 @@
 # Velocimeter
 
+run this script after cloning the repo to get the openzeppelin contracts and foundry setup etc.
+
+https://github.com/Velocimeter/instruments/blob/master/gitsubmodules.sh
+
+
+
 Goerli
 
 
