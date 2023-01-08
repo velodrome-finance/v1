@@ -1,4 +1,5 @@
 import { task } from 'hardhat/config'
+var fs = require('fs')
 
 import optimismConfig from './constants/optimismConfig'
 import testOptimismConfig from './constants/testOptimismConfig'
@@ -19,129 +20,191 @@ task('deploy:arbTest', 'Deploys Optimism contracts').setAction(async function (
   // Load
   const [
     Velo,
-    GaugeFactory,
-    BribeFactory,
-    PairFactory,
-    Router,
-    Library,
-    VeArtProxy,
-    VotingEscrow,
-    RewardsDistributor,
-    Voter,
-    Minter,
-    VeloGovernor,
-    RedemptionReceiver,
-    MerkleClaim
+    GaugeFactory
+    // BribeFactory,
+    // PairFactory,
+    // Router,
+    // Library,
+    // VeArtProxy,
+    // VotingEscrow,
+    // RewardsDistributor,
+    // Voter,
+    // Minter,
+    // VeloGovernor,
+    // RedemptionReceiver,
+    // MerkleClaim
   ] = await Promise.all([
     ethers.getContractFactory('Velo'),
-    ethers.getContractFactory('GaugeFactory'),
-    ethers.getContractFactory('BribeFactory'),
-    ethers.getContractFactory('PairFactory'),
-    ethers.getContractFactory('Router'),
-    ethers.getContractFactory('VelodromeLibrary'),
-    ethers.getContractFactory('VeArtProxy'),
-    ethers.getContractFactory('VotingEscrow'),
-    ethers.getContractFactory('RewardsDistributor'),
-    ethers.getContractFactory('Voter'),
-    ethers.getContractFactory('Minter'),
-    ethers.getContractFactory('VeloGovernor'),
-    ethers.getContractFactory('RedemptionReceiver'),
-    ethers.getContractFactory('MerkleClaim')
+    ethers.getContractFactory('GaugeFactory')
+    // ethers.getContractFactory('BribeFactory'),
+    // ethers.getContractFactory('PairFactory'),
+    // ethers.getContractFactory('Router'),
+    // ethers.getContractFactory('VelodromeLibrary'),
+    // ethers.getContractFactory('VeArtProxy'),
+    // ethers.getContractFactory('VotingEscrow'),
+    // ethers.getContractFactory('RewardsDistributor'),
+    // ethers.getContractFactory('Voter'),
+    // ethers.getContractFactory('Minter'),
+    // ethers.getContractFactory('VeloGovernor'),
+    // ethers.getContractFactory('RedemptionReceiver'),
+    // ethers.getContractFactory('MerkleClaim')
   ])
+
+  //WIP wait for 5 block transactions to ensure deployment before verifying
+  // https://stackoverflow.com/questions/72916701/hardhat-compile-deploy-and-verify-in-a-single-script
+  // https://github.com/profullstackdeveloper/contract-deploy-verify-hardhat
+  // shows how to save deployments and verify but for a single contract only... Need to find a better example to loop through them all save to /deployments and then verify...
+  // await Promise.all.deployTransaction.wait(5)
+
+  // //verify
+
+  // await hre.run('verify:verify', {
+  //   address: velo.address,
+  //   contract: 'contracts/Velo.sol:MyContract', //Filename.sol:ClassName
+  //   constructorArguments: [arg1, arg2, arg3]
+  // })
+
+  // WIP ^^
 
   const velo = await Velo.deploy()
   await velo.deployed()
   console.log('Velo deployed to: ', velo.address)
 
+  await hre.run('verify:verify', {
+    address: velo.address,
+    contract: 'contracts/Velo.sol:Velo', //Filename.sol:ClassName
+    constructorArguments: []
+  })
+
+  await velo.deployed()
+  const name = await velo.name()
+  console.log('dunksname: ', name)
+
+  const temp1 = {
+    [name]: velo.address
+  }
+  const json1 = JSON.stringify(temp1)
+  console.log('result of json is ', json1)
+  fs.writeFileSync('contracts/deployments/veloAddress.json', json1, err => {
+    if (err) {
+      console.log('ERROR! while creating file: ', err)
+    } else {
+      console.log('result is ', json1)
+    }
+  })
+
   const gaugeFactory = await GaugeFactory.deploy()
   await gaugeFactory.deployed()
   console.log('GaugeFactory deployed to: ', gaugeFactory.address)
 
-  const bribeFactory = await BribeFactory.deploy()
-  await bribeFactory.deployed()
-  console.log('BribeFactory deployed to: ', bribeFactory.address)
+  await hre.run('verify:verify', {
+    address: gaugeFactory.address,
+    contract: 'contracts/factories/GaugeFactory.sol:GaugeFactory', //Filename.sol:ClassName
+    constructorArguments: []
+  })
 
-  const pairFactory = await PairFactory.deploy()
-  await pairFactory.deployed()
-  console.log('PairFactory deployed to: ', pairFactory.address)
+  await gaugeFactory.deployed()
+  const name1 = await gaugeFactory.name()
+  console.log('dunksname: ', name)
 
-  const router = await Router.deploy(pairFactory.address, OP_CONFIG.WETH)
-  await router.deployed()
-  console.log('Router deployed to: ', router.address)
-  console.log('Args: ', pairFactory.address, OP_CONFIG.WETH, '\n')
+  const temp = {
+    [name1]: gaugeFactory.address
+  }
+  const json = JSON.stringify(temp)
+  console.log('result of json is ', json)
+  fs.writeFileSync('contracts/deployments/veloAddress.json', json, err => {
+    if (err) {
+      console.log('ERROR! while creating file: ', err)
+    } else {
+      console.log('result is ', json)
+    }
+  })
 
-  const library = await Library.deploy(router.address)
-  await library.deployed()
-  console.log('VelodromeLibrary deployed to: ', library.address)
-  console.log('Args: ', router.address, '\n')
+  // const bribeFactory = await BribeFactory.deploy()
+  // await bribeFactory.deployed()
+  // console.log('BribeFactory deployed to: ', bribeFactory.address)
 
-  const artProxy = await VeArtProxy.deploy()
-  await artProxy.deployed()
-  console.log('VeArtProxy deployed to: ', artProxy.address)
+  // const pairFactory = await PairFactory.deploy()
+  // await pairFactory.deployed()
+  // console.log('PairFactory deployed to: ', pairFactory.address)
 
-  const escrow = await VotingEscrow.deploy(velo.address, artProxy.address)
-  await escrow.deployed()
-  console.log('VotingEscrow deployed to: ', escrow.address)
-  console.log('Args: ', velo.address, artProxy.address, '\n')
+  // const router = await Router.deploy(pairFactory.address, OP_CONFIG.WETH)
+  // await router.deployed()
+  // console.log('Router deployed to: ', router.address)
+  // console.log('Args: ', pairFactory.address, OP_CONFIG.WETH, '\n')
 
-  const distributor = await RewardsDistributor.deploy(escrow.address)
-  await distributor.deployed()
-  console.log('RewardsDistributor deployed to: ', distributor.address)
-  console.log('Args: ', escrow.address, '\n')
+  // const library = await Library.deploy(router.address)
+  // await library.deployed()
+  // console.log('VelodromeLibrary deployed to: ', library.address)
+  // console.log('Args: ', router.address, '\n')
 
-  const voter = await Voter.deploy(
-    escrow.address,
-    pairFactory.address,
-    gaugeFactory.address,
-    bribeFactory.address
-  )
-  await voter.deployed()
-  console.log('Voter deployed to: ', voter.address)
-  console.log(
-    'Args: ',
-    escrow.address,
-    pairFactory.address,
-    gaugeFactory.address,
-    bribeFactory.address,
-    '\n'
-  )
+  // const artProxy = await VeArtProxy.deploy()
+  // await artProxy.deployed()
+  // console.log('VeArtProxy deployed to: ', artProxy.address)
 
-  const minter = await Minter.deploy(
-    voter.address,
-    escrow.address,
-    distributor.address
-  )
-  await minter.deployed()
-  console.log('Minter deployed to: ', minter.address)
-  console.log(
-    'Args: ',
-    voter.address,
-    escrow.address,
-    distributor.address,
-    '\n'
-  )
+  // const escrow = await VotingEscrow.deploy(velo.address, artProxy.address)
+  // await escrow.deployed()
+  // console.log('VotingEscrow deployed to: ', escrow.address)
+  // console.log('Args: ', velo.address, artProxy.address, '\n')
 
-  const receiver = await RedemptionReceiver.deploy(
-    OP_CONFIG.USDC,
-    velo.address,
-    FTM_CONFIG.lzChainId,
-    OP_CONFIG.lzEndpoint
-  )
-  await receiver.deployed()
-  console.log('RedemptionReceiver deployed to: ', receiver.address)
-  console.log(
-    'Args: ',
-    OP_CONFIG.USDC,
-    velo.address,
-    FTM_CONFIG.lzChainId,
-    OP_CONFIG.lzEndpoint,
-    '\n'
-  )
+  // const distributor = await RewardsDistributor.deploy(escrow.address)
+  // await distributor.deployed()
+  // console.log('RewardsDistributor deployed to: ', distributor.address)
+  // console.log('Args: ', escrow.address, '\n')
 
-  const governor = await VeloGovernor.deploy(escrow.address)
-  await governor.deployed()
-  console.log('VeloGovernor deployed to: ', governor.address)
-  console.log('Args: ', escrow.address, '\n')
+  // const voter = await Voter.deploy(
+  //   escrow.address,
+  //   pairFactory.address,
+  //   gaugeFactory.address,
+  //   bribeFactory.address
+  // )
+  // await voter.deployed()
+  // console.log('Voter deployed to: ', voter.address)
+  // console.log(
+  //   'Args: ',
+  //   escrow.address,
+  //   pairFactory.address,
+  //   gaugeFactory.address,
+  //   bribeFactory.address,
+  //   '\n'
+  // )
+
+  // const minter = await Minter.deploy(
+  //   voter.address,
+  //   escrow.address,
+  //   distributor.address
+  // )
+  // await minter.deployed()
+  // console.log('Minter deployed to: ', minter.address)
+  // console.log(
+  //   'Args: ',
+  //   voter.address,
+  //   escrow.address,
+  //   distributor.address,
+  //   '\n'
+  // )
+
+  // const receiver = await RedemptionReceiver.deploy(
+  //   OP_CONFIG.USDC,
+  //   velo.address,
+  //   FTM_CONFIG.lzChainId,
+  //   OP_CONFIG.lzEndpoint
+  // )
+  // await receiver.deployed()
+  // console.log('RedemptionReceiver deployed to: ', receiver.address)
+  // console.log(
+  //   'Args: ',
+  //   OP_CONFIG.USDC,
+  //   velo.address,
+  //   FTM_CONFIG.lzChainId,
+  //   OP_CONFIG.lzEndpoint,
+  //   '\n'
+  // )
+
+  // const governor = await VeloGovernor.deploy(escrow.address)
+  // await governor.deployed()
+  // console.log('VeloGovernor deployed to: ', governor.address)
+  // console.log('Args: ', escrow.address, '\n')
 
   // Airdrop
   // const claim = await MerkleClaim.deploy(velo.address, OP_CONFIG.merkleRoot)
@@ -159,49 +222,55 @@ task('deploy:arbTest', 'Deploys Optimism contracts').setAction(async function (
   // await velo.setMerkleClaim(claim.address)
   // console.log('MerkleClaim set')
 
-  await velo.setMinter(minter.address)
-  console.log('Minter set')
+  // await velo.setMinter(minter.address)
+  // console.log('Minter set')
 
-  await pairFactory.setPauser(OP_CONFIG.teamMultisig)
-  console.log('Pauser set')
+  // await pairFactory.setPauser(OP_CONFIG.teamMultisig)
+  // console.log('Pauser set')
 
-  await escrow.setVoter(voter.address)
-  console.log('Voter set')
+  // await escrow.setVoter(voter.address)
+  // console.log(
+  //   'Voter set',
+  //   'voter address: ',
+  //   voter.address,
+  //   'escrow address: ',
+  //   escrow.address
+  // )
 
-  await escrow.setTeam(OP_CONFIG.teamMultisig)
-  console.log('Team set for escrow')
+  // await escrow.setTeam(OP_CONFIG.teamMultisig)
+  // console.log('Team set for escrow')
 
-  await voter.setGovernor(OP_CONFIG.teamMultisig)
-  console.log('Governor set')
+  // await voter.setGovernor(OP_CONFIG.teamMultisig)
+  // console.log('Governor set')
 
-  await voter.setEmergencyCouncil(OP_CONFIG.teamMultisig)
-  console.log('Emergency Council set')
+  // await voter.setEmergencyCouncil(OP_CONFIG.teamMultisig)
+  // console.log('Emergency Council set')
 
-  await distributor.setDepositor(minter.address)
-  console.log('Depositor set')
+  // await distributor.setDepositor(minter.address)
+  // console.log('Depositor set')
 
-  await receiver.setTeam(OP_CONFIG.teamMultisig)
-  console.log('Team set for receiver')
+  // await receiver.setTeam(OP_CONFIG.teamMultisig)
+  // console.log('Team set for receiver')
 
-  await governor.setTeam(OP_CONFIG.teamMultisig)
-  console.log('Team set for governor')
+  // await governor.setTeam(OP_CONFIG.teamMultisig)
+  // console.log('Team set for governor')
 
-  // Whitelist
-  const nativeToken = [velo.address]
-  const tokenWhitelist = nativeToken.concat(OP_CONFIG.tokenWhitelist)
-  await voter.initialize(tokenWhitelist, minter.address)
-  console.log('Whitelist set')
+  // // Whitelist
+  // const nativeToken = [velo.address]
+  // const tokenWhitelist = nativeToken.concat(OP_CONFIG.tokenWhitelist)
+  // await voter.initialize(tokenWhitelist, minter.address)
+  // console.log('Whitelist set')
 
-  // Initial veVELO distro
-  await minter.initialize(
-    OP_CONFIG.partnerAddrs,
-    OP_CONFIG.partnerAmts,
-    OP_CONFIG.partnerMax
-  )
-  console.log('veVELO distributed')
+  // // Initial veVELO distro
+  // await minter.initialize(
+  //   OP_CONFIG.partnerAddrs,
+  //   OP_CONFIG.partnerAmts,
+  //   OP_CONFIG.partnerMax
+  // )
+  // console.log('veVELO distributed')
 
-  await minter.setTeam(OP_CONFIG.teamMultisig)
-  console.log('Team set for minter')
+  // await minter.setTeam(OP_CONFIG.teamMultisig)
+  // console.log('Team set for minter')
 
   console.log('Arbitrum Goerli Velocimeter Instruments deployed')
 })

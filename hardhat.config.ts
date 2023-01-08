@@ -4,6 +4,7 @@ import '@nomiclabs/hardhat-waffle'
 import '@typechain/hardhat'
 import 'hardhat-preprocessor'
 import 'hardhat-abi-exporter'
+import '@cartesi/hardhat-verify-deployments'
 
 import './tasks/accounts'
 import './tasks/deploy'
@@ -92,7 +93,8 @@ const config: HardhatUserConfig = {
       ftmTestnet: process.env.FTM_SCAN_API_KEY!,
       optimisticEthereum: process.env.OP_SCAN_API_KEY!,
       optimisticKovan: process.env.OP_SCAN_API_KEY!,
-      arbitrum: process.env.ARB_SCAN_API_KEY!
+      arbitrum: process.env.ARB_SCAN_API_KEY!,
+      arbitrumGoerli: process.env.ARB_SCAN_API_KEY!
     }
   }
 }
