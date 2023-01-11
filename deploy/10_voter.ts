@@ -21,7 +21,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       bribeFactory.address,
     ],
     log: true,
+    skipIfAlreadyDeployed: true,
   });
 };
 export default func;
 func.tags = ["Voter"];
+func.id = "voter";

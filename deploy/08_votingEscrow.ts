@@ -14,7 +14,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     from: deployer,
     args: [velo.address, veArtProxy.address],
     log: true,
+    skipIfAlreadyDeployed: true,
   });
 };
 export default func;
 func.tags = ["VotingEscrow"];
+func.id = "votingEscrow";

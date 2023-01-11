@@ -15,7 +15,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     from: deployer,
     args: [voter.address, escrow.address, dist.address],
     log: true,
+    skipIfAlreadyDeployed: true,
   });
 };
 export default func;
 func.tags = ["Minter"];
+func.id = "minter";

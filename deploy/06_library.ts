@@ -13,7 +13,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     from: deployer,
     args: [router.address],
     log: true,
+    skipIfAlreadyDeployed: true,
   });
 };
 export default func;
 func.tags = ["VelodromeLibrary"];
+func.id = "velodromeLibrary";

@@ -17,7 +17,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     from: deployer,
     args: [velo.address, ARB_TEST_CONFIG.merkleRoot],
     log: true,
+    skipIfAlreadyDeployed: true,
   });
 };
 export default func;
 func.tags = ["MerkleClaim"];
+func.id = "merkleClaim";

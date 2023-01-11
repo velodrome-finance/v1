@@ -24,7 +24,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       ARB_TEST_CONFIG.lzEndpoint,
     ],
     log: true,
+    skipIfAlreadyDeployed: true,
   });
 };
 export default func;
 func.tags = ["RedemptionReceiver"];
+func.id = "redemptionReceiver";
