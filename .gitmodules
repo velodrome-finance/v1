@@ -13,3 +13,7 @@
 [submodule "lib/LayerZero"]
 	path = lib/LayerZero
 	url = https://github.com/LayerZero-Labs/LayerZero
+[submodule "lib\\forge-std"]
+	branch = v1.2.0
+[submodule "lib\\openzeppelin-contracts"]
+	branch = v4.8.0
