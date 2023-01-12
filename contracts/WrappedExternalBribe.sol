@@ -103,46 +103,36 @@ contract WrappedExternalBribe {
     }
 
     function earned(address token, uint tokenId) public view returns (uint) {
-        uint _startTimestamp = lastEarn[token][tokenId];
         if (underlying_bribe.numCheckpoints(tokenId) == 0) {
             return 0;
         }
 
-        uint _startIndex = underlying_bribe.getPriorBalanceIndex(tokenId, _startTimestamp);
-        uint _endIndex = underlying_bribe.numCheckpoints(tokenId)-1;
-
         uint reward = 0;
-        // you only earn once per epoch (after it's over)
-        RewardCheckpoint memory prevRewards;
-        prevRewards.timestamp = _bribeStart(_startTimestamp);
-        uint _prevTs = 0;
-        uint _prevBal = 0;
-        uint _prevSupply = 1;
+        uint _ts = 0;
+        uint _bal = 0;
+        uint _supply = 1;
+        uint _index = 0;
+        uint _currTs = _bribeStart(lastEarn[token][tokenId]); // take epoch last claimed in as starting point
 
+        _index = underlying_bribe.getPriorBalanceIndex(tokenId, _currTs);
+        (_ts, _bal) = underlying_bribe.checkpoints(tokenId,_index);
+        // accounts for case where lastEarn is before first checkpoint
+        _currTs = Math.max(_currTs, _bribeStart(_ts));
 
-        if (_endIndex > 0) {
-            for (uint i = _startIndex; i <= _endIndex - 1; i++) {
-                (_prevTs, _prevBal) = underlying_bribe.checkpoints(tokenId,i);
-                uint _nextEpochStart = _bribeStart(_prevTs);
-                // check that you've earned it
-                // this won't happen until a week has passed
-                if (_nextEpochStart > prevRewards.timestamp) {
-                  reward += prevRewards.balance;
-                }
+        // get epochs between current epoch and first checkpoint in same epoch as last claim
+        uint numEpochs = (_bribeStart(block.timestamp) - _currTs) / DURATION;
 
-                prevRewards.timestamp = _nextEpochStart;
-                (, _prevSupply) = underlying_bribe.supplyCheckpoints(underlying_bribe.getPriorSupplyIndex(_nextEpochStart + DURATION));
-                prevRewards.balance = _prevBal * tokenRewardsPerEpoch[token][_nextEpochStart] / _prevSupply;
+        if (numEpochs > 0) {
+            for (uint256 i = 0; i < numEpochs; i++) {
+                // get index of last checkpoint in this epoch
+                _index = underlying_bribe.getPriorBalanceIndex(tokenId, _currTs + DURATION);
+                // get checkpoint in this epoch
+                (_ts, _bal) = underlying_bribe.checkpoints(tokenId,_index);
+                // get supply of last checkpoint in this epoch
+                (, _supply) = underlying_bribe.supplyCheckpoints(underlying_bribe.getPriorSupplyIndex(_currTs + DURATION));
+                reward += _bal * tokenRewardsPerEpoch[token][_currTs] / _supply;
+                _currTs += DURATION;
             }
-        }
-
-        (_prevTs, _prevBal) = underlying_bribe.checkpoints(tokenId,_endIndex);
-        uint _lastEpochStart = _bribeStart(_prevTs);
-        uint _lastEpochEnd = _lastEpochStart + DURATION;
-
-        if (block.timestamp > _lastEpochEnd && _startTimestamp < _lastEpochEnd) {
-            (, _prevSupply) = underlying_bribe.supplyCheckpoints(underlying_bribe.getPriorSupplyIndex(_lastEpochEnd));
-            reward += _prevBal * tokenRewardsPerEpoch[token][_lastEpochStart] / _prevSupply;
         }
 
         return reward;

@@ -203,8 +203,9 @@ contract WashTradeTest is BaseTest {
         console2.log(bribe3.earned(address(FRAX), 1));
         console2.log(FRAX.balanceOf(address(owner)));
         console2.log(FRAX.balanceOf(address(bribe3)));
-        bribe3.batchRewardPerToken(address(FRAX), 200);
-        bribe3.batchRewardPerToken(address(DAI), 200);
+        // as we ported code from external bribe, we don't have this functions
+        // bribe3.batchRewardPerToken(address(FRAX), 200);
+        // bribe3.batchRewardPerToken(address(DAI), 200);
         address[] memory tokens = new address[](2);
         tokens[0] = address(FRAX);
         tokens[1] = address(DAI);

@@ -59,7 +59,7 @@ contract PairTest is BaseTest {
 
     function votingEscrowViews() public {
         increaseLock();
-        
+
         uint256 block_ = escrow.block_number();
         assertEq(escrow.balanceOfAtNFT(1, block_), escrow.balanceOfNFT(1));
         assertEq(escrow.totalSupplyAt(block_), escrow.totalSupply());
@@ -446,7 +446,7 @@ contract PairTest is BaseTest {
 
     function gaugePokeHacking() public {
         voteHacking();
-        
+
         assertEq(voter.usedWeights(1), 0);
         assertEq(voter.votes(1, address(pair)), 0);
         voter.poke(1);
@@ -456,7 +456,7 @@ contract PairTest is BaseTest {
 
     function gaugeVoteAndBribeBalanceOf() public {
         gaugePokeHacking();
-        
+
         address[] memory pools = new address[](2);
         pools[0] = address(pair);
         pools[1] = address(pair2);

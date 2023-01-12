@@ -211,42 +211,38 @@ contract ExternalBribe is IBribe {
     }
 
     function earned(address token, uint tokenId) public view returns (uint) {
-        uint _startTimestamp = lastEarn[token][tokenId];
         if (numCheckpoints[tokenId] == 0) {
             return 0;
         }
 
-        uint _startIndex = getPriorBalanceIndex(tokenId, _startTimestamp);
-        uint _endIndex = numCheckpoints[tokenId]-1;
-
         uint reward = 0;
-        // you only earn once per epoch (after it's over)
-        Checkpoint memory prevRewards; // reuse struct to avoid stack too deep
-        prevRewards.timestamp = _bribeStart(_startTimestamp);
-        uint _prevSupply = 1;
+        uint _ts = 0;
+        uint _bal = 0;
+        uint _supply = 1;
+        uint _index = 0;
+        uint _currTs = _bribeStart(lastEarn[token][tokenId]); // take epoch last claimed in as starting point
 
-        if (_endIndex > 0) {
-            for (uint i = _startIndex; i <= _endIndex - 1; i++) {
-                Checkpoint memory cp0 = checkpoints[tokenId][i];
-                uint _nextEpochStart = _bribeStart(cp0.timestamp);
-                // check that you've earned it
-                // this won't happen until a week has passed
-                if (_nextEpochStart > prevRewards.timestamp) {
-                  reward += prevRewards.balanceOf;
-                }
+        _index = getPriorBalanceIndex(tokenId, _currTs);
+        _ts = checkpoints[tokenId][_index].timestamp;
+        _bal = checkpoints[tokenId][_index].balanceOf;
+        // accounts for case where lastEarn is before first checkpoint
+        _currTs = Math.max(_currTs, _bribeStart(_ts));
 
-                prevRewards.timestamp = _nextEpochStart;
-                _prevSupply = supplyCheckpoints[getPriorSupplyIndex(_nextEpochStart + DURATION)].supply;
-                prevRewards.balanceOf = cp0.balanceOf * tokenRewardsPerEpoch[token][_nextEpochStart] / _prevSupply;
+        // get epochs between current epoch and first checkpoint in same epoch as last claim
+        uint numEpochs = (_bribeStart(block.timestamp) - _currTs) / DURATION;
+
+        if (numEpochs > 0) {
+            for (uint256 i = 0; i < numEpochs; i++) {
+                // get index of last checkpoint in this epoch
+                _index = getPriorBalanceIndex(tokenId, _currTs + DURATION);
+                // get checkpoint in this epoch
+                _ts = checkpoints[tokenId][_index].timestamp;
+                _bal = checkpoints[tokenId][_index].balanceOf;
+                // get supply of last checkpoint in this epoch
+                _supply = supplyCheckpoints[getPriorSupplyIndex(_currTs + DURATION)].supply;
+                reward += _bal * tokenRewardsPerEpoch[token][_currTs] / _supply;
+                _currTs += DURATION;
             }
-        }
-
-        Checkpoint memory cp = checkpoints[tokenId][_endIndex];
-        uint _lastEpochStart = _bribeStart(cp.timestamp);
-        uint _lastEpochEnd = _lastEpochStart + DURATION;
-
-        if (block.timestamp > _lastEpochEnd) {
-          reward += cp.balanceOf * tokenRewardsPerEpoch[token][_lastEpochStart] / supplyCheckpoints[getPriorSupplyIndex(_lastEpochEnd)].supply;
         }
 
         return reward;
@@ -285,8 +281,8 @@ contract ExternalBribe is IBribe {
     function notifyRewardAmount(address token, uint amount) external lock {
         require(amount > 0);
         if (!isReward[token]) {
-          require(IVoter(voter).isWhitelisted(token), "bribe tokens must be whitelisted");
-          require(rewards.length < MAX_REWARD_TOKENS, "too many rewards tokens");
+            require(IVoter(voter).isWhitelisted(token), "bribe tokens must be whitelisted");
+            require(rewards.length < MAX_REWARD_TOKENS, "too many rewards tokens");
         }
         // bribes kick in at the start of next bribe period
         uint adjustedTstamp = getEpochStart(block.timestamp);
