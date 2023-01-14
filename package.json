@@ -5,6 +5,9 @@
   "directories": {
     "lib": "lib"
   },
+  "scripts": {
+    "verify": "npx hardhat --network arbitrumGoerli etherscan-verify --solc-input --sleep"
+  },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "yarn:hardhat-deploy-ethers",
     "@nomiclabs/hardhat-etherscan": "^3.1.4",

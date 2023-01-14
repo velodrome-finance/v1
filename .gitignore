@@ -1,6 +1,6 @@
 # for verify
 args.js 
-
+/contracts/deploy/
 .env
 
 # Foundry
@@ -32,3 +32,4 @@ lib/openzeppelin-contracts
 lib/forge-std
 lib/LayerZero
 lib/forge-std
+deployments/arbitrumGoerli/solcInputs/
