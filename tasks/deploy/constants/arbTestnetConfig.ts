@@ -12,26 +12,27 @@ const TWENTY_MILLION = ethers.BigNumber.from('20')
   .mul(TOKEN_DECIMALS)
 const PARTNER_MAX = ethers.BigNumber.from('78').mul(MILLION).mul(TOKEN_DECIMALS)
 
-const TEAM_MULTISIG = '0xb074ec6c37659525EEf2Fb44478077901F878012'
-const TEAM_EOA = '0xe247340f06FCB7eb904F16a48C548221375b5b96'
+const TEAM_MULTISIG = '0x069e85D4F1010DD961897dC8C095FBB5FF297434'
+const TEAM_EOA = '0x069e85D4F1010DD961897dC8C095FBB5FF297434'
 
-const arbTestnetConfig = {
+const arbHardhatConfig = {
   // Chain const
-  lzChainId: 11,
+  lzChainId: 110,
   lzEndpoint: '0x3c2269811836af69497E5F486A85D7316753cf62',
 
   // Tokens
-  WETH: '0x4200000000000000000000000000000000000006',
-  USDC: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
+  WETH: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83', // updated by dunks w/ arb agor WETH
+  USDC: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8', //TODO
 
   // Addresses
   teamEOA: TEAM_EOA,
   teamMultisig: TEAM_MULTISIG,
-  emergencyCouncil: '0xcC2D01030eC2cd187346F70bFc483F24488C32E8',
+  emergencyCouncil: '0x069e85D4F1010DD961897dC8C095FBB5FF297434',
 
   merkleRoot:
     '0xbb99a09fb3b8499385659e82a8da93596dd07082fe86981ec06c83181dee489f',
   tokenWhitelist: [
+    // todo update whitelist with actual goerli tokens
     '0x4200000000000000000000000000000000000042', // OP
     '0x4200000000000000000000000000000000000006', // WETH
     '0x7F5c764cBc14f9669B88837ca1490cCa17c31607', // USDC
@@ -88,4 +89,4 @@ const arbTestnetConfig = {
   partnerMax: PARTNER_MAX
 }
 
-export default arbTestnetConfig
+export default arbHardhatConfig

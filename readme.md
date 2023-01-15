@@ -4,23 +4,30 @@ run this script after cloning the repo to get the openzeppelin contracts and fou
 
 https://github.com/Velocimeter/instruments/blob/master/gitsubmodules.sh
 
+deploy command:
+npx hardhat --network arbitrumGoerli deploy
 
+verify command:
+npx hardhat --network arbitrumGoerli etherscan-verify --solc-input --sleep
+
+export abis command:
+npx hardhat --network arbitrumGoerli export --export ./exported.json
 
 {
-  BribeFactory: '0x5542edb529F7c963583e9B8e5339121cFCf4B606',
-  GaugeFactory: '0x1Ac3032Dfd7e206BA6d08F453f38593b9A583052',
-  MerkleClaim: '0x0a68F78212D69EfC6346B5F9d72BC5A301779BE9',
-  Minter: '0xd2C3ebFB8e7e79CA84080a8551D86Df50B0F559d',
-  PairFactory: '0x7488AC81DC3908ff7141db4949e70D60A3Fd4DCc',
-  RedemptionReceiver: '0x08e352f2130d4b68d7B1264CD42191205B61b60f',
-  RewardsDistributor: '0xf6CdA702C6Bd15d5C0A325CE8f9f88219fE5F445',
-  Router: '0xCeaEA7A5cB3e7521DdE6717BCc99a4c8c60E07b6',
-  VeArtProxy: '0x5e7569D02214289490d16bCE4F96B38071db1aD8',
-  Velo: '0xe69b00A164047e7eB87B73971B0f340eEbFF9c81',
-  VeloGovernor: '0x588ADD83f24690BceEbaa4266cd8DC65709DDa4d',
-  VelodromeLibrary: '0x233ed5d7FAed19F7b8A28844E2845FBF0F145Be2',
-  Voter: '0x574607c69f369f0535E77C5F7C35767Aee04879A',
-  VotingEscrow: '0x6b938BA22FB5520fFB5D14c9C4Fef82a48761497'
+  BribeFactory: '0x560b401d9F28F80980451d8582DEe903dD5295c3',
+  GaugeFactory: '0xeAA8Ebb77A7e3b7AE2d8090E7A1c2F9B605dc919',
+  MerkleClaim: '0x92eB499DBC33446Ace4f84Fba84E3A230370858D',
+  Minter: '0x402f3c314149F252144EE4Ca8646b4a215ACD6aC',
+  PairFactory: '0x6389e934d35fC9e066FAb549C8DBc9FddaC10e0D',
+  RedemptionReceiver: '0x52018E83E84ebe30ac6923F3747c7aE503923aaB',
+  RewardsDistributor: '0xc4b9295487B4C43C1929299076820D8f55BBf957',
+  Router: '0x1B0aC6bf6f35E638f6cce8D69C6074561273dc52',
+  VeArtProxy: '0x821B98D42D3AB509AF4F54205f0c52B019b9E2D5',
+  Velo: '0x84Ca387E7ede764A3284c67Ff8c68a305a9030a0',
+  VeloGovernor: '0x1a79b9daa3E741774bf67732F8a8B5820De8A53a',
+  VelodromeLibrary: '0xcbE4714A95f866EB9C2eB50856F431f9E7353Ab6',
+  Voter: '0x854086d39955d28317aE3856399312b8Edb1B473',
+  VotingEscrow: '0xBf05364D6cf1586852c18c6b1CbEe218E3e09885'
 }
 
 ## Testing
