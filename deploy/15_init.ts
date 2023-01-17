@@ -65,6 +65,11 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   await minter.setTeam(ARB_TEST_CONFIG.teamMultisig)
   console.log('Team set for minter')
 
+  // create pair
+  // provide liq
+  // etc etc
+  // see forge tests for more details
+
   return true
 }
 export default func
