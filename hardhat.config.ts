@@ -25,28 +25,29 @@ const remappings = fs
 
 const config: HardhatUserConfig = {
   networks: {
-    // hardhat: {
-    //   initialBaseFeePerGas: 0,
-    //   forking: {
-    //     url: `https://arb-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_MAINNET_ARBITRUM_API_KEY}`,
-    //     blockNumber: 16051852
-    //   }
-    // },
-    // opera: {
-    //   url: 'https://rpc.fantom.network',
-    //   accounts: [process.env.PRIVATE_KEY!]
-    // },
-    // arbitrum: {
-    //   url: `https://arb-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_MAINNET_ARBITRUM_API_KEY}`,
-    //   accounts: [process.env.PRIVATE_KEY!],
-    //   chainId: 42161,
-    //   saveDeployments: false,
-    //   verify: {
-    //     etherscan: {
-    //       apiUrl: 'https://api.arbiscan.io/api'
-    //     }
-    //   }
-    // },
+    hardhat: {
+      initialBaseFeePerGas: 0,
+      forking: {
+        url: `https://arb-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_MAINNET_ARBITRUM_API_KEY}`,
+        blockNumber: 16051852
+      }
+    },
+    opera: {
+      url: 'https://rpc.fantom.network',
+      accounts: [process.env.PRIVATE_KEY!]
+    },
+    arbitrum: {
+      url: `https://arb-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_MAINNET_ARBITRUM_API_KEY}`,
+      accounts: [process.env.PRIVATE_KEY!],
+      chainId: 42161,
+      saveDeployments: true,
+      verify: {
+        etherscan: {
+          apiUrl: 'https://api.arbiscan.io/api/',
+          apiKey: process.env.ARB_SCAN_API_KEY!
+        }
+      }
+    },
     arbitrumGoerli: {
       url: `https://arb-goerli.g.alchemy.com/v2/${process.env.ALCHEMY_GOERLI_ARBITRUM_API_KEY}`,
       accounts: [process.env.PRIVATE_KEY!],
@@ -55,7 +56,9 @@ const config: HardhatUserConfig = {
       verify: {
         etherscan: {
           apiUrl: 'https://api-goerli.arbiscan.io/',
-          apiKey: process.env.ARB_SCAN_API_KEY!
+          apiKey: {
+            arbitrumOne: 'Dyp61CtoHxyYVSrAY7oD6IzSVzOgkJuf'
+          }
         }
       }
     }

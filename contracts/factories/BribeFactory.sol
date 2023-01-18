@@ -19,3 +19,5 @@ contract BribeFactory is IBribeFactory {
         return last_external_bribe;
     }
 }
+
+// if this imports int and ext bribe why is the the gauge factory asking for those address as if they are deployed to an address.
