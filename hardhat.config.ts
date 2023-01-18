@@ -43,7 +43,7 @@ const config: HardhatUserConfig = {
       saveDeployments: true,
       verify: {
         etherscan: {
-          apiUrl: 'https://api.arbiscan.io/api/',
+          apiUrl: 'https://api.arbiscan.io',
           apiKey: process.env.ARB_SCAN_API_KEY!
         }
       }
@@ -55,10 +55,8 @@ const config: HardhatUserConfig = {
       saveDeployments: true,
       verify: {
         etherscan: {
-          apiUrl: 'https://api-goerli.arbiscan.io/',
-          apiKey: {
-            arbitrumOne: 'Dyp61CtoHxyYVSrAY7oD6IzSVzOgkJuf'
-          }
+          apiUrl: 'https://api-goerli.arbiscan.io',
+          apiKey: 'Dyp61CtoHxyYVSrAY7oD6IzSVzOgkJuf'
         }
       }
     }
@@ -107,7 +105,7 @@ const config: HardhatUserConfig = {
       // ftmTestnet: process.env.FTM_SCAN_API_KEY!,
       // optimisticEthereum: process.env.OP_SCAN_API_KEY!,
 
-      // arbitrum: process.env.ARB_SCAN_API_KEY!,
+      arbitrum: process.env.ARB_SCAN_API_KEY!,
       arbitrumGoerli: process.env.ARB_SCAN_API_KEY!
     }
   }
