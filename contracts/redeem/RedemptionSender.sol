@@ -4,7 +4,7 @@ pragma solidity 0.8.13;
 import "LayerZero/interfaces/ILayerZeroEndpoint.sol";
 import "contracts/interfaces/IERC20.sol";
 
-/// @notice Part 1 of 2 in the WeVE (FTM) -> USDC + VELO (OP) redemption process
+/// @notice Part 1 of 2 in the WeVE (FTM) -> USDC + FLOW (OP) redemption process
 /// This contract is responsible for burning WeVE and sending the LZ message
 contract RedemptionSender {
     address public immutable weve;

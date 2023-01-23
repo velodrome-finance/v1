@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity 0.8.13;
 
-import "contracts/interfaces/IVelo.sol";
+import "contracts/interfaces/IFlow.sol";
 
 contract Velo is IVelo {
 
     string public constant name = "Velodrome";
-    string public constant symbol = "VELO";
+    string public constant symbol = "FLOW";
     uint8 public constant decimals = 18;
     uint public totalSupply = 0;
 

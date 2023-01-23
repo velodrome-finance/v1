@@ -4,13 +4,13 @@ pragma solidity 0.8.13;
 import "LayerZero/interfaces/ILayerZeroEndpoint.sol";
 import "LayerZero/interfaces/ILayerZeroReceiver.sol";
 import "contracts/interfaces/IERC20.sol";
-import "contracts/interfaces/IVelo.sol";
+import "contracts/interfaces/IFlow.sol";
 
-/// @notice Part 2 of 2 in the WeVE (FTM) -> USDC + VELO (OP) redemption process
-/// This contract is responsible for receiving the LZ message and distributing USDC + VELO
+/// @notice Part 2 of 2 in the WeVE (FTM) -> USDC + FLOW (OP) redemption process
+/// This contract is responsible for receiving the LZ message and distributing USDC + FLOW
 contract RedemptionReceiver is ILayerZeroReceiver {
     IERC20 public immutable USDC;
-    IVelo public immutable VELO;
+    IVelo public immutable FLOW;
 
     uint16 public immutable fantomChainId; // 12 for FTM, 10012 for FTM testnet
     address public immutable endpoint;
@@ -22,8 +22,8 @@ contract RedemptionReceiver is ILayerZeroReceiver {
     uint256 public constant ELIGIBLE_WEVE = 375112540 * 1e18;
     uint256 public redeemedWEVE;
     uint256 public redeemableUSDC;
-    uint256 public redeemableVELO;
-    uint256 public leftoverVELO;
+    uint256 public redeemableFLOW;
+    uint256 public leftoverFLOW;
 
     constructor(
         address _usdc,
@@ -34,7 +34,7 @@ contract RedemptionReceiver is ILayerZeroReceiver {
         require(_fantomChainId == 12 || _fantomChainId == 10012, "CHAIN_ID_NOT_FTM");
 
         USDC = IERC20(_usdc);
-        VELO = IVelo(_velo);
+        FLOW = IVelo(_velo);
 
         fantomChainId = _fantomChainId;
         endpoint = _endpoint;
@@ -48,12 +48,12 @@ contract RedemptionReceiver is ILayerZeroReceiver {
         _;
     }
 
-    event Initialized(address fantomSender, uint256 redeemableUSDC, uint256 redeemableVELO);
+    event Initialized(address fantomSender, uint256 redeemableUSDC, uint256 redeemableFLOW);
 
     function initializeReceiverWith(
         address _fantomSender,
         uint256 _redeemableUSDC,
-        uint256 _redeemableVELO
+        uint256 _redeemableFLOW
     ) external onlyTeam {
         require(fantomSender == address(0), "ALREADY_INITIALIZED");
         require(
@@ -63,10 +63,10 @@ contract RedemptionReceiver is ILayerZeroReceiver {
 
         fantomSender = _fantomSender;
         redeemableUSDC = _redeemableUSDC;
-        redeemableVELO = _redeemableVELO;
-        leftoverVELO = _redeemableVELO;
+        redeemableFLOW = _redeemableFLOW;
+        leftoverFLOW = _redeemableFLOW;
 
-        emit Initialized(fantomSender, redeemableUSDC, redeemableVELO);
+        emit Initialized(fantomSender, redeemableUSDC, redeemableFLOW);
     }
 
     function setTeam(address _team) external onlyTeam {
@@ -76,12 +76,12 @@ contract RedemptionReceiver is ILayerZeroReceiver {
     function previewRedeem(uint256 amountWEVE)
         public
         view
-        returns (uint256 shareOfUSDC, uint256 shareOfVELO)
+        returns (uint256 shareOfUSDC, uint256 shareOfFLOW)
     {
         // pro rata USDC
         shareOfUSDC = (amountWEVE * redeemableUSDC) / ELIGIBLE_WEVE;
-        // pro rata VELO
-        shareOfVELO = (amountWEVE * redeemableVELO) / ELIGIBLE_WEVE;
+        // pro rata FLOW
+        shareOfFLOW = (amountWEVE * redeemableFLOW) / ELIGIBLE_WEVE;
     }
 
     function lzReceive(
@@ -107,16 +107,16 @@ contract RedemptionReceiver is ILayerZeroReceiver {
             (redeemedWEVE += amountWEVE) <= ELIGIBLE_WEVE,
             "cannot redeem more than eligible"
         );
-        (uint256 shareOfUSDC, uint256 shareOfVELO) = previewRedeem(amountWEVE);
+        (uint256 shareOfUSDC, uint256 shareOfFLOW) = previewRedeem(amountWEVE);
 
         require(
             USDC.transfer(redemptionAddress, shareOfUSDC),
             "USDC_TRANSFER_FAILED"
         );
 
-        leftoverVELO -= shareOfVELO; // this will revert if underflows
+        leftoverFLOW -= shareOfFLOW; // this will revert if underflows
         require(
-            VELO.claim(redemptionAddress, shareOfVELO),
+            FLOW.claim(redemptionAddress, shareOfFLOW),
             "CLAIM_FAILED"
         );
     }

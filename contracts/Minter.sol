@@ -4,7 +4,7 @@ pragma solidity 0.8.13;
 import "contracts/libraries/Math.sol";
 import "contracts/interfaces/IMinter.sol";
 import "contracts/interfaces/IRewardsDistributor.sol";
-import "contracts/interfaces/IVelo.sol";
+import "contracts/interfaces/IFlow.sol";
 import "contracts/interfaces/IVoter.sol";
 import "contracts/interfaces/IVotingEscrow.sol";
 
@@ -19,7 +19,7 @@ contract Minter is IMinter {
     IVoter public immutable _voter;
     IVotingEscrow public immutable _ve;
     IRewardsDistributor public immutable _rewards_distributor;
-    uint256 public weekly = 15_000_000 * 1e18; // represents a starting weekly emission of 15M VELO (VELO has 18 decimals)
+    uint256 public weekly = 15_000_000 * 1e18; // represents a starting weekly emission of 15M FLOW (FLOW has 18 decimals)
     uint256 public active_period;
     uint256 internal constant LOCK = 86400 * 7 * 52 * 4;
 
