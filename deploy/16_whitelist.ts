@@ -8,12 +8,12 @@ const ARB_TEST_CONFIG = arbTestnetConfig
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { ethers } = hre
 
-  const velo = await ethers.getContract('Velo')
+  const flow = await ethers.getContract('Flow')
   const voter = await ethers.getContract('Voter')
   const minter = await ethers.getContract('Minter')
 
   // Whitelist
-  const nativeToken = [velo.address]
+  const nativeToken = [flow.address]
   const tokenWhitelist = nativeToken.concat(ARB_TEST_CONFIG.tokenWhitelist)
   await voter.initialize(tokenWhitelist, minter.address)
   console.log('Whitelist set')

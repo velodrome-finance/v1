@@ -8,7 +8,7 @@ const ARB_TEST_CONFIG = arbHardhatConfig
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, ethers } = hre
 
-  const velo = await ethers.getContract('Velo')
+  const flow = await ethers.getContract('Flow')
   const pairFactory = await ethers.getContract('PairFactory')
   const escrow = await ethers.getContract('VotingEscrow')
   const voter = await ethers.getContract('Voter')
@@ -20,16 +20,16 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const claim = await deployments.get('MerkleClaim')
 
   // Initialize
-  await velo.initialMint(ARB_TEST_CONFIG.teamEOA)
+  await flow.initialMint(ARB_TEST_CONFIG.teamEOA)
   console.log('Initial minted')
 
-  await velo.setRedemptionReceiver(receiver.address)
+  await flow.setRedemptionReceiver(receiver.address)
   console.log('RedemptionReceiver set')
 
-  await velo.setMerkleClaim(claim.address)
+  await flow.setMerkleClaim(claim.address)
   console.log('MerkleClaim set')
 
-  await velo.setMinter(minter.address)
+  await flow.setMinter(minter.address)
   console.log('Minter set')
 
   await pairFactory.setPauser(ARB_TEST_CONFIG.teamMultisig)

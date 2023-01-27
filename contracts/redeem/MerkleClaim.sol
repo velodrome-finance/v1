@@ -3,7 +3,7 @@ pragma solidity 0.8.13;
 
 /// ============ Imports ============
 
-import {IVelo} from "contracts/interfaces/IFlow.sol";
+import {IFlow} from "contracts/interfaces/IFlow.sol";
 import {MerkleProof} from "openzeppelin-contracts/contracts/utils/cryptography/MerkleProof.sol"; // OZ: MerkleProof
 
 /// @title MerkleClaim
@@ -13,7 +13,7 @@ contract MerkleClaim {
     /// ============ Immutable storage ============
 
     /// @notice FLOW token to claim
-    IVelo public immutable FLOW;
+    IFlow public immutable FLOW;
     /// @notice ERC20-claimee inclusion root
     bytes32 public immutable merkleRoot;
 
@@ -28,7 +28,7 @@ contract MerkleClaim {
     /// @param _velo address
     /// @param _merkleRoot of claimees
     constructor(address _velo, bytes32 _merkleRoot) {
-        FLOW = IVelo(_velo);
+        FLOW = IFlow(_velo);
         merkleRoot = _merkleRoot;
     }
 

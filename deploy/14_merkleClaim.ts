@@ -12,11 +12,11 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const { deployer } = await getNamedAccounts()
 
-  const velo = await deployments.get('Velo')
+  const flow = await deployments.get('Flow')
 
   await deploy('MerkleClaim', {
     from: deployer,
-    args: [velo.address, ARB_TEST_CONFIG.merkleRoot],
+    args: [flow.address, ARB_TEST_CONFIG.merkleRoot],
     log: true,
     skipIfAlreadyDeployed: true
   })

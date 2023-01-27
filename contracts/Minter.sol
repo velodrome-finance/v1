@@ -15,7 +15,7 @@ contract Minter is IMinter {
     uint256 internal constant EMISSION = 990;
     uint256 internal constant TAIL_EMISSION = 2;
     uint256 internal constant PRECISION = 1000;
-    IVelo public immutable _velo;
+    IFlow public immutable _velo;
     IVoter public immutable _voter;
     IVotingEscrow public immutable _ve;
     IRewardsDistributor public immutable _rewards_distributor;
@@ -44,7 +44,7 @@ contract Minter is IMinter {
         initializer = msg.sender;
         team = msg.sender;
         teamRate = 30; // 30 bps = 0.03%
-        _velo = IVelo(IVotingEscrow(__ve).token());
+        _velo = IFlow(IVotingEscrow(__ve).token());
         _voter = IVoter(__voter);
         _ve = IVotingEscrow(__ve);
         _rewards_distributor = IRewardsDistributor(__rewards_distributor);

@@ -23,7 +23,7 @@ npx hardhat --network arbitrumGoerli export --export ./exported.json
   RewardsDistributor: '0xc4b9295487B4C43C1929299076820D8f55BBf957',
   Router: '0x1B0aC6bf6f35E638f6cce8D69C6074561273dc52',
   VeArtProxy: '0x821B98D42D3AB509AF4F54205f0c52B019b9E2D5',
-  Velo: '0x84Ca387E7ede764A3284c67Ff8c68a305a9030a0',
+  Flow: '0x84Ca387E7ede764A3284c67Ff8c68a305a9030a0',
   VeloGovernor: '0x1a79b9daa3E741774bf67732F8a8B5820De8A53a',
   VelodromeLibrary: '0xcbE4714A95f866EB9C2eB50856F431f9E7353Ab6',
   Voter: '0x854086d39955d28317aE3856399312b8Edb1B473',
@@ -61,14 +61,14 @@ Deployment contains 3 steps:
 
 ## Security
 
-The Velodrome team engaged with Code 4rena for a security review. The results of that audit are available [here](https://code4rena.com/reports/2022-05-velodrome/). Our up-to-date security findings are located on our website [here](https://docs.velodrome.finance/security).
+The Velocimeter team engaged with Code 4rena for a security review. The results of that audit are available [here](https://code4rena.com/reports/2022-05-velodrome/). Our up-to-date security findings are located on our website [here](https://docs.velodrome.finance/security).
 
 ## Contracts
 
 | Name               | Address                                                                                                                               |
 | :----------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
 | WETH               | [0x4200000000000000000000000000000000000006](https://optimistic.etherscan.io/address/0x4200000000000000000000000000000000000006#code) |
-| Velo               | [0x3c8B650257cFb5f272f799F5e2b4e65093a11a05](https://optimistic.etherscan.io/address/0x3c8B650257cFb5f272f799F5e2b4e65093a11a05#code) |
+| Flow               | [0x3c8B650257cFb5f272f799F5e2b4e65093a11a05](https://optimistic.etherscan.io/address/0x3c8B650257cFb5f272f799F5e2b4e65093a11a05#code) |
 | MerkleClaim        | [0x00D59BC35174C3b250Dd92a363495d38C8777a49](https://optimistic.etherscan.io/address/0x00D59BC35174C3b250Dd92a363495d38C8777a49#code) |
 | RedemptionSender   | [0x9809fB94eED086F9529df00d6f125Bf25Ee84A93](https://ftmscan.com/address/0x9809fB94eED086F9529df00d6f125Bf25Ee84A93#code)             |
 | RedemptionReceiver | [0x846e822e9a00669dcC647079d7d625d2cd25A951](https://optimistic.etherscan.io/address/0x846e822e9a00669dcC647079d7d625d2cd25A951#code) |

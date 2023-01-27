@@ -13,13 +13,13 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const { deployer } = await getNamedAccounts()
 
-  const velo = await deployments.get('Velo')
+  const flow = await deployments.get('Flow')
 
   await deploy('RedemptionReceiver', {
     from: deployer,
     args: [
       ARB_TEST_CONFIG.USDC,
-      velo.address,
+      flow.address,
       FTM_CONFIG.lzChainId,
       ARB_TEST_CONFIG.lzEndpoint
     ],

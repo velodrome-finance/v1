@@ -36,7 +36,7 @@ const config: HardhatUserConfig = {
       url: 'https://rpc.fantom.network',
       accounts: [process.env.PRIVATE_KEY!]
     },
-    arbitrum: {
+    arbitrumOne: {
       url: `https://arb-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_MAINNET_ARBITRUM_API_KEY}`,
       accounts: [process.env.PRIVATE_KEY!],
       chainId: 42161,
@@ -105,7 +105,7 @@ const config: HardhatUserConfig = {
       // ftmTestnet: process.env.FTM_SCAN_API_KEY!,
       // optimisticEthereum: process.env.OP_SCAN_API_KEY!,
 
-      arbitrum: process.env.ARB_SCAN_API_KEY!,
+      arbitrumOne: process.env.ARB_SCAN_API_KEY!,
       arbitrumGoerli: process.env.ARB_SCAN_API_KEY!
     }
   }
