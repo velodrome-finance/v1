@@ -3,7 +3,7 @@
   "chainId": "421613",
   "contracts": {
     "BribeFactory": {
-      "address": "0x560b401d9F28F80980451d8582DEe903dD5295c3",
+      "address": "0x5cD2336a80E72bf0480ae704df021e4531A09671",
       "abi": [
         {
           "inputs": [
@@ -71,8 +71,392 @@
         }
       ]
     },
+    "Flow": {
+      "address": "0xf5A53c1b4072425DF6eC082f0A48B4652bc4188C",
+      "abi": [
+        {
+          "inputs": [],
+          "stateMutability": "nonpayable",
+          "type": "constructor"
+        },
+        {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "spender",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "value",
+              "type": "uint256"
+            }
+          ],
+          "name": "Approval",
+          "type": "event"
+        },
+        {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "from",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "to",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "value",
+              "type": "uint256"
+            }
+          ],
+          "name": "Transfer",
+          "type": "event"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "name": "allowance",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_spender",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_value",
+              "type": "uint256"
+            }
+          ],
+          "name": "approve",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "name": "balanceOf",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "claim",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "decimals",
+          "outputs": [
+            {
+              "internalType": "uint8",
+              "name": "",
+              "type": "uint8"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_recipient",
+              "type": "address"
+            }
+          ],
+          "name": "initialMint",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "initialMinted",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "merkleClaim",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "mint",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "minter",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "name",
+          "outputs": [
+            {
+              "internalType": "string",
+              "name": "",
+              "type": "string"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "redemptionReceiver",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_merkleClaim",
+              "type": "address"
+            }
+          ],
+          "name": "setMerkleClaim",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_minter",
+              "type": "address"
+            }
+          ],
+          "name": "setMinter",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_receiver",
+              "type": "address"
+            }
+          ],
+          "name": "setRedemptionReceiver",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "symbol",
+          "outputs": [
+            {
+              "internalType": "string",
+              "name": "",
+              "type": "string"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "totalSupply",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_to",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_value",
+              "type": "uint256"
+            }
+          ],
+          "name": "transfer",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_from",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "_to",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_value",
+              "type": "uint256"
+            }
+          ],
+          "name": "transferFrom",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        }
+      ]
+    },
     "GaugeFactory": {
-      "address": "0xeAA8Ebb77A7e3b7AE2d8090E7A1c2F9B605dc919",
+      "address": "0xA957E3958C7ed4590a28C5564438E89238b34EC1",
       "abi": [
         {
           "inputs": [
@@ -134,13 +518,13 @@
       ]
     },
     "MerkleClaim": {
-      "address": "0x92eB499DBC33446Ace4f84Fba84E3A230370858D",
+      "address": "0x7F86f722a510CACb2cCD880a41dfE64773bfb371",
       "abi": [
         {
           "inputs": [
             {
               "internalType": "address",
-              "name": "_velo",
+              "name": "_flow",
               "type": "address"
             },
             {
@@ -173,10 +557,10 @@
         },
         {
           "inputs": [],
-          "name": "VELO",
+          "name": "FLOW",
           "outputs": [
             {
-              "internalType": "contract IVelo",
+              "internalType": "contract IFlow",
               "name": "",
               "type": "address"
             }
@@ -242,7 +626,7 @@
       ]
     },
     "Minter": {
-      "address": "0x402f3c314149F252144EE4Ca8646b4a215ACD6aC",
+      "address": "0x388c6C5e6D27E3b6fa40eb98e0ef573D9E8e037E",
       "abi": [
         {
           "inputs": [
@@ -311,6 +695,19 @@
         },
         {
           "inputs": [],
+          "name": "_flow",
+          "outputs": [
+            {
+              "internalType": "contract IFlow",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
           "name": "_rewards_distributor",
           "outputs": [
             {
@@ -328,19 +725,6 @@
           "outputs": [
             {
               "internalType": "contract IVotingEscrow",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "_velo",
-          "outputs": [
-            {
-              "internalType": "contract IVelo",
               "name": "",
               "type": "address"
             }
@@ -569,7 +953,7 @@
       ]
     },
     "PairFactory": {
-      "address": "0x6389e934d35fC9e066FAb549C8DBc9FddaC10e0D",
+      "address": "0xddadFF10D1C9eb062180a870150D11673FFf7ad6",
       "abi": [
         {
           "inputs": [],
@@ -955,7 +1339,7 @@
       ]
     },
     "RedemptionReceiver": {
-      "address": "0x52018E83E84ebe30ac6923F3747c7aE503923aaB",
+      "address": "0x552dD2458Ac8Fb7bC83a2BFF16e57e44Aa30cd4F",
       "abi": [
         {
           "inputs": [
@@ -966,7 +1350,7 @@
             },
             {
               "internalType": "address",
-              "name": "_velo",
+              "name": "_flow",
               "type": "address"
             },
             {
@@ -1001,7 +1385,7 @@
             {
               "indexed": false,
               "internalType": "uint256",
-              "name": "redeemableVELO",
+              "name": "redeemableFLOW",
               "type": "uint256"
             }
           ],
@@ -1023,10 +1407,10 @@
         },
         {
           "inputs": [],
-          "name": "USDC",
+          "name": "FLOW",
           "outputs": [
             {
-              "internalType": "contract IERC20",
+              "internalType": "contract IFlow",
               "name": "",
               "type": "address"
             }
@@ -1036,10 +1420,10 @@
         },
         {
           "inputs": [],
-          "name": "VELO",
+          "name": "USDC",
           "outputs": [
             {
-              "internalType": "contract IVelo",
+              "internalType": "contract IERC20",
               "name": "",
               "type": "address"
             }
@@ -1139,7 +1523,7 @@
             },
             {
               "internalType": "uint256",
-              "name": "_redeemableVELO",
+              "name": "_redeemableFLOW",
               "type": "uint256"
             }
           ],
@@ -1150,7 +1534,7 @@
         },
         {
           "inputs": [],
-          "name": "leftoverVELO",
+          "name": "leftoverFLOW",
           "outputs": [
             {
               "internalType": "uint256",
@@ -1206,7 +1590,7 @@
             },
             {
               "internalType": "uint256",
-              "name": "shareOfVELO",
+              "name": "shareOfFLOW",
               "type": "uint256"
             }
           ],
@@ -1215,7 +1599,7 @@
         },
         {
           "inputs": [],
-          "name": "redeemableUSDC",
+          "name": "redeemableFLOW",
           "outputs": [
             {
               "internalType": "uint256",
@@ -1228,7 +1612,7 @@
         },
         {
           "inputs": [],
-          "name": "redeemableVELO",
+          "name": "redeemableUSDC",
           "outputs": [
             {
               "internalType": "uint256",
@@ -1281,7 +1665,7 @@
       ]
     },
     "RewardsDistributor": {
-      "address": "0xc4b9295487B4C43C1929299076820D8f55BBf957",
+      "address": "0xEED0deFB831F96fC45B5e0ACb477F517F186496F",
       "abi": [
         {
           "inputs": [
@@ -1635,7 +2019,7 @@
       ]
     },
     "Router": {
-      "address": "0x1B0aC6bf6f35E638f6cce8D69C6074561273dc52",
+      "address": "0x49fb251F8Ff60bcd975D2018D0011D7a6065000B",
       "abi": [
         {
           "inputs": [
@@ -2617,7 +3001,7 @@
       ]
     },
     "VeArtProxy": {
-      "address": "0x821B98D42D3AB509AF4F54205f0c52B019b9E2D5",
+      "address": "0xDe032908A79276B257d1ae80f0C0A2c070eDa1F4",
       "abi": [
         {
           "inputs": [
@@ -3040,7 +3424,7 @@
       ]
     },
     "VeloGovernor": {
-      "address": "0x1a79b9daa3E741774bf67732F8a8B5820De8A53a",
+      "address": "0xB843444d08bee4f79f571Bd34D13Ec71D4194b40",
       "abi": [
         {
           "inputs": [
@@ -4097,6 +4481,197 @@
         }
       ]
     },
+    "VelocimeterLibrary": {
+      "address": "0x243fC1E928E4bce603669CAf4512B6Db9B965aB0",
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_router",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "constructor"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "amountIn",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "tokenIn",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "tokenOut",
+              "type": "address"
+            },
+            {
+              "internalType": "bool",
+              "name": "stable",
+              "type": "bool"
+            }
+          ],
+          "name": "getAmountOut",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "tokenIn",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "tokenOut",
+              "type": "address"
+            },
+            {
+              "internalType": "bool",
+              "name": "stable",
+              "type": "bool"
+            }
+          ],
+          "name": "getMinimumValue",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "tokenIn",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "tokenOut",
+              "type": "address"
+            },
+            {
+              "internalType": "bool",
+              "name": "stable",
+              "type": "bool"
+            }
+          ],
+          "name": "getSample",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "amountIn",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "tokenIn",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "tokenOut",
+              "type": "address"
+            },
+            {
+              "internalType": "bool",
+              "name": "stable",
+              "type": "bool"
+            }
+          ],
+          "name": "getTradeDiff",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "a",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "b",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "amountIn",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "tokenIn",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "pair",
+              "type": "address"
+            }
+          ],
+          "name": "getTradeDiff",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "a",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "b",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        }
+      ]
+    },
     "VelodromeLibrary": {
       "address": "0xcbE4714A95f866EB9C2eB50856F431f9E7353Ab6",
       "abi": [
@@ -4289,7 +4864,7 @@
       ]
     },
     "Voter": {
-      "address": "0x854086d39955d28317aE3856399312b8Edb1B473",
+      "address": "0x362502b7139761937067cf81a73Dc18D315f10A0",
       "abi": [
         {
           "inputs": [
@@ -5433,7 +6008,7 @@
       ]
     },
     "VotingEscrow": {
-      "address": "0xBf05364D6cf1586852c18c6b1CbEe218E3e09885",
+      "address": "0xC43f6EbF97f9D99FF8a3aFe1413599e8DEc2aDB3",
       "abi": [
         {
           "inputs": [
