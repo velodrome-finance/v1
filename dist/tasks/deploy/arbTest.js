@@ -46,7 +46,7 @@ const testFantomConfig_1 = __importDefault(
       ethers.getContractFactory('BribeFactory'),
       ethers.getContractFactory('PairFactory'),
       ethers.getContractFactory('Router'),
-      ethers.getContractFactory('VelodromeLibrary'),
+      ethers.getContractFactory('VelocimeterLibrary'),
       ethers.getContractFactory('VeArtProxy'),
       ethers.getContractFactory('VotingEscrow'),
       ethers.getContractFactory('RewardsDistributor'),
@@ -128,7 +128,7 @@ const testFantomConfig_1 = __importDefault(
     console.log('Args: ', pairFactory.address, OP_CONFIG.WETH, '\n')
     const library = await Library.deploy(router.address)
     await library.deployed()
-    console.log('VelodromeLibrary deployed to: ', library.address)
+    console.log('VelocimeterLibrary deployed to: ', library.address)
     console.log('Args: ', router.address, '\n')
     const artProxy = await VeArtProxy.deploy()
     await artProxy.deployed()

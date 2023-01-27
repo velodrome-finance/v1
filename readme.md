@@ -25,7 +25,7 @@ npx hardhat --network arbitrumGoerli export --export ./exported.json
   VeArtProxy: '0x821B98D42D3AB509AF4F54205f0c52B019b9E2D5',
   Flow: '0x84Ca387E7ede764A3284c67Ff8c68a305a9030a0',
   VeloGovernor: '0x1a79b9daa3E741774bf67732F8a8B5820De8A53a',
-  VelodromeLibrary: '0xcbE4714A95f866EB9C2eB50856F431f9E7353Ab6',
+  VelocimeterLibrary: '0xcbE4714A95f866EB9C2eB50856F431f9E7353Ab6',
   Voter: '0x854086d39955d28317aE3856399312b8Edb1B473',
   VotingEscrow: '0xBf05364D6cf1586852c18c6b1CbEe218E3e09885'
 }

@@ -25,10 +25,10 @@ contract MerkleClaim {
     /// ============ Constructor ============
 
     /// @notice Creates a new MerkleClaim contract
-    /// @param _velo address
+    /// @param _flow address
     /// @param _merkleRoot of claimees
-    constructor(address _velo, bytes32 _merkleRoot) {
-        FLOW = IFlow(_velo);
+    constructor(address _flow, bytes32 _merkleRoot) {
+        FLOW = IFlow(_flow);
         merkleRoot = _merkleRoot;
     }
 

@@ -8,7 +8,7 @@ const func = async function (hre) {
     from: deployer,
     args: [],
     log: true,
-    skipIfAlreadyDeployed: true
+    skipIfAlreadyDeployed: false
   })
 }
 exports.default = func

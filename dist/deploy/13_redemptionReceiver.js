@@ -27,7 +27,7 @@ const func = async function (hre) {
       ARB_TEST_CONFIG.lzEndpoint
     ],
     log: true,
-    skipIfAlreadyDeployed: true
+    skipIfAlreadyDeployed: false
   })
 }
 exports.default = func

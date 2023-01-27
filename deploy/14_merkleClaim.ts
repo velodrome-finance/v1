@@ -18,7 +18,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     from: deployer,
     args: [flow.address, ARB_TEST_CONFIG.merkleRoot],
     log: true,
-    skipIfAlreadyDeployed: true
+    skipIfAlreadyDeployed: false
   })
 }
 export default func

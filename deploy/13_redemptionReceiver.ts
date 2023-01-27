@@ -24,7 +24,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       ARB_TEST_CONFIG.lzEndpoint
     ],
     log: true,
-    skipIfAlreadyDeployed: true
+    skipIfAlreadyDeployed: false
   })
 }
 export default func

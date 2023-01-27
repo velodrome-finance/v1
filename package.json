@@ -9,7 +9,8 @@
     "verify": "npx hardhat --network arbitrumGoerli etherscan-verify --solc-input --sleep",
     "export": "npx hardhat --network arbitrumGoerli export --export ./exported.json",
     "exportMainnet": "npx hardhat --network arbitrum export --export ./mainnet-exported.json",
-    "deploy": "npx hardhat --network arbitrumGoerli",
+    "deploy": "npx hardhat deploy --network arbitrumGoerli",
+    "deployHardhat": "npx hardhat deploy --network hardhat",
     "verifyMainnet": "npx hardhat --network arbitrum etherscan-verify --solc-input --sleep"
   },
   "devDependencies": {

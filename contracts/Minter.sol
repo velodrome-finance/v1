@@ -15,7 +15,7 @@ contract Minter is IMinter {
     uint256 internal constant EMISSION = 990;
     uint256 internal constant TAIL_EMISSION = 2;
     uint256 internal constant PRECISION = 1000;
-    IFlow public immutable _velo;
+    IFlow public immutable _flow;
     IVoter public immutable _voter;
     IVotingEscrow public immutable _ve;
     IRewardsDistributor public immutable _rewards_distributor;
@@ -44,7 +44,7 @@ contract Minter is IMinter {
         initializer = msg.sender;
         team = msg.sender;
         teamRate = 30; // 30 bps = 0.03%
-        _velo = IFlow(IVotingEscrow(__ve).token());
+        _flow = IFlow(IVotingEscrow(__ve).token());
         _voter = IVoter(__voter);
         _ve = IVotingEscrow(__ve);
         _rewards_distributor = IRewardsDistributor(__rewards_distributor);
@@ -57,8 +57,8 @@ contract Minter is IMinter {
         uint256 max // sum amounts / max = % ownership of top protocols, so if initial 20m is distributed, and target is 25% protocol ownership, then max - 4 x 20m = 80m
     ) external {
         require(initializer == msg.sender);
-        _velo.mint(address(this), max);
-        _velo.approve(address(_ve), type(uint256).max);
+        _flow.mint(address(this), max);
+        _flow.approve(address(_ve), type(uint256).max);
         for (uint256 i = 0; i < claimants.length; i++) {
             _ve.create_lock_for(amounts[i], LOCK, claimants[i]);
         }
@@ -84,7 +84,7 @@ contract Minter is IMinter {
 
     // calculate circulating supply as total token supply - locked supply
     function circulating_supply() public view returns (uint256) {
-        return _velo.totalSupply() - _ve.totalSupply();
+        return _flow.totalSupply() - _ve.totalSupply();
     }
 
     // emission calculation is 1% of available supply to mint adjusted by circulating / total supply
@@ -105,11 +105,11 @@ contract Minter is IMinter {
     // calculate inflation and adjust ve balances accordingly
     function calculate_growth(uint256 _minted) public view returns (uint256) {
         uint256 _veTotal = _ve.totalSupply();
-        uint256 _veloTotal = _velo.totalSupply();
+        uint256 _flowTotal = _flow.totalSupply();
         return
-            (((((_minted * _veTotal) / _veloTotal) * _veTotal) / _veloTotal) *
+            (((((_minted * _veTotal) / _flowTotal) * _veTotal) / _flowTotal) *
                 _veTotal) /
-            _veloTotal /
+            _flowTotal /
             2;
     }
 
@@ -126,17 +126,17 @@ contract Minter is IMinter {
             uint256 _teamEmissions = (teamRate * (_growth + weekly)) /
                 (PRECISION - teamRate);
             uint256 _required = _growth + weekly + _teamEmissions;
-            uint256 _balanceOf = _velo.balanceOf(address(this));
+            uint256 _balanceOf = _flow.balanceOf(address(this));
             if (_balanceOf < _required) {
-                _velo.mint(address(this), _required - _balanceOf);
+                _flow.mint(address(this), _required - _balanceOf);
             }
 
-            require(_velo.transfer(team, _teamEmissions));
-            require(_velo.transfer(address(_rewards_distributor), _growth));
+            require(_flow.transfer(team, _teamEmissions));
+            require(_flow.transfer(address(_rewards_distributor), _growth));
             _rewards_distributor.checkpoint_token(); // checkpoint token balance that was just minted in rewards distributor
             _rewards_distributor.checkpoint_total_supply(); // checkpoint supply
 
-            _velo.approve(address(_voter), weekly);
+            _flow.approve(address(_voter), weekly);
             _voter.notifyRewardAmount(weekly);
 
             emit Mint(

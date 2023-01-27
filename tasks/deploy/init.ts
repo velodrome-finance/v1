@@ -19,7 +19,7 @@
 //       ethers.BigNumber.from("375112540").mul(TOKEN_DECIMALS); // TODO fix rounding
 
 //     const REDEEMABLE_USDC = ethers.BigNumber.from("0"); // TODO update
-//     const REDEEMABLE_VELO =
+//     const REDEEMABLE_flow =
 //       ethers.BigNumber.from("108000000").mul(TOKEN_DECIMALS); // TODO fix rounding
 
 //     // Load
@@ -33,7 +33,7 @@
 //       deployed.fantomSender,
 //       ELIGIBLE_WEVE,
 //       REDEEMABLE_USDC,
-//       REDEEMABLE_VELO
+//       REDEEMABLE_flow
 //     );
 //     console.log(`RedemptionSender at ${receiver.address} configured!`);
 //   }

@@ -42,7 +42,7 @@ task('deploy:arbHardhat', 'Deploys Arbitrum forked chain contracts').setAction(
       ethers.getContractFactory('BribeFactory'),
       ethers.getContractFactory('PairFactory'),
       ethers.getContractFactory('Router'),
-      ethers.getContractFactory('VelodromeLibrary'),
+      ethers.getContractFactory('VelocimeterLibrary'),
       ethers.getContractFactory('VeArtProxy'),
       ethers.getContractFactory('VotingEscrow'),
       ethers.getContractFactory('RewardsDistributor'),
@@ -76,7 +76,7 @@ task('deploy:arbHardhat', 'Deploys Arbitrum forked chain contracts').setAction(
 
     const library = await Library.deploy(router.address)
     await library.deployed()
-    console.log('VelodromeLibrary deployed to: ', library.address)
+    console.log('VelocimeterLibrary deployed to: ', library.address)
     console.log('Args: ', router.address, '\n')
 
     const artProxy = await VeArtProxy.deploy()

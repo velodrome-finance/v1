@@ -27,14 +27,14 @@ contract RedemptionReceiver is ILayerZeroReceiver {
 
     constructor(
         address _usdc,
-        address _velo,
+        address _flow,
         uint16 _fantomChainId,
         address _endpoint
     ) {
         require(_fantomChainId == 12 || _fantomChainId == 10012, "CHAIN_ID_NOT_FTM");
 
         USDC = IERC20(_usdc);
-        FLOW = IFlow(_velo);
+        FLOW = IFlow(_flow);
 
         fantomChainId = _fantomChainId;
         endpoint = _endpoint;
