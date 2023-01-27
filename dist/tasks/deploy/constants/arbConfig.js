@@ -4,7 +4,8 @@ const ethers_1 = require('ethers')
 const TOKEN_DECIMALS = ethers_1.ethers.BigNumber.from('10').pow(
   ethers_1.ethers.BigNumber.from('18')
 )
-const MILLION = ethers_1.ethers.BigNumber.from('10').pow(
+
+const MILLION = ethers_1.ethers.BigNumber.from('1').pow(
   ethers_1.ethers.BigNumber.from('6')
 )
 const FOUR_MILLION = ethers_1.ethers.BigNumber.from('4')
@@ -19,7 +20,7 @@ const TEN_MILLION = ethers_1.ethers.BigNumber.from('10')
 const TWELVE_MILLION = ethers_1.ethers.BigNumber.from('12')
   .mul(MILLION)
   .mul(TOKEN_DECIMALS)
-const TWENTY_MILLION = ethers_1.ethers.BigNumber.from('20')
+const SIXTY_MILLION = ethers_1.ethers.BigNumber.from('60')
   .mul(MILLION)
   .mul(TOKEN_DECIMALS)
 const PARTNER_MAX = ethers_1.ethers.BigNumber.from('78')
@@ -76,12 +77,12 @@ const arbConfig = {
     TEAM_MULTISIG, // Protocol owned NFT 64m
     '0x069e85D4F1010DD961897dC8C095FBB5FF297434', // dunks
     '0x3c5Aac016EF2F178e8699D6208796A2D67557fe2', // ceazor
-    coolie,
-    dunks,
-    ceazor,
-    faeflow,
-    wtck,
-    torbik,
+    '0x03B88DacB7c21B54cEfEcC297D981E5b721A9dF1', //coolie
+    
+   
+     ''//faeflow,
+     '0x78e801136F77805239A7F533521A7a5570F572C8', //wtck,
+     '0x0b776552c1Aef1Dc33005DD25AcDA22493b6615d',//torbik,
     velodromeMultisig,
     TEAM_MULTISIG,
     TEAM_MULTISIG,
@@ -123,15 +124,15 @@ const arbConfig = {
     TEAM_MULTISIG // 38 x protcol / partner NFTs
   ],
   partnerAmts: [
-    TEN_MILLION * 6.4, // 64 million
+    SIXTY_MILLION, // 60 million for protcol owned NFT 15% 
     TWO_MILLION, // dunks presale
     TWO_MILLION, // ceazor presale
-    TWELVE_MILLION, // team veFLOW 1%
-    TWELVE_MILLION, // team veFLOW 1%
-    TWELVE_MILLION, // team veFLOW 1%
-    TWELVE_MILLION, // team veFLOW 1%
-    TWELVE_MILLION, // team veFLOW 1%
-    TWELVE_MILLION, // team veFLOW 1%
+    FOUR_MILLION, // team veFLOW 1%
+    FOUR_MILLION, // team veFLOW 1%
+    FOUR_MILLION, // team veFLOW 1%
+    FOUR_MILLION, // team veFLOW 1%
+    FOUR_MILLION, // team veFLOW 1%
+    FOUR_MILLION, // team veFLOW 1%
     FOUR_MILLION, // tribute to velodrome (need to get their arb address DO NOT USE MULTISIG FROM OP)
     FOUR_MILLION,
     FOUR_MILLION,
