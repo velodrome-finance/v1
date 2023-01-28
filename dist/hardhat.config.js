@@ -50,7 +50,7 @@ const config = {
       url: `https://arb-goerli.g.alchemy.com/v2/${process.env.ALCHEMY_GOERLI_ARBITRUM_API_KEY}`,
       accounts: [process.env.PRIVATE_KEY],
       chainId: 421613,
-      saveDeployments: true,
+      saveDeployments: false,
       verify: {
         etherscan: {
           apiUrl: 'https://api-goerli.arbiscan.io/',

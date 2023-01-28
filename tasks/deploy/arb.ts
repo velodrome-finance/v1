@@ -1,6 +1,6 @@
 import { task } from 'hardhat/config'
 import arbConfig from './constants/arbConfig'
-import arbTestnetConfig from './constants/arbTestnetConfig'
+import arbTestnetConfig from './constants/arbConfig'
 import arbHardhatConfig from './constants/arbHardhatConfig'
 
 import optimismConfig from './constants/optimismConfig'

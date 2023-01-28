@@ -56,5 +56,5 @@ const func = async function (hre) {
   return true
 }
 exports.default = func
-func.tags = ['init_deploy']
-func.id = 'init_deploy'
+func.tags = ['Init']
+func.id = 'init'

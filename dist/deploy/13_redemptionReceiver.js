@@ -6,7 +6,7 @@ var __importDefault =
   }
 Object.defineProperty(exports, '__esModule', { value: true })
 const arbTestnetConfig_1 = __importDefault(
-  require('../tasks/deploy/constants/arbTestnetConfig')
+  require('../tasks/deploy/constants/arbConfig')
 )
 const testFantomConfig_1 = __importDefault(
   require('../tasks/deploy/constants/testFantomConfig')

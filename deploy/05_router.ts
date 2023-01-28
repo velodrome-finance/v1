@@ -1,8 +1,8 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types'
 import { DeployFunction } from 'hardhat-deploy/types'
 
-import arbTestnetConfig from '../tasks/deploy/constants/arbTestnetConfig'
-const ARB_TEST_CONFIG = arbTestnetConfig
+import arbConfig from '../tasks/deploy/constants/arbConfig'
+const ARB_TEST_CONFIG = arbConfig
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts } = hre

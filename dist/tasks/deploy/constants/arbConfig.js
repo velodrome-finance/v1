@@ -27,7 +27,11 @@ const PARTNER_MAX = ethers_1.ethers.BigNumber.from('78')
   .mul(MILLION)
   .mul(TOKEN_DECIMALS)
 const TEAM_MULTISIG = '0x16ec7CD5E35682B751d0c77c41A4e6a1A3E2DE01'
-const TEAM_EOA = '0x16ec7CD5E35682B751d0c77c41A4e6a1A3E2DE01'
+const TEAM_EOA = '0x069e85D4F1010DD961897dC8C095FBB5FF297434'
+const arbitrumTeam = TEAM_MULTISIG
+const velodromeMultisig = TEAM_MULTISIG
+const anton = TEAM_MULTISIG
+const andre = TEAM_MULTISIG
 const arbConfig = {
   // Chain const
   lzChainId: 110,
@@ -39,7 +43,7 @@ const arbConfig = {
   // Addresses
   teamEOA: TEAM_EOA,
   teamMultisig: TEAM_MULTISIG,
-  coolie: TEAM_EOA,
+  coolie: 0x03b88dacb7c21b54cefecc297d981e5b721a9df1,
   dunks: '0x069e85D4F1010DD961897dC8C095FBB5FF297434',
   ceazor: '0x3c5Aac016EF2F178e8699D6208796A2D67557fe2',
   faeflow: TEAM_EOA, //update
@@ -55,27 +59,19 @@ const arbConfig = {
   merkleRoot:
     '0xbb99a09fb3b8499385659e82a8da93596dd07082fe86981ec06c83181dee489f',
   tokenWhitelist: [
-    // tokens whitelisted for gauges
-    '0x4200000000000000000000000000000000000042',
-    '0x4200000000000000000000000000000000000006',
-    '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
-    '0x2E3D870790dC77A83DD1d18184Acc7439A53f475',
-    '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
-    '0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9',
-    '0x217D47011b23BB961eB6D93cA9945B7501a5BB11',
-    '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb',
-    '0x67CCEA5bb16181E7b4109c9c2143c24a1c2205Be',
-    '0x9e1028F5F1D5eDE59748FFceE5532509976840E0',
-    '0x8700dAec35aF8Ff88c16BdF0418774CB3D7599B4',
-    '0xCB8FA9a76b8e203D8C3797bF438d8FB81Ea3326A',
-    '0x3E29D3A9316dAB217754d13b28646B76607c5f04',
-    '0x8aE125E8653821E851F12A49F7765db9a9ce7384',
-    '0x10010078a54396F62c96dF8532dc2B4847d47ED3',
-    // "", // BTRFLY -- N/A
-    // "", // pxFLOW -- N/A
-    '0xc40F949F8a4e094D1b49a23ea9241D289B7b2819' // LUSD
-    // "", // wstETH -- N/A
-    // "", // HOP -- N/A
+    // '0x4200000000000000000000000000000000000042', // OP
+    '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1', // WETH updated
+    '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8', // USDC updated but do we want to whitelist it?
+    '0x17FC002b466eEc40DaE837Fc4bE5c67993ddBd6F', // FRAX updated
+    '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1', // DAI
+    // '0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9', // sUSD  not sure on this one
+    '0x10663b695b8f75647bD3FF0ff609e16D35BbD1eC', // AGG
+    '0xb96B904ba83DdEeCE47CAADa8B40EE6936D92091' //CRE8R
+
+    // '0x8aE125E8653821E851F12A49F7765db9a9ce7384', // DOLA
+    // '0x10010078a54396F62c96dF8532dc2B4847d47ED3', // HND
+
+    // '0xc40F949F8a4e094D1b49a23ea9241D289B7b2819' // LUSD
   ],
   partnerAddrs: [
     TEAM_MULTISIG, // 1 Protocol owned NFT 64m
@@ -130,7 +126,7 @@ const arbConfig = {
     TEAM_MULTISIG // 38 x protcol / partner NFTs # 49
   ],
   partnerAmts: [
-    SIXTY_MILLION, // 60 million for protcol owned NFT 15%  1
+    SIXTY_MILLION, // 60 million for protcol owned NFT 15%  #1
     TWO_MILLION, // dunks presale 2
     TWO_MILLION, // ceazor presale 3
     FOUR_MILLION, // team veFLOW 1% 4

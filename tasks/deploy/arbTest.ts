@@ -3,7 +3,7 @@ var fs = require('fs')
 
 import optimismConfig from './constants/optimismConfig'
 import testOptimismConfig from './constants/testOptimismConfig'
-import arbTestnetConfig from './constants/arbTestnetConfig'
+import arbTestnetConfig from './constants/arbConfig'
 
 import fantomConfig from './constants/fantomConfig'
 import testFantomConfig from './constants/testFantomConfig'

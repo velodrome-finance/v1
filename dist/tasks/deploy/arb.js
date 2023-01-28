@@ -7,9 +7,7 @@ var __importDefault =
 Object.defineProperty(exports, '__esModule', { value: true })
 const config_1 = require('hardhat/config')
 const arbConfig_1 = __importDefault(require('./constants/arbConfig'))
-const arbTestnetConfig_1 = __importDefault(
-  require('./constants/arbTestnetConfig')
-)
+const arbTestnetConfig_1 = __importDefault(require('./constants/arbConfig'))
 const fantomConfig_1 = __importDefault(require('./constants/fantomConfig'))
 const testFantomConfig_1 = __importDefault(
   require('./constants/testFantomConfig')
@@ -40,7 +38,7 @@ const testFantomConfig_1 = __importDefault(
       RewardsDistributor,
       Voter,
       Minter,
-      FlowGovernor,
+      VeloGovernor,
       RedemptionReceiver,
       MerkleClaim
     ] = await Promise.all([
@@ -55,7 +53,7 @@ const testFantomConfig_1 = __importDefault(
       ethers.getContractFactory('RewardsDistributor'),
       ethers.getContractFactory('Voter'),
       ethers.getContractFactory('Minter'),
-      ethers.getContractFactory('FlowGovernor'),
+      ethers.getContractFactory('VeloGovernor'),
       ethers.getContractFactory('RedemptionReceiver'),
       ethers.getContractFactory('MerkleClaim')
     ])
@@ -136,9 +134,9 @@ const testFantomConfig_1 = __importDefault(
       ARB_CONFIG.lzEndpoint,
       '\n'
     )
-    const governor = await FlowGovernor.deploy(escrow.address)
+    const governor = await VeloGovernor.deploy(escrow.address)
     await governor.deployed()
-    console.log('FlowGovernor deployed to: ', governor.address)
+    console.log('VeloGovernor deployed to: ', governor.address)
     console.log('Args: ', escrow.address, '\n')
     // Airdrop
     const claim = await MerkleClaim.deploy(flow.address, ARB_CONFIG.merkleRoot)

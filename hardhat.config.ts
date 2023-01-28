@@ -53,6 +53,7 @@ const config: HardhatUserConfig = {
       accounts: [process.env.PRIVATE_KEY!],
       chainId: 421613,
       saveDeployments: true,
+      // deploy: ['dist/deploy/'],
       verify: {
         etherscan: {
           apiUrl: 'https://api-goerli.arbiscan.io',
