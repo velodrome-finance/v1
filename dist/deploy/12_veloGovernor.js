@@ -5,7 +5,7 @@ const func = async function (hre) {
   const { deploy } = deployments
   const { deployer } = await getNamedAccounts()
   const escrow = await deployments.get('VotingEscrow')
-  await deploy('VeloGovernor', {
+  await deploy('FlowGovernor', {
     from: deployer,
     args: [escrow.address],
     log: true,
@@ -13,5 +13,5 @@ const func = async function (hre) {
   })
 }
 exports.default = func
-func.tags = ['VeloGovernor']
-func.id = 'veloGovernor'
+func.tags = ['FlowGovernor']
+func.id = 'FlowGovernor'

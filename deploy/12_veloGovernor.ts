@@ -9,7 +9,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const escrow = await deployments.get('VotingEscrow')
 
-  await deploy('VeloGovernor', {
+  await deploy('FlowGovernor', {
     from: deployer,
     args: [escrow.address],
     log: true,
@@ -17,5 +17,5 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   })
 }
 export default func
-func.tags = ['VeloGovernor']
-func.id = 'veloGovernor'
+func.tags = ['FlowGovernor']
+func.id = 'FlowGovernor'

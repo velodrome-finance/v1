@@ -1,9 +1,9 @@
 pragma solidity 0.8.13;
 
 import "./BaseTest.sol";
-import "contracts/VeloGovernor.sol";
+import "contracts/FlowGovernor.sol";
 
-contract VeloGovernorTest is BaseTest {
+contract FlowGovernorTest is BaseTest {
     VotingEscrow escrow;
     GaugeFactory gaugeFactory;
     BribeFactory bribeFactory;
@@ -12,7 +12,7 @@ contract VeloGovernorTest is BaseTest {
     Minter minter;
     Gauge gauge;
     InternalBribe bribe;
-    VeloGovernor governor;
+    FlowGovernor governor;
 
     function setUp() public {
         deployOwners();
@@ -63,7 +63,7 @@ contract VeloGovernorTest is BaseTest {
         gauge = Gauge(gaugeAddress);
         bribe = InternalBribe(bribeAddress);
 
-        governor = new VeloGovernor(escrow);
+        governor = new FlowGovernor(escrow);
         voter.setGovernor(address(governor));
     }
 

@@ -6,7 +6,7 @@ var __importDefault =
   }
 Object.defineProperty(exports, '__esModule', { value: true })
 const arbTestnetConfig_1 = __importDefault(
-  require('../tasks/deploy/constants/arbTestnetConfig')
+  require('../tasks/deploy/constants/arbConfig') // update to arbConfig
 )
 const ARB_TEST_CONFIG = arbTestnetConfig_1.default
 const func = async function (hre) {
@@ -16,7 +16,7 @@ const func = async function (hre) {
   const escrow = await ethers.getContract('VotingEscrow')
   const voter = await ethers.getContract('Voter')
   const distributor = await ethers.getContract('RewardsDistributor')
-  const governor = await ethers.getContract('VeloGovernor')
+  const governor = await ethers.getContract('FlowGovernor')
   const minter = await ethers.getContract('Minter')
   const receiver = await ethers.getContract('RedemptionReceiver')
   const claim = await deployments.get('MerkleClaim')

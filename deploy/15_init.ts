@@ -1,9 +1,9 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types'
 import { DeployFunction } from 'hardhat-deploy/types'
 
-import arbHardhatConfig from '../tasks/deploy/constants/arbHardhatConfig'
+import arbConfig from '../tasks/deploy/constants/arbConfig'
 
-const ARB_TEST_CONFIG = arbHardhatConfig
+const ARB_TEST_CONFIG = arbConfig
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, ethers } = hre
@@ -13,7 +13,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const escrow = await ethers.getContract('VotingEscrow')
   const voter = await ethers.getContract('Voter')
   const distributor = await ethers.getContract('RewardsDistributor')
-  const governor = await ethers.getContract('VeloGovernor')
+  const governor = await ethers.getContract('FlowGovernor')
   const minter = await ethers.getContract('Minter')
   const receiver = await ethers.getContract('RedemptionReceiver')
 

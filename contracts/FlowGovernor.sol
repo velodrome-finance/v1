@@ -9,7 +9,7 @@ import {L2GovernorCountingSimple} from "contracts/governance/L2GovernorCountingS
 import {L2GovernorVotes} from "contracts/governance/L2GovernorVotes.sol";
 import {L2GovernorVotesQuorumFraction} from "contracts/governance/L2GovernorVotesQuorumFraction.sol";
 
-contract VeloGovernor is
+contract FlowGovernor is
     L2Governor,
     L2GovernorCountingSimple,
     L2GovernorVotes,

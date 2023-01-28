@@ -46,6 +46,10 @@ const arbConfig = {
   wtck: TEAM_EOA,
   torbik: TEAM_EOA,
   velodromeMultisig: TEAM_EOA,
+  arbitrumTeam: TEAM_MULTISIG,
+  velodromeMultisig: TEAM_MULTISIG,
+  anton: TEAM_MULTISIG,
+  andre: TEAM_MULTISIG,
 
   emergencyCouncil: '0xcC2D01030eC2cd187346F70bFc483F24488C32E8',
   merkleRoot:
@@ -74,105 +78,107 @@ const arbConfig = {
     // "", // HOP -- N/A
   ],
   partnerAddrs: [
-    TEAM_MULTISIG, // Protocol owned NFT 64m
-    '0x069e85D4F1010DD961897dC8C095FBB5FF297434', // dunks
-    '0x3c5Aac016EF2F178e8699D6208796A2D67557fe2', // ceazor
-    '0x03B88DacB7c21B54cEfEcC297D981E5b721A9dF1', //coolie
-    
-   
-     ''//faeflow,
-     '0x78e801136F77805239A7F533521A7a5570F572C8', //wtck,
-     '0x0b776552c1Aef1Dc33005DD25AcDA22493b6615d',//torbik,
-    velodromeMultisig,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG,
-    TEAM_MULTISIG // 38 x protcol / partner NFTs
+    TEAM_MULTISIG, // 1 Protocol owned NFT 64m
+    '0x069e85D4F1010DD961897dC8C095FBB5FF297434', // 2  dunks
+    '0x3c5Aac016EF2F178e8699D6208796A2D67557fe2', // 3 ceazor
+    '0x03B88DacB7c21B54cEfEcC297D981E5b721A9dF1', // 4coolie
+
+    '0xf78da0B8Ae888C318e1A19415d593729A61Ac0c3', // 5  faeflow,
+    '0x78e801136F77805239A7F533521A7a5570F572C8', // 6 wtck,
+    '0x0b776552c1Aef1Dc33005DD25AcDA22493b6615d', // 7 torbik,
+    velodromeMultisig, // 8 should we split this up?
+    anton, // 9 half %
+    andre, // 10 half %
+    arbitrumTeam, // 11 minimum 1% could be more if they help us
+    TEAM_MULTISIG, // 12
+    TEAM_MULTISIG, // 13
+    TEAM_MULTISIG, // 14
+    TEAM_MULTISIG, // 15
+    TEAM_MULTISIG, // 16
+    TEAM_MULTISIG, // 17
+    TEAM_MULTISIG, // 18
+    TEAM_MULTISIG, // 19
+    TEAM_MULTISIG, // 20
+    TEAM_MULTISIG, // 21
+    TEAM_MULTISIG, // 22
+    TEAM_MULTISIG, // 23
+    TEAM_MULTISIG, // 24
+    TEAM_MULTISIG, // 25
+    TEAM_MULTISIG, // 26
+    TEAM_MULTISIG, // 27
+    TEAM_MULTISIG, // 28
+    TEAM_MULTISIG, // 29
+    TEAM_MULTISIG, // 30
+    TEAM_MULTISIG, // 31
+    TEAM_MULTISIG, // 32
+    TEAM_MULTISIG, // 33
+    TEAM_MULTISIG, // 34
+    TEAM_MULTISIG, // 35
+    TEAM_MULTISIG, // 36
+    TEAM_MULTISIG, // 37
+    TEAM_MULTISIG, // 38
+    TEAM_MULTISIG, // 39
+    TEAM_MULTISIG, // 40
+    TEAM_MULTISIG, // 41
+    TEAM_MULTISIG, // 42
+    TEAM_MULTISIG, // 43
+    TEAM_MULTISIG, // 44
+    TEAM_MULTISIG, // 45
+    TEAM_MULTISIG, // 46
+    TEAM_MULTISIG, // 47
+    TEAM_MULTISIG, // 48
+    TEAM_MULTISIG // 38 x protcol / partner NFTs # 49
   ],
   partnerAmts: [
-    SIXTY_MILLION, // 60 million for protcol owned NFT 15% 
-    TWO_MILLION, // dunks presale
-    TWO_MILLION, // ceazor presale
-    FOUR_MILLION, // team veFLOW 1%
-    FOUR_MILLION, // team veFLOW 1%
-    FOUR_MILLION, // team veFLOW 1%
-    FOUR_MILLION, // team veFLOW 1%
-    FOUR_MILLION, // team veFLOW 1%
-    FOUR_MILLION, // team veFLOW 1%
-    FOUR_MILLION, // tribute to velodrome (need to get their arb address DO NOT USE MULTISIG FROM OP)
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION // 1% to each partner x 38 partners
+    SIXTY_MILLION, // 60 million for protcol owned NFT 15%  1
+    TWO_MILLION, // dunks presale 2
+    TWO_MILLION, // ceazor presale 3
+    FOUR_MILLION, // team veFLOW 1% 4
+    FOUR_MILLION, // team veFLOW 1% 5
+    FOUR_MILLION, // team veFLOW 1% 6
+    FOUR_MILLION, // team veFLOW 1% 7
+    FOUR_MILLION, // team veFLOW 1% 8
+    FOUR_MILLION, // team veFLOW 1% 9
+    FOUR_MILLION, // 10 tribute to velodrome (need to get their arb address DO NOT USE MULTISIG FROM OP)
+    FOUR_MILLION, //11
+    FOUR_MILLION, // 12
+    FOUR_MILLION, // 13
+    FOUR_MILLION, // 14
+    FOUR_MILLION, // 15
+    FOUR_MILLION, // 16
+    FOUR_MILLION, // 17
+    FOUR_MILLION, // 18
+    FOUR_MILLION, // 19
+    FOUR_MILLION, // 20
+    FOUR_MILLION, // 21
+    FOUR_MILLION, // 22
+    FOUR_MILLION, // 23
+    FOUR_MILLION, // 24
+    FOUR_MILLION, // 25
+    FOUR_MILLION, // 26
+    FOUR_MILLION, // 27
+    FOUR_MILLION, // 28
+    FOUR_MILLION, // 29
+    FOUR_MILLION, // 30
+    FOUR_MILLION, // 31
+    FOUR_MILLION, // 32
+    FOUR_MILLION, // 33
+    FOUR_MILLION, // 34
+    FOUR_MILLION, // 35
+    FOUR_MILLION, // 36
+    FOUR_MILLION, // 37
+    FOUR_MILLION, // 38
+    FOUR_MILLION, // 39
+    FOUR_MILLION, // 40
+    FOUR_MILLION, // 41
+    FOUR_MILLION, // 42
+    FOUR_MILLION, // 43
+    FOUR_MILLION, // 44
+    FOUR_MILLION, // 45
+    FOUR_MILLION, // 46
+    FOUR_MILLION, // 47
+    FOUR_MILLION, // 48
+    FOUR_MILLION // 1% to each partner x 38 partners # 49
   ],
   partnerMax: PARTNER_MAX
 }

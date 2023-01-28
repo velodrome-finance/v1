@@ -40,7 +40,7 @@ const testFantomConfig_1 = __importDefault(
       RewardsDistributor,
       Voter,
       Minter,
-      VeloGovernor,
+      FlowGovernor,
       RedemptionReceiver,
       MerkleClaim
     ] = await Promise.all([
@@ -55,7 +55,7 @@ const testFantomConfig_1 = __importDefault(
       ethers.getContractFactory('RewardsDistributor'),
       ethers.getContractFactory('Voter'),
       ethers.getContractFactory('Minter'),
-      ethers.getContractFactory('VeloGovernor'),
+      ethers.getContractFactory('FlowGovernor'),
       ethers.getContractFactory('RedemptionReceiver'),
       ethers.getContractFactory('MerkleClaim')
     ])
@@ -136,9 +136,9 @@ const testFantomConfig_1 = __importDefault(
       ARB_CONFIG.lzEndpoint,
       '\n'
     )
-    const governor = await VeloGovernor.deploy(escrow.address)
+    const governor = await FlowGovernor.deploy(escrow.address)
     await governor.deployed()
-    console.log('VeloGovernor deployed to: ', governor.address)
+    console.log('FlowGovernor deployed to: ', governor.address)
     console.log('Args: ', escrow.address, '\n')
     // Airdrop
     const claim = await MerkleClaim.deploy(flow.address, ARB_CONFIG.merkleRoot)

@@ -36,7 +36,7 @@ task('deploy:arb', 'Deploys Arbitrum contracts').setAction(async function (
     RewardsDistributor,
     Voter,
     Minter,
-    VeloGovernor,
+    FlowGovernor,
     RedemptionReceiver,
     MerkleClaim
   ] = await Promise.all([
@@ -51,7 +51,7 @@ task('deploy:arb', 'Deploys Arbitrum contracts').setAction(async function (
     ethers.getContractFactory('RewardsDistributor'),
     ethers.getContractFactory('Voter'),
     ethers.getContractFactory('Minter'),
-    ethers.getContractFactory('VeloGovernor'),
+    ethers.getContractFactory('FlowGovernor'),
     ethers.getContractFactory('RedemptionReceiver'),
     ethers.getContractFactory('MerkleClaim')
   ])
@@ -145,9 +145,9 @@ task('deploy:arb', 'Deploys Arbitrum contracts').setAction(async function (
     '\n'
   )
 
-  const governor = await VeloGovernor.deploy(escrow.address)
+  const governor = await FlowGovernor.deploy(escrow.address)
   await governor.deployed()
-  console.log('VeloGovernor deployed to: ', governor.address)
+  console.log('FlowGovernor deployed to: ', governor.address)
   console.log('Args: ', escrow.address, '\n')
 
   // Airdrop
