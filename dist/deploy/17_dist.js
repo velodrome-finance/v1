@@ -12,12 +12,12 @@ const ARB_TEST_CONFIG = arbTestnetConfig_1.default
 const func = async function (hre) {
   const { ethers } = hre
   const minter = await ethers.getContract('Minter')
-  // Initial veVELO distro
-  await minter.initialize(
-    ARB_TEST_CONFIG.partnerAddrs,
-    ARB_TEST_CONFIG.partnerAmts,
-    ARB_TEST_CONFIG.partnerMax
-  )
+  // Initial veVELO distro  this is already done by now in init...
+  // await minter.initialize(
+  //   ARB_TEST_CONFIG.partnerAddrs,
+  //   ARB_TEST_CONFIG.partnerAmts,
+  //   ARB_TEST_CONFIG.partnerMax
+  // )  this is inside of dist and it does not run apparently...
   console.log('veVELO distributed')
   console.log('Arbitrum Goerli Velocimeter Instruments deployed')
   return true
