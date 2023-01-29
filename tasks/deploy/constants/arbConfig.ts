@@ -3,7 +3,14 @@ import { ethers } from 'ethers'
 const TOKEN_DECIMALS = ethers.BigNumber.from('10').pow(
   ethers.BigNumber.from('18')
 )
+
 const MILLION = ethers.BigNumber.from('10').pow(ethers.BigNumber.from('6'))
+console.log('million', MILLION)
+
+// const HALF_MILLION = ethers.BigNumber.from('.5')
+//   .mul(MILLION)
+//   .mul(TOKEN_DECIMALS)
+const ONE_MILLION = ethers.BigNumber.from('1').mul(MILLION).mul(TOKEN_DECIMALS)
 const TWO_MILLION = ethers.BigNumber.from('2').mul(MILLION).mul(TOKEN_DECIMALS)
 const FOUR_MILLION = ethers.BigNumber.from('4').mul(MILLION).mul(TOKEN_DECIMALS)
 const TEN_MILLION = ethers.BigNumber.from('10').mul(MILLION).mul(TOKEN_DECIMALS)
@@ -16,7 +23,7 @@ const TWENTY_MILLION = ethers.BigNumber.from('20')
 const SIXTY_MILLION = ethers.BigNumber.from('60')
   .mul(MILLION)
   .mul(TOKEN_DECIMALS)
-const PARTNER_MAX = ethers.BigNumber.from('9000')
+const PARTNER_MAX = ethers.BigNumber.from('600') // It will literally mint this many  tokens so be careful with it..
   .mul(MILLION)
   .mul(TOKEN_DECIMALS)
 
@@ -26,6 +33,14 @@ const arbitrumTeam = TEAM_MULTISIG
 const velodromeMultisig = TEAM_MULTISIG
 const anton = TEAM_MULTISIG
 const andre = TEAM_MULTISIG
+const coolie = '0x03B88DacB7c21B54cEfEcC297D981E5b721A9dF1'
+const ceazor = '0x3c5Aac016EF2F178e8699D6208796A2D67557fe2'
+const wtck = '0x78e801136F77805239A7F533521A7a5570F572C8'
+const t0rb1k = '0x0b776552c1Aef1Dc33005DD25AcDA22493b6615d'
+const dunks = '0x069e85D4F1010DD961897dC8C095FBB5FF297434'
+const faeflow = '0x397A7EC90bb4f0e89Ffd2Fb3269a3ef295d4f84A'
+
+//edit this one or the other one??
 
 const arbConfig = {
   // Chain const
@@ -36,15 +51,45 @@ const arbConfig = {
   WETH: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
   USDC: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
 
+  // partnerAddrs: [
+  //   TEAM_MULTISIG // 1 Protocol owned NFT 64m
+  //   // dunks, // 2
+  //   // dunks, //3
+  //   // coolie, //4
+  //   // ceazor, //5
+  //   // ceazor, // 6
+  //   // faeflow, // 7  faeflow,
+  //   // wtck, // 8 wtck,
+  //   // t0rb1k // 9 torbik,
+  //   // dunks, // 10
+  //   // dunks // 11
+  // ],
+  // partnerAmts: [
+  //   SIXTY_MILLION // 60 million for protcol owned NFT 15%  #1
+  //   // FOUR_MILLION, // 2
+  //   // FOUR_MILLION, // 3
+  //   // FOUR_MILLION, //4
+  //   // FOUR_MILLION, //5
+  //   // FOUR_MILLION, //6
+  //   // FOUR_MILLION, //7
+  //   // FOUR_MILLION, // 8 1%
+  //   // FOUR_MILLION // 9 1%
+  //   // MILLION, // 10 1/4 %
+  //   // MILLION // 11
+  // ],
+  partnerAddrs: [TEAM_MULTISIG, dunks, t0rb1k, dunks, t0rb1k, dunks, t0rb1k],
+  partnerAmts: [SIXTY_MILLION, FOUR_MILLION, FOUR_MILLION, ONE_MILLION], // MILLION Mint 0.001 WTF pls halp
+  partnerMax: PARTNER_MAX,
+
   // Addresses
   teamEOA: TEAM_EOA,
   teamMultisig: TEAM_MULTISIG,
   coolie: TEAM_EOA,
   dunks: '0x069e85D4F1010DD961897dC8C095FBB5FF297434',
   ceazor: '0x3c5Aac016EF2F178e8699D6208796A2D67557fe2',
-  faeflow: TEAM_EOA, //update
-  wtck: TEAM_EOA,
-  torbik: TEAM_EOA,
+  faeflow: '', //update
+  wtck: '0x78e801136F77805239A7F533521A7a5570F572C8',
+  torbik: '0x0b776552c1Aef1Dc33005DD25AcDA22493b6615d',
 
   arbitrumTeam: TEAM_MULTISIG,
   velodromeMultisig: TEAM_MULTISIG,
@@ -69,7 +114,7 @@ const arbConfig = {
     // '0x10010078a54396F62c96dF8532dc2B4847d47ED3', // HND
 
     // '0xc40F949F8a4e094D1b49a23ea9241D289B7b2819' // LUSD
-  ],
+  ]
   // partnerAddrs: [
   //   TEAM_MULTISIG, // 1 Protocol owned NFT 64m
   //   '0x069e85D4F1010DD961897dC8C095FBB5FF297434', // 2  dunks
@@ -173,13 +218,6 @@ const arbConfig = {
   //   FOUR_MILLION, // 48
   //   FOUR_MILLION // 1% to each partner x 38 partners # 49
   // ],
-  partnerAddrs: [
-    TEAM_MULTISIG // 1 Protocol owned NFT 64m
-  ],
-  partnerAmts: [
-    SIXTY_MILLION // 60 million for protcol owned NFT 15%  #1
-  ],
-  partnerMax: PARTNER_MAX
 }
 
 export default arbConfig

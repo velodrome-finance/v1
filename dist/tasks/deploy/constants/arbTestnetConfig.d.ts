@@ -1,21 +1,11 @@
 import { ethers } from 'ethers';
-declare const arbConfig: {
+declare const arbHardhatConfig: {
     lzChainId: number;
     lzEndpoint: string;
     WETH: string;
     USDC: string;
     teamEOA: string;
     teamMultisig: string;
-    coolie: string;
-    dunks: string;
-    ceazor: string;
-    faeflow: string;
-    wtck: string;
-    torbik: string;
-    arbitrumTeam: string;
-    velodromeMultisig: string;
-    anton: string;
-    andre: string;
     emergencyCouncil: string;
     merkleRoot: string;
     tokenWhitelist: string[];
@@ -23,4 +13,4 @@ declare const arbConfig: {
     partnerAmts: ethers.BigNumber[];
     partnerMax: ethers.BigNumber;
 };
-export default arbConfig;
+export default arbHardhatConfig;

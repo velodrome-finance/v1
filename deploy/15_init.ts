@@ -65,11 +65,11 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   await minter.setTeam(ARB_TEST_CONFIG.teamMultisig)
   console.log('Team set for minter')
 
-  await minter.initialize(
-    ARB_TEST_CONFIG.partnerAddrs,
-    ARB_TEST_CONFIG.partnerAmts,
-    ARB_TEST_CONFIG.partnerMax
-  )
+  // await minter.initialize(
+  //   ARB_TEST_CONFIG.partnerAddrs,
+  //   ARB_TEST_CONFIG.partnerAmts,
+  //   ARB_TEST_CONFIG.partnerMax
+  // )
 
   // create pair
   // provide liq

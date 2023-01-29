@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 // The tasks in this file should be called by the multisig
 // CURRENTLY OUTDATED
 // import { task } from "hardhat/config";
