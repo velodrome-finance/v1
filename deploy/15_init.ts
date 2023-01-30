@@ -13,21 +13,21 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const escrow = await ethers.getContract('VotingEscrow')
   const voter = await ethers.getContract('Voter')
   const distributor = await ethers.getContract('RewardsDistributor')
-  const governor = await ethers.getContract('FlowGovernor')
+  // const governor = await ethers.getContract('FlowGovernor')
   const minter = await ethers.getContract('Minter')
-  const receiver = await ethers.getContract('RedemptionReceiver')
+  // const receiver = await ethers.getContract('RedemptionReceiver')
 
-  const claim = await deployments.get('MerkleClaim')
+  // const claim = await deployments.get('MerkleClaim')
 
   // Initialize
   await flow.initialMint(ARB_TEST_CONFIG.teamEOA)
   console.log('Initial minted')
 
-  await flow.setRedemptionReceiver(receiver.address)
-  console.log('RedemptionReceiver set')
+  // await flow.setRedemptionReceiver(receiver.address)
+  // console.log('RedemptionReceiver set')
 
-  await flow.setMerkleClaim(claim.address)
-  console.log('MerkleClaim set')
+  // await flow.setMerkleClaim(claim.address)
+  // console.log('MerkleClaim set')
 
   await flow.setMinter(minter.address)
   console.log('Minter set')
@@ -56,11 +56,11 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   await distributor.setDepositor(minter.address)
   console.log('Depositor set')
 
-  await receiver.setTeam(ARB_TEST_CONFIG.teamMultisig)
-  console.log('Team set for receiver')
+  // await receiver.setTeam(ARB_TEST_CONFIG.teamMultisig)
+  // console.log('Team set for receiver')
 
-  await governor.setTeam(ARB_TEST_CONFIG.teamMultisig)
-  console.log('Team set for governor')
+  // await governor.setTeam(ARB_TEST_CONFIG.teamMultisig)
+  // console.log('Team set for governor')
 
   await minter.setTeam(ARB_TEST_CONFIG.teamMultisig)
   console.log('Team set for minter')
