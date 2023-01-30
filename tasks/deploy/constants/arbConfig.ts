@@ -1,5 +1,7 @@
 import { ethers } from 'ethers'
 
+// this is the actual config that we are using for arbOne
+
 const TOKEN_DECIMALS = ethers.BigNumber.from('10').pow(
   ethers.BigNumber.from('18')
 )
@@ -77,26 +79,32 @@ const arbConfig = {
   //   // MILLION, // 10 1/4 %
   //   // MILLION // 11
   // ],
-  partnerAddrs: [TEAM_MULTISIG, dunks, t0rb1k, dunks, t0rb1k, dunks, t0rb1k],
-  partnerAmts: [SIXTY_MILLION, FOUR_MILLION, FOUR_MILLION, ONE_MILLION], // MILLION Mint 0.001 WTF pls halp
+  partnerAddrs: [
+    TEAM_MULTISIG,
+    dunks,
+    t0rb1k,
+    dunks,
+    t0rb1k,
+    dunks,
+    t0rb1k,
+    dunks
+  ],
+  partnerAmts: [
+    SIXTY_MILLION,
+    FOUR_MILLION,
+    FOUR_MILLION,
+    FOUR_MILLION,
+    FOUR_MILLION,
+    FOUR_MILLION,
+    FOUR_MILLION,
+    ONE_MILLION
+  ], // MILLION Mint 0.001 WTF pls halp
   partnerMax: PARTNER_MAX,
 
   // Addresses
   teamEOA: TEAM_EOA,
   teamMultisig: TEAM_MULTISIG,
-  coolie: TEAM_EOA,
-  dunks: '0x069e85D4F1010DD961897dC8C095FBB5FF297434',
-  ceazor: '0x3c5Aac016EF2F178e8699D6208796A2D67557fe2',
-  faeflow: '', //update
-  wtck: '0x78e801136F77805239A7F533521A7a5570F572C8',
-  torbik: '0x0b776552c1Aef1Dc33005DD25AcDA22493b6615d',
-
-  arbitrumTeam: TEAM_MULTISIG,
-  velodromeMultisig: TEAM_MULTISIG,
-  anton: TEAM_MULTISIG,
-  andre: TEAM_MULTISIG,
-
-  emergencyCouncil: '0xcC2D01030eC2cd187346F70bFc483F24488C32E8',
+  emergencyCouncil: TEAM_MULTISIG,
 
   merkleRoot:
     '0xbb99a09fb3b8499385659e82a8da93596dd07082fe86981ec06c83181dee489f',

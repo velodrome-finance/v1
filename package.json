@@ -10,8 +10,9 @@
     "export": "npx hardhat --network arbitrumGoerli export --export ./exported.json",
     "exportMainnet": "npx hardhat --network arbitrum export --export ./mainnet-exported.json",
     "deploy": "npx hardhat deploy --network arbitrumGoerli",
+    "deployArb": "npx hardhat deploy --network arbitrumOne --tags WrappedExternalBribeFactory",
     "deployHardhat": "npx hardhat deploy --network hardhat",
-    "verifyMainnet": "npx hardhat --network arbitrum etherscan-verify --solc-input --sleep",
+    "verifyMainnet": "npx hardhat --network arbitrumOne etherscan-verify --solc-input --sleep",
     "verifyGoerli": "npx hardhat --network arbitrumGoerli etherscan-verify --solc-input --sleep"
   },
   "devDependencies": {

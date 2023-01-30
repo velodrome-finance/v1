@@ -43,7 +43,7 @@ contract Minter is IMinter {
     ) {
         initializer = msg.sender;
         team = msg.sender;
-        teamRate = 30; // 30 bps = 0.03%
+        teamRate = 30; // 30 bps = 3%
         _flow = IFlow(IVotingEscrow(__ve).token());
         _voter = IVoter(__voter);
         _ve = IVotingEscrow(__ve);
@@ -52,8 +52,8 @@ contract Minter is IMinter {
     }
 
     function initialize(
-        address[] memory claimants,
-        uint256[] memory amounts,
+        address[] memory claimants, // partnerAddrs
+        uint256[] memory amounts, // partnerAmounts
         uint256 max // sum amounts / max = % ownership of top protocols, so if initial 20m is distributed, and target is 25% protocol ownership, then max - 4 x 20m = 80m
     ) external {
         require(initializer == msg.sender);
