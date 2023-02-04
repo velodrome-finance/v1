@@ -13,6 +13,7 @@ import { resolve } from 'path'
 
 import './tasks/accounts'
 import './tasks/deploy'
+import './tasks/createLockFor'
 
 dotenvConfig({ path: resolve(__dirname, './.env') })
 import './checkEnv'
