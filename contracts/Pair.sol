@@ -425,10 +425,10 @@ contract Pair is IPair {
 
         uint256 _totalSupply = totalSupply; // gas savings, must be defined here since totalSupply can update in _mintFee
         if (_totalSupply == 0) {
-            liquidity = MathDunks.sqrt(_amount0 * _amount1) - MINIMUM_LIQUIDITY;
+            liquidity = Math.sqrt(_amount0 * _amount1) - MINIMUM_LIQUIDITY;
             _mint(address(0), MINIMUM_LIQUIDITY); // permanently lock the first MINIMUM_LIQUIDITY tokens
         } else {
-            liquidity = MathDunks.min(
+            liquidity = Math.min(
                 (_amount0 * _totalSupply) / _reserve0,
                 (_amount1 * _totalSupply) / _reserve1
             );

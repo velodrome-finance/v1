@@ -172,7 +172,7 @@ contract Router is IRouter {
         }
         if (reserveA == 0 && reserveB == 0) {
             (amountA, amountB) = (amountADesired, amountBDesired);
-            liquidity = MathDunks.sqrt(amountA * amountB) - MINIMUM_LIQUIDITY;
+            liquidity = Math.sqrt(amountA * amountB) - MINIMUM_LIQUIDITY;
         } else {
             uint256 amountBOptimal = quoteLiquidity(
                 amountADesired,
@@ -181,7 +181,7 @@ contract Router is IRouter {
             );
             if (amountBOptimal <= amountBDesired) {
                 (amountA, amountB) = (amountADesired, amountBOptimal);
-                liquidity = MathDunks.min(
+                liquidity = Math.min(
                     (amountA * _totalSupply) / reserveA,
                     (amountB * _totalSupply) / reserveB
                 );
@@ -192,7 +192,7 @@ contract Router is IRouter {
                     reserveA
                 );
                 (amountA, amountB) = (amountAOptimal, amountBDesired);
-                liquidity = MathDunks.min(
+                liquidity = Math.min(
                     (amountA * _totalSupply) / reserveA,
                     (amountB * _totalSupply) / reserveB
                 );

@@ -23,7 +23,7 @@ function calculate_emission () {
 
 // weekly emission takes the max of calculated (aka target) emission versus circulating tail end emission
 function weekly_emission () {
-  return MathDunks.max(calculate_emission(), circulating_emission())
+  return Math.max(calculate_emission(), circulating_emission())
 }
 
 function circulating_emission () {

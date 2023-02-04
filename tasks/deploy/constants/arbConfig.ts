@@ -79,26 +79,8 @@ const arbConfig = {
   //   // MILLION, // 10 1/4 %
   //   // MILLION // 11
   // ],
-  partnerAddrs: [
-    TEAM_MULTISIG,
-    dunks,
-    t0rb1k,
-    dunks,
-    t0rb1k,
-    dunks,
-    t0rb1k,
-    dunks
-  ],
-  partnerAmts: [
-    SIXTY_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    FOUR_MILLION,
-    ONE_MILLION
-  ], // MILLION Mint 0.001 WTF pls halp
+  partnerAddrs: [dunks],
+  partnerAmts: [ONE_MILLION], // MILLION Mint 0.001 WTF pls halp
   partnerMax: PARTNER_MAX,
 
   // Addresses

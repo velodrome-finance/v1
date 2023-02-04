@@ -94,7 +94,7 @@ contract Minter is IMinter {
 
     // weekly emission takes the max of calculated (aka target) emission versus circulating tail end emission
     function weekly_emission() public view returns (uint256) {
-        return MathDunks.max(calculate_emission(), circulating_emission());
+        return Math.max(calculate_emission(), circulating_emission());
     }
 
     // calculates tail end (infinity) emissions as 0.2% of total supply

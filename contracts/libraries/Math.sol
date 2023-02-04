@@ -1,7 +1,7 @@
 pragma solidity 0.8.13;
 
 // this causes issue with forge test as there is already a Math.sol in the forge repo
-library MathDunks {
+library Math {
     function max(uint256 a, uint256 b) internal pure returns (uint256) {
         return a >= b ? a : b;
     }

@@ -19,11 +19,11 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const flow = await deployments.get('Flow')
 
   // Initial veVELO distro // this is not inside dist lets see if its being used for deploys??
-  // await minter.initialize(
-  //   ARB_TEST_CONFIG.partnerAddrs,
-  //   ARB_TEST_CONFIG.partnerAmts,
-  //   ARB_TEST_CONFIG.partnerMax
-  // )
+  await minter.initialize(
+    ARB_TEST_CONFIG.partnerAddrs,
+    ARB_TEST_CONFIG.partnerAmts,
+    ARB_TEST_CONFIG.partnerMax
+  )
   console.log('veVELO not distributed yet') // we will run this when we want to start the epoch and have the NFTs
   //
   console.log('Arbitrum Goerli Velocimeter Instruments deployed')

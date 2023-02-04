@@ -366,7 +366,7 @@ contract Gauge is IGauge {
         view
         returns (uint256)
     {
-        return MathDunks.min(block.timestamp, periodFinish[token]);
+        return Math.min(block.timestamp, periodFinish[token]);
     }
 
     function getReward(address account, address[] memory tokens) external lock {
@@ -408,7 +408,7 @@ contract Gauge is IGauge {
         return
             rewardPerTokenStored[token] +
             (((lastTimeRewardApplicable(token) -
-                MathDunks.min(lastUpdateTime[token], periodFinish[token])) *
+                Math.min(lastUpdateTime[token], periodFinish[token])) *
                 rewardRate[token] *
                 PRECISION) / derivedSupply);
     }
@@ -440,7 +440,7 @@ contract Gauge is IGauge {
         }
 
         uint256 _startIndex = getPriorSupplyIndex(_startTimestamp);
-        uint256 _endIndex = MathDunks.min(supplyNumCheckpoints - 1, maxRuns);
+        uint256 _endIndex = Math.min(supplyNumCheckpoints - 1, maxRuns);
 
         for (uint256 i = _startIndex; i < _endIndex; i++) {
             SupplyCheckpoint memory sp0 = supplyCheckpoints[i];
@@ -469,11 +469,11 @@ contract Gauge is IGauge {
         uint256 supply,
         uint256 startTimestamp
     ) internal view returns (uint256, uint256) {
-        uint256 endTime = MathDunks.max(timestamp1, startTimestamp);
+        uint256 endTime = Math.max(timestamp1, startTimestamp);
         return (
-            (((MathDunks.min(endTime, periodFinish[token]) -
-                MathDunks.min(
-                    MathDunks.max(timestamp0, startTimestamp),
+            (((Math.min(endTime, periodFinish[token]) -
+                Math.min(
+                    Math.max(timestamp0, startTimestamp),
                     periodFinish[token]
                 )) *
                 rewardRate[token] *
@@ -521,7 +521,7 @@ contract Gauge is IGauge {
         }
 
         uint256 _startIndex = getPriorSupplyIndex(_startTimestamp);
-        uint256 _endIndex = MathDunks.min(supplyNumCheckpoints - 1, maxRuns);
+        uint256 _endIndex = Math.min(supplyNumCheckpoints - 1, maxRuns);
 
         if (_endIndex > 0) {
             for (uint256 i = _startIndex; i <= _endIndex - 1; i++) {
@@ -549,7 +549,7 @@ contract Gauge is IGauge {
                 (uint256 _reward, ) = _calcRewardPerToken(
                     token,
                     lastTimeRewardApplicable(token),
-                    MathDunks.max(sp.timestamp, _startTimestamp),
+                    Math.max(sp.timestamp, _startTimestamp),
                     sp.supply,
                     _startTimestamp
                 );
@@ -568,7 +568,7 @@ contract Gauge is IGauge {
         view
         returns (uint256)
     {
-        uint256 _startTimestamp = MathDunks.max(
+        uint256 _startTimestamp = Math.max(
             lastEarn[token][account],
             rewardPerTokenCheckpoints[token][0].timestamp
         );
@@ -608,7 +608,7 @@ contract Gauge is IGauge {
         reward +=
             (cp.balanceOf *
                 (rewardPerToken(token) -
-                    MathDunks.max(
+                    Math.max(
                         _rewardPerTokenStored,
                         userRewardPerTokenStored[token][account]
                     ))) /

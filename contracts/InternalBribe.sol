@@ -13,7 +13,7 @@ contract InternalBribe is IBribe {
     address public immutable _ve;
 
     uint256 public constant DURATION = 7 days; // rewards are released over 7 days
-    uint256 public constant PRECISION = 10**18;
+
     uint256 internal constant MAX_REWARD_TOKENS = 16;
 
     // default snx staking contract implementation
@@ -293,7 +293,7 @@ contract InternalBribe is IBribe {
         view
         returns (uint256)
     {
-        return MathDunks.min(block.timestamp, periodFinish[token]);
+        return Math.min(block.timestamp, periodFinish[token]);
     }
 
     // allows a user to claim rewards for a given token
@@ -347,9 +347,9 @@ contract InternalBribe is IBribe {
         return
             rewardPerTokenStored[token] +
             (((lastTimeRewardApplicable(token) -
-                MathDunks.min(lastUpdateTime[token], periodFinish[token])) *
+                Math.min(lastUpdateTime[token], periodFinish[token])) *
                 rewardRate[token] *
-                PRECISION) / totalSupply);
+                10**IERC20(token).decimals()) / totalSupply);
     }
 
     function batchRewardPerToken(address token, uint256 maxRuns) external {
@@ -375,7 +375,7 @@ contract InternalBribe is IBribe {
         }
 
         uint256 _startIndex = getPriorSupplyIndex(_startTimestamp);
-        uint256 _endIndex = MathDunks.min(supplyNumCheckpoints - 1, maxRuns);
+        uint256 _endIndex = Math.min(supplyNumCheckpoints - 1, maxRuns);
 
         for (uint256 i = _startIndex; i < _endIndex; i++) {
             SupplyCheckpoint memory sp0 = supplyCheckpoints[i];
@@ -404,15 +404,15 @@ contract InternalBribe is IBribe {
         uint256 supply,
         uint256 startTimestamp
     ) internal view returns (uint256, uint256) {
-        uint256 endTime = MathDunks.max(timestamp1, startTimestamp);
+        uint256 endTime = Math.max(timestamp1, startTimestamp);
         return (
-            (((MathDunks.min(endTime, periodFinish[token]) -
-                MathDunks.min(
-                    MathDunks.max(timestamp0, startTimestamp),
+            (((Math.min(endTime, periodFinish[token]) -
+                Math.min(
+                    Math.max(timestamp0, startTimestamp),
                     periodFinish[token]
                 )) *
                 rewardRate[token] *
-                PRECISION) / supply),
+                10**IERC20(token).decimals()) / supply),
             endTime
         );
     }
@@ -456,7 +456,7 @@ contract InternalBribe is IBribe {
         }
 
         uint256 _startIndex = getPriorSupplyIndex(_startTimestamp);
-        uint256 _endIndex = MathDunks.min(supplyNumCheckpoints - 1, maxRuns);
+        uint256 _endIndex = Math.min(supplyNumCheckpoints - 1, maxRuns);
 
         if (_endIndex > 0) {
             for (uint256 i = _startIndex; i <= _endIndex - 1; i++) {
@@ -483,7 +483,7 @@ contract InternalBribe is IBribe {
                 (uint256 _reward, ) = _calcRewardPerToken(
                     token,
                     lastTimeRewardApplicable(token),
-                    MathDunks.max(sp.timestamp, _startTimestamp),
+                    Math.max(sp.timestamp, _startTimestamp),
                     sp.supply,
                     _startTimestamp
                 );
@@ -501,7 +501,7 @@ contract InternalBribe is IBribe {
         view
         returns (uint256)
     {
-        uint256 _startTimestamp = MathDunks.max(
+        uint256 _startTimestamp = Math.max(
             lastEarn[token][tokenId],
             rewardPerTokenCheckpoints[token][0].timestamp
         );
@@ -529,7 +529,7 @@ contract InternalBribe is IBribe {
                 reward +=
                     (cp0.balanceOf *
                         (_rewardPerTokenStored1 - _rewardPerTokenStored0)) /
-                    PRECISION;
+                    10**IERC20(token).decimals();
             }
         }
 
@@ -541,11 +541,11 @@ contract InternalBribe is IBribe {
         reward +=
             (cp.balanceOf *
                 (rewardPerToken(token) -
-                    MathDunks.max(
+                    Math.max(
                         _rewardPerTokenStored,
                         userRewardPerTokenStored[token][tokenId]
                     ))) /
-            PRECISION;
+            10**IERC20(token).decimals();
 
         return reward;
     }

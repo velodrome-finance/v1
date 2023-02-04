@@ -15,7 +15,7 @@ function calculate_emission () {
 }
 
 function weekly_emission () {
-  return MathDunks.max(calculate_emission(), circulating_emission())
+  return Math.max(calculate_emission(), circulating_emission())
 }
 
 function circulating_emission () {
