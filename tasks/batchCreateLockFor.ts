@@ -5,7 +5,7 @@ const path = require("path");
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 // SAMPLE command
-// npx hardhat batch-create-lock-for --network arbitrumOne --token 0xC33f7f83CbB021846Cb9c58f2d8E3df428dbC8C1 --contract 0x10Df81252069C1095F541FAca61646cb9Ae76703 --recipient 0x069e85D4F1010DD961897dC8C095FBB5FF297434
+// npx hardhat batch-create-lock-for --network arbitrumOne --token 0xC33f7f83CbB021846Cb9c58f2d8E3df428dbC8C1 --contract 0x10Df81252069C1095F541FAca61646cb9Ae76703
 type LockDetails = {
   recipient: string,
   amountInMillion: string,
