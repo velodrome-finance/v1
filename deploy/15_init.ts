@@ -21,7 +21,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   // Initialize
   await flow.initialMint(ARB_TEST_CONFIG.teamEOA)
-  console.log('Initial minted')
+  console.log('400m Initial minted')
 
   // await flow.setRedemptionReceiver(receiver.address)
   // console.log('RedemptionReceiver set')
@@ -30,10 +30,13 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   // console.log('MerkleClaim set')
 
   await flow.setMinter(minter.address)
-  console.log('Minter set')
+  console.log('Minter set on flow contract')
 
   await pairFactory.setPauser(ARB_TEST_CONFIG.teamMultisig)
-  console.log('Pauser set')
+  console.log(
+    'Pauser set on pair factory to multisig: ',
+    ARB_TEST_CONFIG.teamMultisig
+  )
 
   await escrow.setVoter(voter.address)
   console.log(
@@ -45,16 +48,19 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   )
 
   await escrow.setTeam(ARB_TEST_CONFIG.teamMultisig)
-  console.log('Team set for escrow')
+  console.log('Team multisig set for escrow', ARB_TEST_CONFIG.teamMultisig)
 
   await voter.setGovernor(ARB_TEST_CONFIG.teamMultisig)
-  console.log('Governor set')
+  console.log('Governor set on voter to: ', ARB_TEST_CONFIG.teamMultisig)
 
   await voter.setEmergencyCouncil(ARB_TEST_CONFIG.teamMultisig)
-  console.log('Emergency Council set')
+  console.log(
+    'Emergency Council set on voter to: ',
+    ARB_TEST_CONFIG.teamMultisig
+  )
 
   await distributor.setDepositor(minter.address)
-  console.log('Depositor set')
+  console.log('Depositor set to minter contract address')
 
   // await receiver.setTeam(ARB_TEST_CONFIG.teamMultisig)
   // console.log('Team set for receiver')
@@ -63,7 +69,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   // console.log('Team set for governor')
 
   await minter.setTeam(ARB_TEST_CONFIG.teamMultisig)
-  console.log('Team set for minter')
+  console.log('Team set for minter to multisig: ', ARB_TEST_CONFIG.teamMultisig)
 
   // await minter.initialize(
   //   ARB_TEST_CONFIG.partnerAddrs,

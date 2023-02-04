@@ -45,14 +45,11 @@ contract Flow is IFlow {
         merkleClaim = _merkleClaim;
     }
 
-    // Initial mint: total 82M
-    //  4M for "Genesis" pools
-    // 30M for liquid team allocation (40M excl init veNFT)
-    // 48M for future partners
+    // NFTs are minted from this amount as well now
     function initialMint(address _recipient) external {
         require(msg.sender == minter && !initialMinted);
         initialMinted = true;
-        _mint(_recipient, 400 * 1e6 * 1e18);
+        _mint(_recipient, 400 * 1e6 * 1e18); //#settings
     }
 
     function approve(address _spender, uint256 _value) external returns (bool) {

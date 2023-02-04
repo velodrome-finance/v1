@@ -27,7 +27,7 @@ contract Minter is IMinter {
     address public team;
     address public pendingTeam;
     uint256 public teamRate;
-    uint256 public constant MAX_TEAM_RATE = 50; // 50 bps = 0.05%
+    uint256 public constant MAX_TEAM_RATE = 50; // 5% max
 
     event Mint(
         address indexed sender,

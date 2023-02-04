@@ -13,7 +13,8 @@
     "deployArb": "npx hardhat deploy --network arbitrumOne --tags WrappedExternalBribeFactory",
     "deployHardhat": "npx hardhat deploy --network hardhat",
     "verifyMainnet": "npx hardhat --network arbitrumOne etherscan-verify --solc-input --sleep",
-    "verifyGoerli": "npx hardhat --network arbitrumGoerli etherscan-verify --solc-input --sleep"
+    "verifyGoerli": "npx hardhat --network arbitrumGoerli etherscan-verify --solc-input --sleep",
+    "batchMint": "npx hardhat batch-create-lock-for --network arbitrumOne --token 0xC33f7f83CbB021846Cb9c58f2d8E3df428dbC8C1 --contract 0x10Df81252069C1095F541FAca61646cb9Ae76703"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "yarn:hardhat-deploy-ethers",
