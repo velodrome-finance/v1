@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import "contracts/libraries/Math.sol";
+import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
 import "contracts/interfaces/IMinter.sol";
 import "contracts/interfaces/IRewardsDistributor.sol";
 import "contracts/interfaces/IFlow.sol";
