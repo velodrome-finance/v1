@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
+import "openzeppelin-contracts/contracts/utils/math/Math.sol";
 import "contracts/interfaces/IBribe.sol";
 import "contracts/interfaces/IBribeFactory.sol";
 import "contracts/interfaces/IGauge.sol";
@@ -174,7 +174,7 @@ contract Voter is IVoter {
 
     function poke(uint256 _tokenId) external {
         require(
-            IVotingEscrow(_ve).isApprovedOrOwner(msg.sender, tokenId) ||
+            IVotingEscrow(_ve).isApprovedOrOwner(msg.sender, _tokenId) ||
                 msg.sender == governor
         );
         address[] memory _poolVote = poolVote[_tokenId];
