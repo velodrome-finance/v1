@@ -17,6 +17,7 @@ contract PairFactory is IPairFactory {
     address public voter;
     address public team;
     address public tank;
+    address public deployer;
 
     mapping(address => mapping(address => mapping(bool => address)))
         public getPair;
@@ -43,12 +44,13 @@ contract PairFactory is IPairFactory {
         // volatileFee = 2;
         stableFee = 3; // 0.03%
         volatileFee = 25; // 0.25%
+        deployer = msg.sender;
     }
 
     // need to set team so that team can set voter
 
     function setTeam(address _team) external {
-        require(msg.sender == team);
+        require(msg.sender == deployer); // might need to set this to deployer?? or just make it
         team = _team;
     }
 
