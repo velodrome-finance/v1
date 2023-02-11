@@ -55,14 +55,14 @@ contract PairFactory is IPairFactory {
     }
 
     function setVoter(address _voter) external {
-        require(msg.sender == team);
+        require(msg.sender == deployer); // have to make sure that this can be set to the voter addres during init script
         voter = _voter;
     }
 
     // function set tank on factory require team
 
     function setTank(address _tank) external {
-        require(msg.sender == team);
+        require(msg.sender == deployer); // this should be updateable to team but adding deployer so that init script can run..
         tank = _tank;
     }
 
