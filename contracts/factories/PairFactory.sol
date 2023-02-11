@@ -16,7 +16,7 @@ contract PairFactory is IPairFactory {
     address public pendingFeeManager;
     address public voter;
     address public team;
-    address public pendingTeam;
+    address public pendingTank;
     address public tank;
     address public deployer;
 
@@ -46,7 +46,6 @@ contract PairFactory is IPairFactory {
         stableFee = 3; // 0.03%
         volatileFee = 25; // 0.25%
         deployer = msg.sender;
-        owner = msg.sender;  // try owner pattern
     }
 
     // need to set team so that team can set voter we really only need to set the voter once :) - deployer can do this only once (either in the init script but then we have to do this one last otherwise it will fail)
@@ -55,24 +54,11 @@ contract PairFactory is IPairFactory {
         require(msg.sender == deployer); // might need to set this to deployer?? or just make it
         require(team == address(0), "The team has already been set.");
         team = _team;
-        
-        
     }
 
+    // In this example, the owner variable is set to the address that deploys the contract in the constructor. The setTeam function requires that the caller (msg.sender) must be the owner, and that the team variable has not yet been set (it is equal to the address value of 0). If either of these conditions are not met, the function will revert and not update the team variable.
 
-
-  function setTeam(address _team) public {
-        require(msg.sender == deployer, "Only the owner can set the team.");
-        require(team == address(0), "The team has already been set.");
-        team = _team;
-    }
-}
-// In this example, the owner variable is set to the address that deploys the contract in the constructor. The setTeam function requires that the caller (msg.sender) must be the owner, and that the team variable has not yet been set (it is equal to the address value of 0). If either of these conditions are not met, the function will revert and not update the team variable.
-
-
-
-
-  // we only get once shot at this. 
+    // we only get once shot at this.
 
     function setVoter(address _voter) external {
         require(msg.sender == deployer); // have to make sure that this can be set to the voter addres during init script
@@ -87,9 +73,9 @@ contract PairFactory is IPairFactory {
         pendingTank = _tank;
     }
 
-        // This makes tank updateable forever by the team address (multisig)
+    // This makes tank updateable forever by the team address (multisig)
 
-     function acceptTank() external {
+    function acceptTank() external {
         require(msg.sender == team, "not pending team");
         tank = pendingTank;
     }
