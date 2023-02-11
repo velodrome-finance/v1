@@ -71,6 +71,26 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   await minter.setTeam(ARB_TEST_CONFIG.teamMultisig)
   console.log('Team set for minter to multisig: ', ARB_TEST_CONFIG.teamMultisig)
 
+  // new init settings for updated pair -> fees -> bribes system
+
+  await pairFactory.setTeam(ARB_TEST_CONFIG.teamMultisig)
+  console.log(
+    'Team set on Pairfacoty to multisig: ',
+    ARB_TEST_CONFIG.teamMultisig
+  )
+
+  await pairFactory.setTank(ARB_TEST_CONFIG.teamMultisig)
+  console.log(
+    'Set tank on Pairfacoty to multisig for now - later we update to another multisig or contract: ',
+    ARB_TEST_CONFIG.teamMultisig
+  )
+
+  await pairFactory.setVoter(voter.address)
+  console.log(
+    'Voter set on Pairfacoty to to voter contract: ',
+    ARB_TEST_CONFIG.teamMultisig
+  )
+
   // await minter.initialize(
   //   ARB_TEST_CONFIG.partnerAddrs,
   //   ARB_TEST_CONFIG.partnerAmts,
