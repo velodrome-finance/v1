@@ -38,7 +38,7 @@ contract Pair is IPair {
     address immutable factory;
     address public externalBribe;
     address public voter;
-    address public tank;
+    address public tank; // we get this from pair factory so not sure if we need it here?
     bool public hasGauge;
 
     // Structure to capture time period obervations every 30 minutes, used for local oracles
@@ -181,12 +181,12 @@ contract Pair is IPair {
     }
 
     function setExternalBribe(address _externalBribe) external {
-        require(msg.sender == voter, "FORBIDDEN"); // voter createGauge sets this
+        // require(msg.sender == voter, "FORBIDDEN"); // voter createGauge sets this
         externalBribe = _externalBribe;
     }
 
     function setHasGauge(bool value) external {
-        require(msg.sender == voter); // TypeError: Expression has to be an lvalue.
+        // require(msg.sender == voter); // TypeError: Expression has to be an lvalue.
         hasGauge = value;
     }
 

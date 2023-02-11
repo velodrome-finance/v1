@@ -6,7 +6,9 @@ import arbConfig from '../tasks/deploy/constants/arbConfig'
 const ARB_TEST_CONFIG = arbConfig
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-  const { deployments, ethers } = hre
+  const { deployments, getNamedAccounts, ethers } = hre
+
+  const { deployer } = await getNamedAccounts()
 
   const flow = await ethers.getContract('Flow')
   const pairFactory = await ethers.getContract('PairFactory')
@@ -38,9 +40,12 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     ARB_TEST_CONFIG.teamMultisig
   )
 
+  // how to use msg.sender in hardhat scripts is the deployer address
+
   await escrow.setVoter(voter.address)
   console.log(
-    'Voter set',
+    'idk how Voter set when it requires msg.sender to be the voter contract print msg.sender:',
+    deployer,
     'voter address: ',
     voter.address,
     'escrow address: ',
