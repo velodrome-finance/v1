@@ -8,6 +8,8 @@ import "contracts/interfaces/IPairCallee.sol";
 import "contracts/factories/PairFactory.sol";
 import "contracts/PairFees.sol";
 
+import "contracts/interfaces/IBribe.sol";
+
 // The base pair of pools, either stable or volatile
 contract Pair is IPair {
     string public name;
@@ -34,6 +36,10 @@ contract Pair is IPair {
     address public immutable token1;
     address public immutable fees;
     address immutable factory;
+    address public externalBribe;
+    address public voter;
+    address public tank;
+    bool public hasGauge;
 
     // Structure to capture time period obervations every 30 minutes, used for local oracles
     struct Observation {
@@ -108,6 +114,7 @@ contract Pair is IPair {
         ).getInitializable();
         (token0, token1, stable) = (_token0, _token1, _stable);
         fees = address(new PairFees(_token0, _token1));
+        //     externalBribe = address();  this does not need to be set at the time of creation
         if (_stable) {
             name = string(
                 abi.encodePacked(
@@ -157,6 +164,30 @@ contract Pair is IPair {
         _unlocked = 2;
         _;
         _unlocked = 1;
+    }
+
+    // make sure that set external bribe knows the address of the voter. We can do this becuase factory is a known varible here. Still need to make this work tho.
+
+    function getAndSetVoter(address factory) external returns (address) {
+        address _voter = PairFactory(factory).voter();
+        voter = _voter;
+        return _voter;
+    }
+
+    function getAndSetTank(address factory) external returns (address) {
+        address _tank = PairFactory(factory).tank();
+        tank = _tank;
+        return _tank;
+    }
+
+    function setExternalBribe(address _externalBribe) external {
+        require(msg.sender == voter, "FORBIDDEN"); // voter createGauge sets this
+        externalBribe = _externalBribe;
+    }
+
+    function setHasGauge(bool value) external {
+        require(msg.sender == voter); // TypeError: Expression has to be an lvalue.
+        hasGauge = value;
     }
 
     function observationLength() external view returns (uint256) {
@@ -212,24 +243,67 @@ contract Pair is IPair {
         }
     }
 
+    // dunks update0
+
+    // Accrue fees on token0
+    // function _update0(uint256 amount) internal {
+    //     _safeTransfer(token0, fees, amount); // transfer the fees out to PairFees
+    //     uint256 _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
+    //     if (_ratio > 0) {
+    //         index0 += _ratio;
+    //     }
+    //     emit Fees(msg.sender, amount, 0);
+    // }
+
+    // // Accrue fees on token1
+    // function _update1(uint256 amount) internal {
+    //     _safeTransfer(token1, fees, amount);
+    //     uint256 _ratio = (amount * 1e18) / totalSupply;
+    //     if (_ratio > 0) {
+    //         index1 += _ratio;
+    //     }
+    //     emit Fees(msg.sender, 0, amount);
+    // }
+
     // Accrue fees on token0
     function _update0(uint256 amount) internal {
-        _safeTransfer(token0, fees, amount); // transfer the fees out to PairFees
-        uint256 _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
-        if (_ratio > 0) {
-            index0 += _ratio;
+        if (hasGauge == false) {
+            _safeTransfer(token0, tank, amount); // transfer the fees to tank MSig for gaugeless LPs
+            uint256 _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
+            if (_ratio > 0) {
+                index0 += _ratio;
+            }
+            emit Fees(msg.sender, amount, 0);
         }
-        emit Fees(msg.sender, amount, 0);
+        if (hasGauge == true) {
+            IBribe(externalBribe).notifyRewardAmount(token0, amount); //transfer fees to exBribes
+            uint256 _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
+            if (_ratio > 0) {
+                index0 += _ratio;
+            }
+            emit Fees(msg.sender, amount, 0);
+        }
     }
 
     // Accrue fees on token1
     function _update1(uint256 amount) internal {
-        _safeTransfer(token1, fees, amount);
-        uint256 _ratio = (amount * 1e18) / totalSupply;
-        if (_ratio > 0) {
-            index1 += _ratio;
+        if (hasGauge == false) {
+            _safeTransfer(token1, tank, amount); // transfer the fees to tank MSig for gaugeless LPs
+            uint256 _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
+            if (_ratio > 0) {
+                index0 += _ratio;
+            }
+            emit Fees(msg.sender, amount, 0);
         }
-        emit Fees(msg.sender, 0, amount);
+        if (hasGauge == true) {
+            //there is no interface for external bribe so this errors
+            IBribe(externalBribe).notifyRewardAmount(token1, amount); //transfer fees to exBribes
+            uint256 _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
+            if (_ratio > 0) {
+                index0 += _ratio;
+            }
+            emit Fees(msg.sender, amount, 0);
+        }
     }
 
     // this function MUST be called on any balance changes, otherwise can be used to infinitely claim fees

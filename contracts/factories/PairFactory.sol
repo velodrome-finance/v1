@@ -14,6 +14,9 @@ contract PairFactory is IPairFactory {
     uint256 public constant MAX_FEE = 50; // 0.5%
     address public feeManager;
     address public pendingFeeManager;
+    address public voter;
+    address public team;
+    address public tank;
 
     mapping(address => mapping(address => mapping(bool => address)))
         public getPair;
@@ -40,6 +43,31 @@ contract PairFactory is IPairFactory {
         // volatileFee = 2;
         stableFee = 3; // 0.03%
         volatileFee = 25; // 0.25%
+    }
+
+    // need to set team so that team can set voter
+
+    function setTeam(address _team) external {
+        require(msg.sender == team);
+        team = _team;
+    }
+
+    function setVoter(address _voter) external {
+        require(msg.sender == team);
+        voter = _voter;
+    }
+
+    // function set tank on factory require team
+
+    function setTank(address _tank) external {
+        require(msg.sender == team);
+        tank = _tank;
+    }
+
+    // pair uses this to check if voter is updating external_bribe
+
+    function getVoter() external view returns (address) {
+        return voter;
     }
 
     function allPairsLength() external view returns (uint256) {

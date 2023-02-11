@@ -13,6 +13,8 @@ import "contracts/interfaces/IPairFactory.sol";
 import "contracts/interfaces/IVoter.sol";
 import "contracts/interfaces/IVotingEscrow.sol";
 
+import "contracts/Pair.sol";
+
 contract Voter is IVoter {
     address public immutable _ve; // the ve token that governs these contracts
     address public immutable factory; // the PairFactory
@@ -310,6 +312,8 @@ contract Voter is IVoter {
         isAlive[_gauge] = true;
         _updateFor(_gauge);
         pools.push(_pool);
+        Pair(_pool).setHasGauge(true); // may need to switch to IPair?
+        Pair(_pool).setExternalBribe(_external_bribe);
         emit GaugeCreated(
             _gauge,
             msg.sender,
