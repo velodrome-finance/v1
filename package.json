@@ -35,6 +35,7 @@
     "hardhat": "^2.9.5",
     "hardhat-abi-exporter": "^2.9.0",
     "hardhat-deploy": "^0.11.22",
+    "hardhat-deploy-tenderly": "^0.2.0",
     "hardhat-preprocessor": "^0.1.4",
     "path": "^0.12.7",
     "prettier": "^2.6.2",

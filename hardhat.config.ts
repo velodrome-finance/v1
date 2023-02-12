@@ -8,6 +8,11 @@ import 'hardhat-deploy'
 import { config as dotenvConfig } from 'dotenv'
 import { HardhatUserConfig, task } from 'hardhat/config'
 
+// tenderly not sure if we need this since we are using hardhat-deploy-tenderly
+// import '@tenderly/hardhat-tenderly'
+
+import 'hardhat-deploy-tenderly'
+
 import fs from 'fs'
 import { resolve } from 'path'
 
@@ -113,6 +118,11 @@ const config: HardhatUserConfig = {
       arbitrumOne: process.env.ARB_SCAN_API_KEY!,
       arbitrumGoerli: process.env.ARB_SCAN_API_KEY!
     }
+  },
+
+  tenderly: {
+    project: 'Velocimeter',
+    username: 'dunks411'
   }
 }
 
