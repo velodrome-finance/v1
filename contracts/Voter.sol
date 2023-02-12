@@ -275,7 +275,7 @@ contract Voter is IVoter {
             allowedRewards[1] = tokenB;
             internalRewards[0] = tokenA;
             internalRewards[1] = tokenB;
-
+            // if one of the tokens is not base (FLOW) then add base(FLOW) to allowed rewards
             if (base != tokenA && base != tokenB) {
                 allowedRewards[2] = base;
             }
