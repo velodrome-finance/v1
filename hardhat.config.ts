@@ -16,6 +16,8 @@ import './tasks/deploy'
 import './tasks/batchCreateLockFor'
 import './tasks/createLockFor'
 
+// import '@tenderly/hardhat-tenderly'
+
 dotenvConfig({ path: resolve(__dirname, './.env') })
 import './checkEnv'
 

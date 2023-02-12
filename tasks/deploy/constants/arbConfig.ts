@@ -29,7 +29,8 @@ const PARTNER_MAX = ethers.BigNumber.from('600') // It will literally mint this 
   .mul(MILLION)
   .mul(TOKEN_DECIMALS)
 
-const TEAM_MULTISIG = '0x16ec7CD5E35682B751d0c77c41A4e6a1A3E2DE01'
+// const TEAM_MULTISIG = '0x16ec7CD5E35682B751d0c77c41A4e6a1A3E2DE01' // bring back before live
+const TEAM_MULTISIG = '0x069e85D4F1010DD961897dC8C095FBB5FF297434'
 const TEAM_EOA = '0x069e85D4F1010DD961897dC8C095FBB5FF297434'
 const arbitrumTeam = TEAM_MULTISIG
 const velodromeMultisig = TEAM_MULTISIG

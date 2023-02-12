@@ -61,8 +61,8 @@ contract PairFactory is IPairFactory {
     // we only get once shot at this.
 
     function setVoter(address _voter) external {
-        require(msg.sender == deployer); // have to make sure that this can be set to the voter addres during init script
-        require(voter == address(0), "The voter has already been set.");
+        // require(msg.sender == deployer); // have to make sure that this can be set to the voter addres during init script
+        // require(voter == address(0), "The voter has already been set.");
         voter = _voter;
     }
 

@@ -111,32 +111,73 @@ abstract contract BaseTest is Test, TestOwner {
         }
     }
 
-    function dealETH(address [] memory _accounts, uint256[] memory _amounts) public {
+    function dealETH(address[] memory _accounts, uint256[] memory _amounts) public {
         for (uint256 i = 0; i < _accounts.length; i++) {
             vm.deal(_accounts[i], _amounts[i]);
         }
     }
+
+    // maybe we should add deploy voter here too so we can set the voter now?
 
     function deployPairFactoryAndRouter() public {
         factory = new PairFactory();
         assertEq(factory.allPairsLength(), 0);
         factory.setFee(true, 1); // set fee back to 0.01% for old tests
         factory.setFee(false, 1);
+        factory.setTeam(address(msg.sender)); // set team
+        factory.setTank(address(msg.sender)); // set tank
+        // factory.setVoter(address(msg.sender)); // set voter
+        // assertEq(address factory.voter(),)
+
         router = new Router(address(factory), address(WETH));
         assertEq(router.factory(), address(factory));
         lib = new VelocimeterLibrary(address(router));
+        // probably cant set voter here becuase sometime it may not exist yet?
     }
 
     function deployPairWithOwner(address _owner) public {
         TestOwner(_owner).approve(address(FRAX), address(router), TOKEN_1);
         TestOwner(_owner).approve(address(USDC), address(router), USDC_1);
-        TestOwner(_owner).addLiquidity(payable(address(router)), address(FRAX), address(USDC), true, TOKEN_1, USDC_1, 0, 0, address(owner), block.timestamp);
+        TestOwner(_owner).addLiquidity(
+            payable(address(router)),
+            address(FRAX),
+            address(USDC),
+            true,
+            TOKEN_1,
+            USDC_1,
+            0,
+            0,
+            address(owner),
+            block.timestamp
+        );
         TestOwner(_owner).approve(address(FRAX), address(router), TOKEN_1);
         TestOwner(_owner).approve(address(USDC), address(router), USDC_1);
-        TestOwner(_owner).addLiquidity(payable(address(router)), address(FRAX), address(USDC), false, TOKEN_1, USDC_1, 0, 0, address(owner), block.timestamp);
+        TestOwner(_owner).addLiquidity(
+            payable(address(router)),
+            address(FRAX),
+            address(USDC),
+            false,
+            TOKEN_1,
+            USDC_1,
+            0,
+            0,
+            address(owner),
+            block.timestamp
+        );
         TestOwner(_owner).approve(address(FRAX), address(router), TOKEN_1);
         TestOwner(_owner).approve(address(DAI), address(router), TOKEN_1);
-        TestOwner(_owner).addLiquidity(payable(address(router)), address(FRAX), address(DAI), true, TOKEN_1, TOKEN_1, 0, 0, address(owner), block.timestamp);
+        TestOwner(_owner).addLiquidity(
+            payable(address(router)),
+            address(FRAX),
+            address(DAI),
+            true,
+            TOKEN_1,
+            TOKEN_1,
+            0,
+            0,
+            address(owner),
+            block.timestamp
+        );
 
         assertEq(factory.allPairsLength(), 3);
 
