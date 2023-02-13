@@ -11,6 +11,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const pairFactory = await deployments.get('PairFactory')
   const gaugeFactory = await deployments.get('GaugeFactory')
   const bribeFactory = await deployments.get('BribeFactory')
+  const wxbribefactory = await deployments.get('WrappedExternalBribeFactory')
 
   await deploy('Voter', {
     from: deployer,
@@ -18,7 +19,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       escrow.address,
       pairFactory.address,
       gaugeFactory.address,
-      bribeFactory.address
+      bribeFactory.address,
+      wxbribefactory.address
     ],
     log: true,
     skipIfAlreadyDeployed: false
