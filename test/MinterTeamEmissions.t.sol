@@ -7,6 +7,7 @@ contract MinterTeamEmissions is BaseTest {
     VotingEscrow escrow;
     GaugeFactory gaugeFactory;
     BribeFactory bribeFactory;
+    WrappedExternalBribeFactory wxbribeFactory;
     Voter voter;
     RewardsDistributor distributor;
     Minter minter;
@@ -29,13 +30,9 @@ contract MinterTeamEmissions is BaseTest {
         router = new Router(address(factory), address(owner));
         gaugeFactory = new GaugeFactory();
         bribeFactory = new BribeFactory();
-        voter = new Voter(
-            address(escrow),
-            address(factory),
-            address(gaugeFactory),
-            address(bribeFactory)
-        );
-
+        wxbribeFactory = new WrappedExternalBribeFactory();
+        voter = new Voter(address(escrow), address(factory), address(gaugeFactory), address(bribeFactory), address(wxbribeFactory));
+        wxbribeFactory.setVoter(address(voter));
         address[] memory tokens = new address[](2);
         tokens[0] = address(FRAX);
         tokens[1] = address(VELO);

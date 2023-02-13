@@ -126,13 +126,13 @@ contract Pair is IPair {
 
     // make sure that set external bribe knows the address of the voter. We can do this becuase factory is a known varible here. Still need to make this work tho.
 
-    function getAndSetVoter(address factory) external returns (address) {
+    function getAndSetVoter() external returns (address) {
         address _voter = PairFactory(factory).voter();
         voter = _voter;
         return _voter;
     }
 
-    function getAndSetTank(address factory) external returns (address) {
+    function getAndSetTank() external returns (address) {
         address _tank = PairFactory(factory).tank();
         tank = _tank;
         return _tank;
@@ -207,7 +207,7 @@ contract Pair is IPair {
     //     emit Fees(msg.sender, 0, amount);
     // }
 
-    // Accrue fees on token0
+    // Accrue fees on token0.
     function _update0(uint256 amount) internal {
         if (hasGauge == false) {
             _safeTransfer(token0, tank, amount); // transfer the fees to tank MSig for gaugeless LPs

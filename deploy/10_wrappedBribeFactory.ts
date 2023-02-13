@@ -15,7 +15,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   await deploy('WrappedExternalBribeFactory', {
     from: deployer,
-    args: [voter.address],
+    args: [],
     log: true,
     skipIfAlreadyDeployed: false
   })

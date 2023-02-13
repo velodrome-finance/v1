@@ -7,6 +7,7 @@ contract ExternalBribesTest is BaseTest {
     VotingEscrow escrow;
     GaugeFactory gaugeFactory;
     BribeFactory bribeFactory;
+    WrappedExternalBribeFactory wxbribeFactory;
     Voter voter;
     RewardsDistributor distributor;
     Minter minter;
@@ -35,14 +36,17 @@ contract ExternalBribesTest is BaseTest {
         // deployVoter()
         gaugeFactory = new GaugeFactory();
         bribeFactory = new BribeFactory();
+        wxbribeFactory = new WrappedExternalBribeFactory();
         voter = new Voter(
             address(escrow),
             address(factory),
             address(gaugeFactory),
-            address(bribeFactory)
+            address(bribeFactory),
+            address(wxbribeFactory)
         );
 
         escrow.setVoter(address(voter));
+        wxbribeFactory.setVoter(address(voter));
 
         // whitelist reward tokens on voter
 

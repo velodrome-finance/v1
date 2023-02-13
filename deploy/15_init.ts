@@ -14,6 +14,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const pairFactory = await ethers.getContract('PairFactory')
   const escrow = await ethers.getContract('VotingEscrow')
   const voter = await ethers.getContract('Voter')
+  const wrappedXBribeFactory = await ethers.getContract('WrappedExternalBribeFactory')
   const distributor = await ethers.getContract('RewardsDistributor')
   // const governor = await ethers.getContract('FlowGovernor')
   const minter = await ethers.getContract('Minter')
@@ -43,6 +44,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   // how to use msg.sender in hardhat scripts is the deployer address
 
   await escrow.setVoter(voter.address)
+  await wrappedXBribeFactory.setVoter(voter.address)
   console.log(
     'idk how Voter set when it requires msg.sender to be the voter contract print msg.sender:',
     deployer,

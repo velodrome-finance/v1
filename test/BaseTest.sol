@@ -6,6 +6,7 @@ import "solmate/test/utils/mocks/MockERC20.sol";
 import "contracts/factories/BribeFactory.sol";
 import "contracts/factories/GaugeFactory.sol";
 import "contracts/factories/PairFactory.sol";
+import "contracts/factories/WrappedExternalBribeFactory.sol";
 import "contracts/redeem/MerkleClaim.sol";
 import "contracts/redeem/RedemptionReceiver.sol";
 import "contracts/redeem/RedemptionSender.sol";

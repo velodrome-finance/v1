@@ -23,11 +23,11 @@ contract Voter is IVoter {
     address internal immutable base;
     address public immutable gaugefactory;
     address public immutable bribefactory;
+    address public immutable wrappedxbribefactory; // this is the address of the wrapped external bribe factory
     uint256 internal constant DURATION = 7 days; // rewards are released over 7 days
     address public minter;
     address public governor; // should be set to an IGovernor
     address public emergencyCouncil; // credibly neutral party similar to Curve's Emergency DAO
-    address public immutable wxbribefactory; // this is the address of the wrapped external bribe factory
     uint256 public totalWeight; // total voting weight
 
     address[] public pools; // all pools viable for incentives
@@ -63,13 +63,13 @@ contract Voter is IVoter {
     event Detach(address indexed owner, address indexed gauge, uint256 tokenId);
     event Whitelisted(address indexed whitelister, address indexed token);
 
-    constructor(address __ve, address _factory, address _gauges, address _bribes, address _wxbribefactory) {
+    constructor(address __ve, address _factory, address _gauges, address _bribes, address _wrappedxbribefactory) {
         _ve = __ve;
         factory = _factory;
         base = IVotingEscrow(__ve).token();
-        wxbribefactory = _wxbribefactory;
         gaugefactory = _gauges;
         bribefactory = _bribes;
+        wrappedxbribefactory = _wrappedxbribefactory;
         minter = msg.sender;
         governor = msg.sender;
         emergencyCouncil = msg.sender;
@@ -246,7 +246,7 @@ contract Voter is IVoter {
 
         address _internal_bribe = IBribeFactory(bribefactory).createInternalBribe(internalRewards);
         address _external_bribe = IBribeFactory(bribefactory).createExternalBribe(allowedRewards);
-        address _wxbribe = IWrappedExternalBribeFactory(wxbribefactory).createBribe(_external_bribe);
+        address _wxbribe = IWrappedExternalBribeFactory(wrappedxbribefactory).createBribe(_external_bribe);
         address _gauge = IGaugeFactory(gaugefactory).createGauge(
             _pool, _internal_bribe, _external_bribe, _ve, isPair, allowedRewards
         );

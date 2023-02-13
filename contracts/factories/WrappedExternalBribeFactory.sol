@@ -4,13 +4,10 @@ pragma solidity 0.8.13;
 import {WrappedExternalBribe} from 'contracts/WrappedExternalBribe.sol';
 
 contract WrappedExternalBribeFactory {
-    address public immutable voter;
+    bool internal _initialized;
+    address public voter;
     mapping(address => address) public oldBribeToNew;
     address public last_bribe;
-
-    constructor(address _voter) {
-        voter = _voter;
-    }
 
     function createBribe(address existing_bribe) external returns (address) {
         require(
@@ -20,5 +17,11 @@ contract WrappedExternalBribeFactory {
         last_bribe = address(new WrappedExternalBribe(voter, existing_bribe));
         oldBribeToNew[existing_bribe] = last_bribe;
         return last_bribe;
+    }
+
+    function setVoter(address _voter) external {
+        require(!_initialized, "Already initialized");
+        voter = _voter;
+        _initialized = true;
     }
 }

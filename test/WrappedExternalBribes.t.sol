@@ -37,10 +37,11 @@ contract WrappedExternalBribesTest is BaseTest {
         // deployVoter()
         gaugeFactory = new GaugeFactory();
         bribeFactory = new BribeFactory();
-        voter = new Voter(address(escrow), address(factory), address(gaugeFactory), address(bribeFactory));
-        wxbribeFactory = new WrappedExternalBribeFactory(address(voter));
+        wxbribeFactory = new WrappedExternalBribeFactory();
+        voter = new Voter(address(escrow), address(factory), address(gaugeFactory), address(bribeFactory), address(wxbribeFactory));
 
         escrow.setVoter(address(voter));
+        wxbribeFactory.setVoter(address(voter));
 
         // deployMinter()
         distributor = new RewardsDistributor(address(escrow));
