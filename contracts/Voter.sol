@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import 'contracts/libraries/Math.sol';
+import 'openzeppelin-contracts/contracts/utils/math/Math.sol';
 import 'contracts/interfaces/IBribe.sol';
 import 'contracts/interfaces/IBribeFactory.sol';
 import 'contracts/interfaces/IGauge.sol';
@@ -13,6 +13,10 @@ import 'contracts/interfaces/IPairFactory.sol';
 import 'contracts/interfaces/IVoter.sol';
 import 'contracts/interfaces/IVotingEscrow.sol';
 
+import 'contracts/Pair.sol';
+
+import 'contracts/interfaces/IWrappedExternalBribeFactory.sol';
+
 contract Voter is IVoter {
 
     address public immutable _ve; // the ve token that governs these contracts
@@ -20,6 +24,7 @@ contract Voter is IVoter {
     address internal immutable base;
     address public immutable gaugefactory;
     address public immutable bribefactory;
+    address public immutable wrappedxbribefactory; // this is the address of the wrapped external bribe factory
     uint internal constant DURATION = 7 days; // rewards are released over 7 days
     address public minter;
     address public governor; // should be set to an IGovernor
@@ -54,12 +59,13 @@ contract Voter is IVoter {
     event Detach(address indexed owner, address indexed gauge, uint tokenId);
     event Whitelisted(address indexed whitelister, address indexed token);
 
-    constructor(address __ve, address _factory, address  _gauges, address _bribes) {
+    constructor(address __ve, address _factory, address _gauges, address _bribes, address _wrappedxbribefactory) {
         _ve = __ve;
         factory = _factory;
         base = IVotingEscrow(__ve).token();
         gaugefactory = _gauges;
         bribefactory = _bribes;
+        wrappedxbribefactory = _wrappedxbribefactory;
         minter = msg.sender;
         governor = msg.sender;
         emergencyCouncil = msg.sender;
@@ -67,6 +73,7 @@ contract Voter is IVoter {
 
     // simple re-entrancy check
     uint internal _unlocked = 1;
+
     modifier lock() {
         require(_unlocked == 1);
         _unlocked = 2;
@@ -133,7 +140,10 @@ contract Voter is IVoter {
         delete poolVote[_tokenId];
     }
 
+    // remove poke function
+
     function poke(uint _tokenId) external {
+        require(IVotingEscrow(_ve).isApprovedOrOwner(msg.sender, _tokenId) || msg.sender == governor);
         address[] memory _poolVote = poolVote[_tokenId];
         uint _poolCnt = _poolVote.length;
         uint256[] memory _weights = new uint256[](_poolCnt);
@@ -215,7 +225,7 @@ contract Voter is IVoter {
             allowedRewards[1] = tokenB;
             internalRewards[0] = tokenA;
             internalRewards[1] = tokenB;
-
+            // if one of the tokens is not base (FLOW) then add base(FLOW) to allowed rewards
             if (base != tokenA && base != tokenB) {
               allowedRewards[2] = base;
             }
@@ -228,6 +238,7 @@ contract Voter is IVoter {
 
         address _internal_bribe = IBribeFactory(bribefactory).createInternalBribe(internalRewards);
         address _external_bribe = IBribeFactory(bribefactory).createExternalBribe(allowedRewards);
+        address _wxbribe = IWrappedExternalBribeFactory(wrappedxbribefactory).createBribe(_external_bribe);
         address _gauge = IGaugeFactory(gaugefactory).createGauge(_pool, _internal_bribe, _external_bribe, _ve, isPair, allowedRewards);
 
         IERC20(base).approve(_gauge, type(uint).max);
@@ -239,7 +250,9 @@ contract Voter is IVoter {
         isAlive[_gauge] = true;
         _updateFor(_gauge);
         pools.push(_pool);
-        emit GaugeCreated(_gauge, msg.sender, _internal_bribe, _external_bribe, _pool);
+        Pair(_pool).setHasGauge(true); // may need to switch to IPair?
+        Pair(_pool).setExternalBribe(_wxbribe); // Changed this to wrapped external bribe  from
+        emit GaugeCreated(_gauge, msg.sender, _internal_bribe, _external_bribe, _wxbribe, _pool);
         return _gauge;
     }
 

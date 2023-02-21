@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import 'contracts/libraries/Math.sol';
+import 'openzeppelin-contracts/contracts/utils/math/Math.sol';
 import 'contracts/interfaces/IERC20.sol';
 import 'contracts/interfaces/IPair.sol';
 import 'contracts/interfaces/IPairCallee.sol';
 import 'contracts/factories/PairFactory.sol';
 import 'contracts/PairFees.sol';
+
+import 'contracts/interfaces/IBribe.sol';
 
 // The base pair of pools, either stable or volatile
 contract Pair is IPair {
@@ -34,6 +36,10 @@ contract Pair is IPair {
     address public immutable token1;
     address public immutable fees;
     address immutable factory;
+    address public externalBribe;
+    address public voter;
+    address public immutable tank;
+    bool public hasGauge;
 
     // Structure to capture time period obervations every 30 minutes, used for local oracles
     struct Observation {
@@ -71,6 +77,8 @@ contract Pair is IPair {
     mapping(address => uint) public claimable1;
 
     event Fees(address indexed sender, uint amount0, uint amount1);
+    event TankFees(address indexed token, uint amount0, address tank);
+    event GaugeFees(address indexed token, uint amount0, address externalBribe);
     event Mint(address indexed sender, uint amount0, uint amount1);
     event Burn(address indexed sender, uint amount0, uint amount1, address indexed to);
     event Swap(
@@ -89,7 +97,9 @@ contract Pair is IPair {
 
     constructor() {
         factory = msg.sender;
-        (address _token0, address _token1, bool _stable) = PairFactory(msg.sender).getInitializable();
+        voter = PairFactory(msg.sender).voter(); // nice easy way to add the voter :) we already getting this from pair factory tho
+        tank = PairFactory(msg.sender).tank(); // nice easy way to add the voter :) we already getting this from pair factory tho
+        (address _token0, address _token1, bool _stable) = PairFactory(msg.sender).getInitializable(); //wondering why msg.sender is passed here??
         (token0, token1, stable) = (_token0, _token1, _stable);
         fees = address(new PairFees(_token0, _token1));
         if (_stable) {
@@ -113,6 +123,24 @@ contract Pair is IPair {
         _unlocked = 2;
         _;
         _unlocked = 1;
+    }
+
+    function _safeApprove(address token, address spender, uint value) internal {
+        require(token.code.length > 0);
+        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(IERC20.approve.selector, spender, value));
+        require(success && (data.length == 0 || abi.decode(data, (bool))));
+    }
+
+    function setExternalBribe(address _externalBribe) external {
+        require(msg.sender == voter, 'Only voter can set external bribe');
+        externalBribe = _externalBribe;
+        _safeApprove(token0, externalBribe, type(uint).max);
+        _safeApprove(token1, externalBribe, type(uint).max);
+    }
+
+    function setHasGauge(bool value) external {
+        require(msg.sender == voter, 'Only voter can set has gauge');
+        hasGauge = value;
     }
 
     function observationLength() external view returns (uint) {
@@ -148,24 +176,46 @@ contract Pair is IPair {
         }
     }
 
-    // Accrue fees on token0
+    // Accrue fees on token0.
     function _update0(uint amount) internal {
-        _safeTransfer(token0, fees, amount); // transfer the fees out to PairFees
-        uint256 _ratio = amount * 1e18 / totalSupply; // 1e18 adjustment is removed during claim
-        if (_ratio > 0) {
-            index0 += _ratio;
+        if (hasGauge == false) {
+            _safeTransfer(token0, tank, amount); // transfer the fees to tank MSig for gaugeless LPs
+            uint _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
+            if (_ratio > 0) {
+                index0 += _ratio;
+            }
+            emit TankFees(token0, amount, tank);
         }
-        emit Fees(msg.sender, amount, 0);
+        if (hasGauge == true) {
+            // _safeApprove(token0, externalBribe, amount);  // max abprove when setExternalBribe() is called
+            IBribe(externalBribe).notifyRewardAmount(token0, amount); //transfer fees to exBribes
+            //  _safeTransfer(token0, tank, amount);
+            uint _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
+            if (_ratio > 0) {
+                index0 += _ratio;
+            }
+            emit GaugeFees(token0, amount, externalBribe);
+        }
     }
 
     // Accrue fees on token1
     function _update1(uint amount) internal {
-        _safeTransfer(token1, fees, amount);
-        uint256 _ratio = amount * 1e18 / totalSupply;
-        if (_ratio > 0) {
-            index1 += _ratio;
+        if (hasGauge == false) {
+            _safeTransfer(token1, tank, amount); // transfer the fees to tank MSig for gaugeless LPs
+            uint _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
+            if (_ratio > 0) {
+                index0 += _ratio;
+            }
+            emit TankFees(token1, amount, tank);
         }
-        emit Fees(msg.sender, 0, amount);
+        if (hasGauge == true) {
+            IBribe(externalBribe).notifyRewardAmount(token1, amount); //transfer fees to exBribes
+            uint _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
+            if (_ratio > 0) {
+                index0 += _ratio;
+            }
+            emit GaugeFees(token1, amount, externalBribe);
+        }
     }
 
     // this function MUST be called on any balance changes, otherwise can be used to infinitely claim fees

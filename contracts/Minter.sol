@@ -1,7 +1,8 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import "contracts/libraries/Math.sol";
+import "openzeppelin-contracts/contracts/utils/math/Math.sol";
+
 import "contracts/interfaces/IMinter.sol";
 import "contracts/interfaces/IRewardsDistributor.sol";
 import "contracts/interfaces/IVelo.sol";
@@ -19,7 +20,7 @@ contract Minter is IMinter {
     IVoter public immutable _voter;
     IVotingEscrow public immutable _ve;
     IRewardsDistributor public immutable _rewards_distributor;
-    uint public weekly = 15_000_000 * 1e18; // represents a starting weekly emission of 15M VELO (VELO has 18 decimals)
+    uint public weekly = 15_000_000 * 1e18; // represents a starting weekly emission of 15M VELO (VELOhas 18 decimals)
     uint public active_period;
     uint internal constant LOCK = 86400 * 7 * 52 * 4;
 
@@ -27,7 +28,7 @@ contract Minter is IMinter {
     address public team;
     address public pendingTeam;
     uint public teamRate;
-    uint public constant MAX_TEAM_RATE = 50; // 50 bps = 0.05%
+    uint public constant MAX_TEAM_RATE = 50; // 5% max
 
     event Mint(address indexed sender, uint weekly, uint circulating_supply, uint circulating_emission);
 
@@ -38,7 +39,7 @@ contract Minter is IMinter {
     ) {
         initializer = msg.sender;
         team = msg.sender;
-        teamRate = 30; // 30 bps = 0.03%
+        teamRate = 30; // 30 bps = 3%
         _velo = IVelo(IVotingEscrow(__ve).token());
         _voter = IVoter(__voter);
         _ve = IVotingEscrow(__ve);
@@ -47,8 +48,8 @@ contract Minter is IMinter {
     }
 
     function initialize(
-        address[] memory claimants,
-        uint[] memory amounts,
+        address[] memory claimants, // partnerAddrs
+        uint[] memory amounts, // partnerAmounts
         uint max // sum amounts / max = % ownership of top protocols, so if initial 20m is distributed, and target is 25% protocol ownership, then max - 4 x 20m = 80m
     ) external {
         require(initializer == msg.sender);

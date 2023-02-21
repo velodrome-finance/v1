@@ -10,11 +10,17 @@ contract PairFactory is IPairFactory {
     address public pauser;
     address public pendingPauser;
 
-    uint256 public stableFee;
-    uint256 public volatileFee;
-    uint256 public constant MAX_FEE = 5; // 0.05%
+    uint public stableFee;
+    uint public volatileFee;
+    uint public constant MAX_FEE = 50; // 0.5%
     address public feeManager;
     address public pendingFeeManager;
+    address public voter;
+    address public team;
+    bool internal initial_voter_set;
+    bool internal initial_tank_set;
+    address public tank;
+    address public deployer;
 
     mapping(address => mapping(address => mapping(bool => address))) public getPair;
     address[] public allPairs;
@@ -30,8 +36,38 @@ contract PairFactory is IPairFactory {
         pauser = msg.sender;
         isPaused = false;
         feeManager = msg.sender;
-        stableFee = 2; // 0.02%
-        volatileFee = 2;
+        stableFee = 3; // 0.03%
+        volatileFee = 25; // 0.25%
+        deployer = msg.sender;
+    }
+
+    function setTeam(address _team) external {
+        require(msg.sender == deployer); // might need to set this to deployer?? or just make it
+        require(team == address(0), 'The team has already been set.');
+        team = _team;
+    }
+
+    function setVoter(address _voter) external {
+        require(!initial_voter_set, 'The voter has already been set.');
+        require(msg.sender == deployer); // have to make sure that this can be set to the voter addres during init script
+        voter = _voter;
+        initial_voter_set = true;
+    }
+
+    function setTank(address _tank) external {
+        require(!initial_tank_set, 'The tank has already been set.');
+        require(msg.sender == deployer); // this should be updateable to team but adding deployer so that init script can run..
+        tank = _tank;
+        initial_tank_set = true;
+    }
+
+    function acceptTank(address _tank) external {
+        require(msg.sender == team, 'not pending team');
+        tank = _tank;
+    }
+
+    function getVoter() external view returns (address) {
+        return voter;
     }
 
     function allPairsLength() external view returns (uint) {
