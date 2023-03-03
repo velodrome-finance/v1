@@ -6,7 +6,6 @@ import 'contracts/interfaces/IERC20.sol';
 import 'contracts/interfaces/IPair.sol';
 import 'contracts/interfaces/IPairCallee.sol';
 import 'contracts/factories/PairFactory.sol';
-import 'contracts/PairFees.sol';
 
 import 'contracts/interfaces/IBribe.sol';
 
@@ -34,7 +33,6 @@ contract Pair is IPair {
 
     address public immutable token0;
     address public immutable token1;
-    address public immutable fees;
     address immutable factory;
     address public externalBribe;
     address public voter;
@@ -63,7 +61,6 @@ contract Pair is IPair {
     uint public reserve0CumulativeLast;
     uint public reserve1CumulativeLast;
 
-    event Fees(address indexed sender, uint amount0, uint amount1);
     event TankFees(address indexed token, uint amount0, address tank);
     event GaugeFees(address indexed token, uint amount0, address externalBribe);
     event Mint(address indexed sender, uint amount0, uint amount1);
@@ -87,7 +84,6 @@ contract Pair is IPair {
         tank = PairFactory(msg.sender).tank();
         (address _token0, address _token1, bool _stable) = PairFactory(msg.sender).getInitializable();
         (token0, token1, stable) = (_token0, _token1, _stable);
-        fees = address(new PairFees(_token0, _token1));
         if (_stable) {
             name = string(abi.encodePacked("StableV1 AMM - ", IERC20(_token0).symbol(), "/", IERC20(_token1).symbol()));
             symbol = string(abi.encodePacked("sAMM-", IERC20(_token0).symbol(), "/", IERC20(_token1).symbol()));
