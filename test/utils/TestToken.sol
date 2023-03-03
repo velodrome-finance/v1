@@ -80,10 +80,6 @@ contract TestToken {
         return balanceOf[account];
     }
 
-    function claimFees() external pure returns (uint, uint) {
-        return (0,0);
-    }
-
     function _mint(address _to, uint _amount) internal returns (bool) {
         balanceOf[_to] += _amount;
         totalSupply += _amount;

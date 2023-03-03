@@ -46,7 +46,7 @@ abstract contract BaseTest is Test, TestOwner {
     Velo VELO;
     MockERC20 WEVE;
     MockERC20 LR; // late reward
-    TestToken stake; // MockERC20 with claimFees() function that returns (0,0)
+    TestToken stake;
     PairFactory factory;
     Router router;
     VelodromeLibrary lib;
