@@ -204,7 +204,7 @@ contract Pair is IPair {
             _safeTransfer(token1, tank, amount); // transfer the fees to tank MSig for gaugeless LPs
             uint _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
             if (_ratio > 0) {
-                index0 += _ratio;
+                index1 += _ratio;
             }
             emit TankFees(token1, amount, tank);
         }
@@ -212,7 +212,7 @@ contract Pair is IPair {
             IBribe(externalBribe).notifyRewardAmount(token1, amount); //transfer fees to exBribes
             uint _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
             if (_ratio > 0) {
-                index0 += _ratio;
+                index1 += _ratio;
             }
             emit GaugeFees(token1, amount, externalBribe);
         }
