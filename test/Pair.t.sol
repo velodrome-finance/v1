@@ -7,6 +7,7 @@ contract PairTest is BaseTest {
     VotingEscrow escrow;
     GaugeFactory gaugeFactory;
     BribeFactory bribeFactory;
+    WrappedExternalBribeFactory wxbribeFactory;
     Voter voter;
     RewardsDistributor distributor;
     Minter minter;
@@ -123,6 +124,7 @@ contract PairTest is BaseTest {
     function confirmTokensForFraxUsdc() public {
         confirmFraxDeployment();
         deployPairFactoryAndRouter();
+        routerAddLiquidity();
         deployPairWithOwner(address(owner));
         deployPairWithOwner(address(owner2));
 
@@ -203,11 +205,6 @@ contract PairTest is BaseTest {
         router.swapExactTokensForTokens(USDC_1, assertedOutput[1], routes, address(owner), block.timestamp);
         vm.warp(block.timestamp + 1801);
         vm.roll(block.number + 1);
-        address fees = pair.fees();
-        assertEq(USDC.balanceOf(fees), 100);
-        uint256 b = USDC.balanceOf(address(owner));
-        pair.claimFees();
-        assertGt(USDC.balanceOf(address(owner)), b);
     }
 
     function routerPair1GetAmountsOutAndSwapExactTokensForTokensOwner2() public {
@@ -221,11 +218,6 @@ contract PairTest is BaseTest {
         uint256[] memory expectedOutput = router.getAmountsOut(USDC_1, routes);
         owner2.approve(address(USDC), address(router), USDC_1);
         owner2.swapExactTokensForTokens(payable(address(router)), USDC_1, expectedOutput[1], routes, address(owner2), block.timestamp);
-        address fees = pair.fees();
-        assertEq(USDC.balanceOf(fees), 101);
-        uint256 b = USDC.balanceOf(address(owner));
-        owner2.claimFees(address(pair));
-        assertEq(USDC.balanceOf(address(owner)), b);
     }
 
     function routerPair2GetAmountsOutAndSwapExactTokensForTokens() public {
@@ -255,19 +247,19 @@ contract PairTest is BaseTest {
     }
 
     function deployVoter() public {
-        routerAddLiquidity();
-
         gaugeFactory = new GaugeFactory();
         bribeFactory = new BribeFactory();
-        voter = new Voter(address(escrow), address(factory), address(gaugeFactory), address(bribeFactory));
+        wxbribeFactory = new WrappedExternalBribeFactory();
+        voter = new Voter(address(escrow), address(factory), address(gaugeFactory), address(bribeFactory), address(wxbribeFactory));
 
         escrow.setVoter(address(voter));
-
+        wxbribeFactory.setVoter(address(voter));
+        factory.setVoter(address(voter));
         assertEq(voter.length(), 0);
     }
 
     function deployMinter() public {
-        deployVoter();
+        routerAddLiquidity();
 
         distributor = new RewardsDistributor(address(escrow));
 
@@ -601,7 +593,6 @@ contract PairTest is BaseTest {
 
         address[] memory gauges = new address[](1);
         gauges[0] = address(gauge);
-        voter.distributeFees(gauges);
     }
 
     function minterMint() public {

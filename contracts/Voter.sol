@@ -44,7 +44,7 @@ contract Voter is IVoter {
     mapping(address => bool) public isWhitelisted;
     mapping(address => bool) public isAlive;
 
-    event GaugeCreated(address indexed gauge, address creator, address internal_bribe, address indexed external_bribe, address indexed pool);
+    event GaugeCreated(address indexed gauge, address creator, address internal_bribe, address indexed external_bribe, address wxbribe, address indexed pool);
     event GaugeKilled(address indexed gauge);
     event GaugeRevived(address indexed gauge);
     event Voted(address indexed voter, uint tokenId, uint256 weight);
@@ -364,14 +364,6 @@ contract Voter is IVoter {
         require(IVotingEscrow(_ve).isApprovedOrOwner(msg.sender, _tokenId));
         for (uint i = 0; i < _fees.length; i++) {
             IBribe(_fees[i]).getRewardForOwner(_tokenId, _tokens[i]);
-        }
-    }
-
-    function distributeFees(address[] memory _gauges) external {
-        for (uint i = 0; i < _gauges.length; i++) {
-            if (IGauge(_gauges[i]).isForPair()){
-                IGauge(_gauges[i]).claimFees();
-            }
         }
     }
 

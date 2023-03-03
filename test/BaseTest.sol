@@ -6,6 +6,7 @@ import "solmate/test/utils/mocks/MockERC20.sol";
 import "contracts/factories/BribeFactory.sol";
 import "contracts/factories/GaugeFactory.sol";
 import "contracts/factories/PairFactory.sol";
+import "contracts/factories/WrappedExternalBribeFactory.sol";
 import "contracts/redeem/MerkleClaim.sol";
 import "contracts/redeem/RedemptionReceiver.sol";
 import "contracts/redeem/RedemptionSender.sol";
@@ -121,6 +122,9 @@ abstract contract BaseTest is Test, TestOwner {
         assertEq(factory.allPairsLength(), 0);
         factory.setFee(true, 1); // set fee back to 0.01% for old tests
         factory.setFee(false, 1);
+        factory.setTeam(address(msg.sender)); // set team
+        factory.setTank(address(msg.sender)); // set tank
+
         router = new Router(address(factory), address(WETH));
         assertEq(router.factory(), address(factory));
         lib = new VelodromeLibrary(address(router));

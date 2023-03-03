@@ -7,6 +7,7 @@ contract VeloGovernorTest is BaseTest {
     VotingEscrow escrow;
     GaugeFactory gaugeFactory;
     BribeFactory bribeFactory;
+    WrappedExternalBribeFactory wxbribeFactory;
     Voter voter;
     RewardsDistributor distributor;
     Minter minter;
@@ -40,21 +41,27 @@ contract VeloGovernorTest is BaseTest {
 
         deployPairFactoryAndRouter();
 
+        gaugeFactory = new GaugeFactory();
+        bribeFactory = new BribeFactory();
+        wxbribeFactory = new WrappedExternalBribeFactory();
+        voter = new Voter(address(escrow), address(factory), address(gaugeFactory), address(bribeFactory), address(wxbribeFactory));
+
+        escrow.setVoter(address(voter));
+        wxbribeFactory.setVoter(address(voter));
+        factory.setVoter(address(voter));
+
         USDC.approve(address(router), USDC_100K);
         FRAX.approve(address(router), TOKEN_100K);
         router.addLiquidity(address(FRAX), address(USDC), true, TOKEN_100K, USDC_100K, TOKEN_100K, USDC_100K, address(owner), block.timestamp);
-
-        gaugeFactory = new GaugeFactory();
-        bribeFactory = new BribeFactory();
-        voter = new Voter(address(escrow), address(factory), address(gaugeFactory), address(bribeFactory));
-
-        escrow.setVoter(address(voter));
 
         distributor = new RewardsDistributor(address(escrow));
 
         minter = new Minter(address(voter), address(escrow), address(distributor));
         distributor.setDepositor(address(minter));
         VELO.setMinter(address(minter));
+
+        address address1 = factory.getPair(address(FRAX), address(USDC), true);
+        pair = Pair(address1);
 
         VELO.approve(address(gaugeFactory), 15 * TOKEN_100K);
         voter.createGauge(address(pair));

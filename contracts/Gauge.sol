@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import 'contracts/libraries/Math.sol';
+import 'openzeppelin-contracts/contracts/utils/math/Math.sol';
 import 'contracts/interfaces/IBribe.sol';
 import 'contracts/interfaces/IERC20.sol';
 import 'contracts/interfaces/IGauge.sol';
@@ -81,7 +81,6 @@ contract Gauge is IGauge {
     event Deposit(address indexed from, uint tokenId, uint amount);
     event Withdraw(address indexed from, uint tokenId, uint amount);
     event NotifyReward(address indexed from, address indexed reward, uint amount);
-    event ClaimFees(address indexed from, uint claimed0, uint claimed1);
     event ClaimRewards(address indexed from, address indexed reward, uint amount);
 
     constructor(address _stake, address _internal_bribe, address _external_bribe, address  __ve, address _voter, bool _forPair, address[] memory _allowedRewardTokens) {
@@ -107,38 +106,6 @@ contract Gauge is IGauge {
         _unlocked = 2;
         _;
         _unlocked = 1;
-    }
-
-    function claimFees() external lock returns (uint claimed0, uint claimed1) {
-        return _claimFees();
-    }
-
-    function _claimFees() internal returns (uint claimed0, uint claimed1) {
-        if (!isForPair) {
-            return (0, 0);
-        }
-        (claimed0, claimed1) = IPair(stake).claimFees();
-        if (claimed0 > 0 || claimed1 > 0) {
-            uint _fees0 = fees0 + claimed0;
-            uint _fees1 = fees1 + claimed1;
-            (address _token0, address _token1) = IPair(stake).tokens();
-            if (_fees0 > IBribe(internal_bribe).left(_token0) && _fees0 / DURATION > 0) {
-                fees0 = 0;
-                _safeApprove(_token0, internal_bribe, _fees0);
-                IBribe(internal_bribe).notifyRewardAmount(_token0, _fees0);
-            } else {
-                fees0 = _fees0;
-            }
-            if (_fees1 > IBribe(internal_bribe).left(_token1) && _fees1 / DURATION > 0) {
-                fees1 = 0;
-                _safeApprove(_token1, internal_bribe, _fees1);
-                IBribe(internal_bribe).notifyRewardAmount(_token1, _fees1);
-            } else {
-                fees1 = _fees1;
-            }
-
-            emit ClaimFees(msg.sender, claimed0, claimed1);
-        }
     }
 
     /**
@@ -541,7 +508,6 @@ contract Gauge is IGauge {
         }
         if (rewardRate[token] == 0) _writeRewardPerTokenCheckpoint(token, 0, block.timestamp);
         (rewardPerTokenStored[token], lastUpdateTime[token]) = _updateRewardPerToken(token, type(uint).max, true);
-        _claimFees();
 
         if (block.timestamp >= periodFinish[token]) {
             _safeTransferFrom(token, msg.sender, address(this), amount);

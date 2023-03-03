@@ -36,10 +36,6 @@ contract TestOwner {
                                   Pair
     //////////////////////////////////////////////////////////////*/
 
-    function claimFees(address _pair) public {
-        Pair(_pair).claimFees();
-    }
-
     function mint(address _pair, address _to) public {
         Pair(_pair).mint(_to);
     }

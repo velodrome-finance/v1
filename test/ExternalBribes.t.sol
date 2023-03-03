@@ -6,12 +6,14 @@ contract ExternalBribesTest is BaseTest {
     VotingEscrow escrow;
     GaugeFactory gaugeFactory;
     BribeFactory bribeFactory;
+    WrappedExternalBribeFactory wxbribeFactory;
     Voter voter;
     RewardsDistributor distributor;
     Minter minter;
     Gauge gauge;
     InternalBribe bribe;
     ExternalBribe xbribe;
+    PairFactory pairFactory;
 
     function setUp() public {
         vm.warp(block.timestamp + 1 weeks); // put some initial time in
@@ -28,16 +30,19 @@ contract ExternalBribesTest is BaseTest {
         VeArtProxy artProxy = new VeArtProxy();
         escrow = new VotingEscrow(address(VELO), address(artProxy));
         deployPairFactoryAndRouter();
-        deployPairWithOwner(address(owner));
 
         // deployVoter()
         gaugeFactory = new GaugeFactory();
         bribeFactory = new BribeFactory();
-        voter = new Voter(address(escrow), address(factory), address(gaugeFactory), address(bribeFactory));
+        wxbribeFactory = new WrappedExternalBribeFactory();
+        voter = new Voter(address(escrow), address(factory), address(gaugeFactory), address(bribeFactory), address(wxbribeFactory));
 
         escrow.setVoter(address(voter));
+        wxbribeFactory.setVoter(address(voter));
+        // setVoter on pairFactory. factory defined in BaseTest and we know for sure that it is deployed because of deployPairFactoryAndRouter()
+        factory.setVoter(address(voter));
+        deployPairWithOwner(address(owner));
 
-        // deployMinter()
         distributor = new RewardsDistributor(address(escrow));
         minter = new Minter(address(voter), address(escrow), address(distributor));
         distributor.setDepositor(address(minter));

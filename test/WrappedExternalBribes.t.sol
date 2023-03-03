@@ -32,15 +32,17 @@ contract WrappedExternalBribesTest is BaseTest {
         VeArtProxy artProxy = new VeArtProxy();
         escrow = new VotingEscrow(address(VELO), address(artProxy));
         deployPairFactoryAndRouter();
-        deployPairWithOwner(address(owner));
 
         // deployVoter()
         gaugeFactory = new GaugeFactory();
         bribeFactory = new BribeFactory();
-        voter = new Voter(address(escrow), address(factory), address(gaugeFactory), address(bribeFactory));
-        wxbribeFactory = new WrappedExternalBribeFactory(address(voter));
+        wxbribeFactory = new WrappedExternalBribeFactory();
+        voter = new Voter(address(escrow), address(factory), address(gaugeFactory), address(bribeFactory), address(wxbribeFactory));
 
         escrow.setVoter(address(voter));
+        wxbribeFactory.setVoter(address(voter));
+        factory.setVoter(address(voter));
+        deployPairWithOwner(address(owner));
 
         // deployMinter()
         distributor = new RewardsDistributor(address(escrow));
@@ -63,7 +65,7 @@ contract WrappedExternalBribesTest is BaseTest {
         gauge = Gauge(voter.createGauge(address(pair)));
         bribe = InternalBribe(gauge.internal_bribe());
         xbribe = ExternalBribe(gauge.external_bribe());
-        wxbribe = WrappedExternalBribe(wxbribeFactory.createBribe(address(xbribe)));
+        wxbribe = WrappedExternalBribe(wxbribeFactory.oldBribeToNew(address(xbribe)));
 
         // ve
         VELO.approve(address(escrow), TOKEN_1);

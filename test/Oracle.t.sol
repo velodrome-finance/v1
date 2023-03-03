@@ -72,11 +72,9 @@ contract OracleTest is BaseTest {
         vm.roll(block.number + 1);
         USDC.approve(address(router), USDC_1);
         router.swapExactTokensForTokens(USDC_1, 0, routes, address(owner), block.timestamp);
-        address fees = pair.fees();
-        assertEq(USDC.balanceOf(fees), 400);
-        uint256 b = USDC.balanceOf(address(owner));
-        pair.claimFees();
-        assertGt(USDC.balanceOf(address(owner)), b);
+        address tank = pair.tank();
+        assertFalse(tank == address(0));
+        assertEq(USDC.balanceOf(tank), 400); // tank should have 400 USDC
     }
 
     function testOracle() public {
