@@ -17,8 +17,6 @@ contract PairFactory is IPairFactory {
     address public pendingFeeManager;
     address public voter;
     address public team;
-    bool internal initial_voter_set;
-    bool internal initial_tank_set;
     address public tank;
     address public deployer;
 
@@ -42,27 +40,19 @@ contract PairFactory is IPairFactory {
     }
 
     function setTeam(address _team) external {
-        require(msg.sender == deployer); // might need to set this to deployer?? or just make it
         require(team == address(0), 'The team has already been set.');
+        require(msg.sender == deployer, 'Not authorised to set team.'); // might need to set this to deployer?? or just make it
         team = _team;
     }
 
     function setVoter(address _voter) external {
-        require(!initial_voter_set, 'The voter has already been set.');
-        require(msg.sender == deployer); // have to make sure that this can be set to the voter addres during init script
+        require(voter == address(0), 'The voter has already been set.');
+        require(msg.sender == deployer, 'Not authorised to set voter.'); // have to make sure that this can be set to the voter addres during init script
         voter = _voter;
-        initial_voter_set = true;
     }
 
     function setTank(address _tank) external {
-        require(!initial_tank_set, 'The tank has already been set.');
-        require(msg.sender == deployer); // this should be updateable to team but adding deployer so that init script can run..
-        tank = _tank;
-        initial_tank_set = true;
-    }
-
-    function acceptTank(address _tank) external {
-        require(msg.sender == team, 'not pending team');
+        require(msg.sender == deployer || msg.sender == team, 'Not authorised to set tank.'); // this should be updateable to team but adding deployer so that init script can run..
         tank = _tank;
     }
 
