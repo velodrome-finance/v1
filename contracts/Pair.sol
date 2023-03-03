@@ -63,19 +63,6 @@ contract Pair is IPair {
     uint public reserve0CumulativeLast;
     uint public reserve1CumulativeLast;
 
-    // index0 and index1 are used to accumulate fees, this is split out from normal trades to keep the swap "clean"
-    // this further allows LP holders to easily claim fees for tokens they have/staked
-    uint public index0 = 0;
-    uint public index1 = 0;
-
-    // position assigned to each LP to track their current index0 & index1 vs the global position
-    mapping(address => uint) public supplyIndex0;
-    mapping(address => uint) public supplyIndex1;
-
-    // tracks the amount of unclaimed, but claimable tokens off of fees for token0 and token1
-    mapping(address => uint) public claimable0;
-    mapping(address => uint) public claimable1;
-
     event Fees(address indexed sender, uint amount0, uint amount1);
     event TankFees(address indexed token, uint amount0, address tank);
     event GaugeFees(address indexed token, uint amount0, address externalBribe);
@@ -160,38 +147,13 @@ contract Pair is IPair {
         return (token0, token1);
     }
 
-    // claim accumulated but unclaimed fees (viewable via claimable0 and claimable1)
-    function claimFees() external returns (uint claimed0, uint claimed1) {
-        _updateFor(msg.sender);
-
-        claimed0 = claimable0[msg.sender];
-        claimed1 = claimable1[msg.sender];
-
-        if (claimed0 > 0 || claimed1 > 0) {
-            claimable0[msg.sender] = 0;
-            claimable1[msg.sender] = 0;
-
-            PairFees(fees).claimFeesFor(msg.sender, claimed0, claimed1);
-
-            emit Claim(msg.sender, msg.sender, claimed0, claimed1);
-        }
-    }
-
     // Accrue fees on token0.
     function _update0(uint amount) internal {
         if (!hasGauge) {
             _safeTransfer(token0, tank, amount); // transfer the fees to tank MSig for gaugeless LPs
-            uint _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
-            if (_ratio > 0) {
-                index0 += _ratio;
-            }
             emit TankFees(token0, amount, tank);
         } else {
             IBribe(externalBribe).notifyRewardAmount(token0, amount); //transfer fees to exBribes
-            uint _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
-            if (_ratio > 0) {
-                index0 += _ratio;
-            }
             emit GaugeFees(token0, amount, externalBribe);
         }
     }
@@ -200,45 +162,10 @@ contract Pair is IPair {
     function _update1(uint amount) internal {
         if (!hasGauge) {
             _safeTransfer(token1, tank, amount); // transfer the fees to tank MSig for gaugeless LPs
-            uint _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
-            if (_ratio > 0) {
-                index1 += _ratio;
-            }
             emit TankFees(token1, amount, tank);
         } else {
             IBribe(externalBribe).notifyRewardAmount(token1, amount); //transfer fees to exBribes
-            uint _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
-            if (_ratio > 0) {
-                index1 += _ratio;
-            }
             emit GaugeFees(token1, amount, externalBribe);
-        }
-    }
-
-    // this function MUST be called on any balance changes, otherwise can be used to infinitely claim fees
-    // Fees are segregated from core funds, so fees can never put liquidity at risk
-    function _updateFor(address recipient) internal {
-        uint _supplied = balanceOf[recipient]; // get LP balance of `recipient`
-        if (_supplied > 0) {
-            uint _supplyIndex0 = supplyIndex0[recipient]; // get last adjusted index0 for recipient
-            uint _supplyIndex1 = supplyIndex1[recipient];
-            uint _index0 = index0; // get global index0 for accumulated fees
-            uint _index1 = index1;
-            supplyIndex0[recipient] = _index0; // update user current position to global position
-            supplyIndex1[recipient] = _index1;
-            uint _delta0 = _index0 - _supplyIndex0; // see if there is any difference that need to be accrued
-            uint _delta1 = _index1 - _supplyIndex1;
-            if (_delta0 > 0) {
-                uint _share = _supplied * _delta0 / 1e18; // add accrued difference for each supplied token
-                claimable0[recipient] += _share;
-            }
-            if (_delta1 > 0) {
-                uint _share = _supplied * _delta1 / 1e18;
-                claimable1[recipient] += _share;
-            }
-        } else {
-            supplyIndex0[recipient] = index0; // new users are set to the default global state
-            supplyIndex1[recipient] = index1;
         }
     }
 
@@ -494,14 +421,12 @@ contract Pair is IPair {
     }
 
     function _mint(address dst, uint amount) internal {
-        _updateFor(dst); // balances must be updated on mint/burn/transfer
         totalSupply += amount;
         balanceOf[dst] += amount;
         emit Transfer(address(0), dst, amount);
     }
 
     function _burn(address dst, uint amount) internal {
-        _updateFor(dst);
         totalSupply -= amount;
         balanceOf[dst] -= amount;
         emit Transfer(dst, address(0), amount);
@@ -560,9 +485,6 @@ contract Pair is IPair {
     }
 
     function _transferTokens(address src, address dst, uint amount) internal {
-        _updateFor(src); // update fee position for src
-        _updateFor(dst); // update fee position for dst
-
         balanceOf[src] -= amount;
         balanceOf[dst] += amount;
 
