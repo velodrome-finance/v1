@@ -29,6 +29,16 @@ contract PairFactory is IPairFactory {
     bool internal _temp;
 
     event PairCreated(address indexed token0, address indexed token1, bool stable, address pair, uint);
+    event TeamSet(address indexed setter, address indexed team);
+    event VoterSet(address indexed setter, address indexed voter);
+    event TankSet(address indexed setter, address indexed tank);
+    event PauserSet(address indexed setter, address indexed pauser);
+    event PauserAccepted(address indexed previous, address indexed current);
+    event Paused(address indexed pauser, bool paused);
+    event FeeManagerSet(address indexed setter, address indexed feeManager);
+    event FeeManagerAccepted(address indexed previous, address indexed current);
+
+    event FeeSet(address indexed setter, bool stable, uint256 fee);
 
     constructor() {
         pauser = msg.sender;
@@ -43,17 +53,20 @@ contract PairFactory is IPairFactory {
         require(team == address(0), 'The team has already been set.');
         require(msg.sender == deployer, 'Not authorised to set team.'); // might need to set this to deployer?? or just make it
         team = _team;
+        emit TeamSet(msg.sender, _team);
     }
 
     function setVoter(address _voter) external {
         require(voter == address(0), 'The voter has already been set.');
         require(msg.sender == deployer, 'Not authorised to set voter.'); // have to make sure that this can be set to the voter addres during init script
         voter = _voter;
+        emit VoterSet(msg.sender, _voter);
     }
 
     function setTank(address _tank) external {
         require(msg.sender == deployer || msg.sender == team, 'Not authorised to set tank.'); // this should be updateable to team but adding deployer so that init script can run..
         tank = _tank;
+        emit TankSet(msg.sender, _tank);
     }
 
     function allPairsLength() external view returns (uint) {
@@ -63,26 +76,33 @@ contract PairFactory is IPairFactory {
     function setPauser(address _pauser) external {
         require(msg.sender == pauser);
         pendingPauser = _pauser;
+        emit PauserSet(msg.sender, _pauser);
     }
 
     function acceptPauser() external {
         require(msg.sender == pendingPauser);
+        address prevPauser = pauser;
         pauser = pendingPauser;
+        emit PauserAccepted(prevPauser, msg.sender);
     }
 
     function setPause(bool _state) external {
         require(msg.sender == pauser);
         isPaused = _state;
+        emit Paused(msg.sender, _state);
     }
 
     function setFeeManager(address _feeManager) external {
         require(msg.sender == feeManager, 'not fee manager');
         pendingFeeManager = _feeManager;
+        emit FeeManagerSet(msg.sender, _feeManager);
     }
 
     function acceptFeeManager() external {
         require(msg.sender == pendingFeeManager, 'not pending fee manager');
+        address prevFeeManager = feeManager;
         feeManager = pendingFeeManager;
+        emit FeeManagerAccepted(prevFeeManager, msg.sender);
     }
 
     function setFee(bool _stable, uint256 _fee) external {
@@ -94,6 +114,7 @@ contract PairFactory is IPairFactory {
         } else {
             volatileFee = _fee;
         }
+        emit FeeSet(msg.sender, _stable, _fee);
     }
 
     function getFee(bool _stable) public view returns(uint256) {
