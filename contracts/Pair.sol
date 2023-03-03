@@ -178,15 +178,14 @@ contract Pair is IPair {
 
     // Accrue fees on token0.
     function _update0(uint amount) internal {
-        if (hasGauge == false) {
+        if (!hasGauge) {
             _safeTransfer(token0, tank, amount); // transfer the fees to tank MSig for gaugeless LPs
             uint _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
             if (_ratio > 0) {
                 index0 += _ratio;
             }
             emit TankFees(token0, amount, tank);
-        }
-        if (hasGauge == true) {
+        } else {
             // _safeApprove(token0, externalBribe, amount);  // max abprove when setExternalBribe() is called
             IBribe(externalBribe).notifyRewardAmount(token0, amount); //transfer fees to exBribes
             //  _safeTransfer(token0, tank, amount);
@@ -200,15 +199,14 @@ contract Pair is IPair {
 
     // Accrue fees on token1
     function _update1(uint amount) internal {
-        if (hasGauge == false) {
+        if (!hasGauge) {
             _safeTransfer(token1, tank, amount); // transfer the fees to tank MSig for gaugeless LPs
             uint _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
             if (_ratio > 0) {
                 index1 += _ratio;
             }
             emit TankFees(token1, amount, tank);
-        }
-        if (hasGauge == true) {
+        } else {
             IBribe(externalBribe).notifyRewardAmount(token1, amount); //transfer fees to exBribes
             uint _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
             if (_ratio > 0) {
