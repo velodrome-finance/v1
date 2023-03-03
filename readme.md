@@ -1,6 +1,6 @@
 # Velocimeter
 
-This repo contains the contracts for Velocimeter Finance, an AMM on Optimism inspired by Solidly.
+This repo contains the contracts for Velocimeter Finance, an AMM on Canto inspired by Solidly.
 
 ## Testing
 
