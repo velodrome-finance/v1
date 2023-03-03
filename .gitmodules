@@ -12,6 +12,3 @@
 	path = lib/openzeppelin-contracts
 	url = https://github.com/Openzeppelin/openzeppelin-contracts
 	branch = v4.8.2
-[submodule "lib/LayerZero"]
-	path = lib/LayerZero
-	url = https://github.com/LayerZero-Labs/LayerZero
