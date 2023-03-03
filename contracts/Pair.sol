@@ -77,7 +77,6 @@ contract Pair is IPair {
         address indexed to
     );
     event Sync(uint reserve0, uint reserve1);
-    event Claim(address indexed sender, address indexed recipient, uint amount0, uint amount1);
 
     event Transfer(address indexed from, address indexed to, uint amount);
     event Approval(address indexed owner, address indexed spender, uint amount);
