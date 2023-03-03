@@ -147,28 +147,14 @@ contract Pair is IPair {
         return (token0, token1);
     }
 
-    // Accrue fees on token0.
-    function _update0(uint amount) internal {
+    function _sendTokenFees(address token, uint amount) internal {
         if (amount != 0) {
             if (hasGauge) {
-                IBribe(externalBribe).notifyRewardAmount(token0, amount); // transfer fees to exBribes
-                emit GaugeFees(token0, amount, externalBribe);
+                IBribe(externalBribe).notifyRewardAmount(token, amount); // transfer fees to exBribes
+                emit GaugeFees(token, amount, externalBribe);
             } else {
-                _safeTransfer(token0, tank, amount); // transfer the fees to tank MSig for gaugeless LPs
-                emit TankFees(token0, amount, tank);
-            }
-        }
-    }
-
-    // Accrue fees on token1
-    function _update1(uint amount) internal {
-        if (amount != 0) {
-            if (hasGauge) {
-                IBribe(externalBribe).notifyRewardAmount(token1, amount); // transfer fees to exBribes
-                emit GaugeFees(token1, amount, externalBribe);
-            } else {
-                _safeTransfer(token1, tank, amount); // transfer the fees to tank MSig for gaugeless LPs
-                emit TankFees(token1, amount, tank);
+                _safeTransfer(token, tank, amount); // transfer the fees to tank MSig for gaugeless LPs
+                emit TankFees(token, amount, tank);
             }
         }
     }
@@ -335,8 +321,8 @@ contract Pair is IPair {
         require(amount0In > 0 || amount1In > 0, 'IIA'); // Pair: INSUFFICIENT_INPUT_AMOUNT
         { // scope for reserve{0,1}Adjusted, avoids stack too deep errors
         (address _token0, address _token1) = (token0, token1);
-        if (amount0In > 0) _update0(amount0In * PairFactory(factory).getFee(stable) / 10000); // accrue fees for token0 and move them out of pool
-        if (amount1In > 0) _update1(amount1In * PairFactory(factory).getFee(stable) / 10000); // accrue fees for token1 and move them out of pool
+        if (amount0In > 0) _sendTokenFees(token0, amount0In * PairFactory(factory).getFee(stable) / 10000);
+        if (amount1In > 0) _sendTokenFees(token1, amount1In * PairFactory(factory).getFee(stable) / 10000);
         _balance0 = IERC20(_token0).balanceOf(address(this)); // since we removed tokens, we need to reconfirm balances, can also simply use previous balance - amountIn/ 10000, but doing balanceOf again as safety check
         _balance1 = IERC20(_token1).balanceOf(address(this));
         // The curve, either x3y+y3x for stable pools, or x*y for volatile pools
