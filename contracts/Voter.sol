@@ -246,8 +246,8 @@ contract Voter is IVoter {
         isAlive[_gauge] = true;
         _updateFor(_gauge);
         pools.push(_pool);
-        IPair(_pool).setHasGauge(true); // may need to switch to IPair?
-        IPair(_pool).setExternalBribe(_wxbribe); // Changed this to wrapped external bribe  from
+        IPair(_pool).setHasGauge(true);
+        IPair(_pool).setExternalBribe(_wxbribe);
         emit GaugeCreated(_gauge, msg.sender, _internal_bribe, _external_bribe, _wxbribe, _pool);
         return _gauge;
     }
