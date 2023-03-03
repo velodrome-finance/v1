@@ -132,6 +132,7 @@ contract Pair is IPair {
     }
 
     function setExternalBribe(address _externalBribe) external {
+        require(externalBribe == address(0), 'External bribe has already been set.');
         require(msg.sender == voter, 'Only voter can set external bribe');
         externalBribe = _externalBribe;
         _safeApprove(token0, externalBribe, type(uint).max);
