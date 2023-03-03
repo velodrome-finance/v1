@@ -13,28 +13,20 @@ contract Velo is IVelo {
     mapping(address => uint) public balanceOf;
     mapping(address => mapping(address => uint)) public allowance;
 
-    bool public initialMinted;
     address public minter;
 
     event Transfer(address indexed from, address indexed to, uint value);
     event Approval(address indexed owner, address indexed spender, uint value);
 
-    constructor() {
+    constructor(address initialSupplyRecipient) {
         minter = msg.sender;
-        _mint(msg.sender, 0);
+        _mint(initialSupplyRecipient, 300 * 1e6 * 1e18);
     }
 
     // No checks as its meant to be once off to set minting rights to BaseV1 Minter
     function setMinter(address _minter) external {
         require(msg.sender == minter);
         minter = _minter;
-    }
-
-    // NFTs are minted from this amount as well now
-    function initialMint(address _recipient) external {
-        require(msg.sender == minter && !initialMinted);
-        initialMinted = true;
-        _mint(_recipient, 300 * 1e6 * 1e18); //#settings
     }
 
     function approve(address _spender, uint _value) external returns (bool) {

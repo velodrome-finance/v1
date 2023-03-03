@@ -117,9 +117,6 @@ task("deploy:op", "Deploys Optimism contracts").setAction(async function (
 
   // Airdrop
   // Initialize
-  await velo.initialMint(OP_CONFIG.teamEOA);
-  console.log("Initial minted");
-
   await velo.setMinter(minter.address);
   console.log("Minter set");
 
@@ -140,9 +137,6 @@ task("deploy:op", "Deploys Optimism contracts").setAction(async function (
 
   await distributor.setDepositor(minter.address);
   console.log("Depositor set");
-
-  await receiver.setTeam(OP_CONFIG.teamMultisig)
-  console.log("Team set for receiver");
 
   await governor.setTeam(OP_CONFIG.teamMultisig)
   console.log("Team set for governor");
