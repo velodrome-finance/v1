@@ -99,7 +99,7 @@ contract Pair is IPair {
         factory = msg.sender;
         voter = PairFactory(msg.sender).voter(); // nice easy way to add the voter :) we already getting this from pair factory tho
         tank = PairFactory(msg.sender).tank(); // nice easy way to add the voter :) we already getting this from pair factory tho
-        (address _token0, address _token1, bool _stable) = PairFactory(msg.sender).getInitializable(); //wondering why msg.sender is passed here??
+        (address _token0, address _token1, bool _stable) = PairFactory(msg.sender).getInitializable();
         (token0, token1, stable) = (_token0, _token1, _stable);
         fees = address(new PairFees(_token0, _token1));
         if (_stable) {
