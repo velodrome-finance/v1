@@ -66,10 +66,6 @@ contract PairFactory is IPairFactory {
         tank = _tank;
     }
 
-    function getVoter() external view returns (address) {
-        return voter;
-    }
-
     function allPairsLength() external view returns (uint) {
         return allPairs.length;
     }
