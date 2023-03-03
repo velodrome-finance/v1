@@ -258,7 +258,7 @@ contract Voter is IVoter {
         isAlive[_gauge] = false;
         claimable[_gauge] = 0;
         address _pair = IGauge(_gauge).stake(); // TODO: add test cases
-        IPair(_pair).setHasGauge(bool false);
+        IPair(_pair).setHasGauge(false);
         emit GaugeKilled(_gauge);
     }
 
@@ -267,7 +267,7 @@ contract Voter is IVoter {
         require(!isAlive[_gauge], "gauge already alive");
         isAlive[_gauge] = true;
         address _pair = IGauge(_gauge).stake(); // TODO: add test cases
-        IPair(_pair).setHasGauge(bool true);
+        IPair(_pair).setHasGauge(true);
         emit GaugeRevived(_gauge);
     }
 
