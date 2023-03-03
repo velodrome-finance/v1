@@ -10,9 +10,9 @@ contract PairFactory is IPairFactory {
     address public pauser;
     address public pendingPauser;
 
-    uint public stableFee;
-    uint public volatileFee;
-    uint public constant MAX_FEE = 50; // 0.5%
+    uint256 public stableFee;
+    uint256 public volatileFee;
+    uint256 public constant MAX_FEE = 50; // 0.5%
     address public feeManager;
     address public pendingFeeManager;
     address public voter;
