@@ -2,7 +2,6 @@ pragma solidity 0.8.13;
 
 interface IPair {
     function metadata() external view returns (uint dec0, uint dec1, uint r0, uint r1, bool st, address t0, address t1);
-    function claimFees() external returns (uint, uint);
     function tokens() external returns (address, address);
     function transferFrom(address src, address dst, uint amount) external returns (bool);
     function permit(address owner, address spender, uint value, uint deadline, uint8 v, bytes32 r, bytes32 s) external;
