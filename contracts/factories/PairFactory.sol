@@ -108,7 +108,6 @@ contract PairFactory is IPairFactory {
     function setFee(bool _stable, uint256 _fee) external {
         require(msg.sender == feeManager, 'not fee manager');
         require(_fee <= MAX_FEE, 'fee too high');
-        require(_fee != 0, 'fee must be nonzero');
         if (_stable) {
             stableFee = _fee;
         } else {

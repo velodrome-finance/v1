@@ -149,23 +149,27 @@ contract Pair is IPair {
 
     // Accrue fees on token0.
     function _update0(uint amount) internal {
-        if (!hasGauge) {
-            _safeTransfer(token0, tank, amount); // transfer the fees to tank MSig for gaugeless LPs
-            emit TankFees(token0, amount, tank);
-        } else {
-            IBribe(externalBribe).notifyRewardAmount(token0, amount); //transfer fees to exBribes
-            emit GaugeFees(token0, amount, externalBribe);
+        if (amount != 0) {
+            if (hasGauge) {
+                IBribe(externalBribe).notifyRewardAmount(token0, amount); // transfer fees to exBribes
+                emit GaugeFees(token0, amount, externalBribe);
+            } else {
+                _safeTransfer(token0, tank, amount); // transfer the fees to tank MSig for gaugeless LPs
+                emit TankFees(token0, amount, tank);
+            }
         }
     }
 
     // Accrue fees on token1
     function _update1(uint amount) internal {
-        if (!hasGauge) {
-            _safeTransfer(token1, tank, amount); // transfer the fees to tank MSig for gaugeless LPs
-            emit TankFees(token1, amount, tank);
-        } else {
-            IBribe(externalBribe).notifyRewardAmount(token1, amount); //transfer fees to exBribes
-            emit GaugeFees(token1, amount, externalBribe);
+        if (amount != 0) {
+            if (hasGauge) {
+                IBribe(externalBribe).notifyRewardAmount(token1, amount); // transfer fees to exBribes
+                emit GaugeFees(token1, amount, externalBribe);
+            } else {
+                _safeTransfer(token1, tank, amount); // transfer the fees to tank MSig for gaugeless LPs
+                emit TankFees(token1, amount, tank);
+            }
         }
     }
 
