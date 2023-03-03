@@ -13,8 +13,6 @@ import 'contracts/interfaces/IPairFactory.sol';
 import 'contracts/interfaces/IVoter.sol';
 import 'contracts/interfaces/IVotingEscrow.sol';
 
-import 'contracts/Pair.sol';
-
 import 'contracts/interfaces/IWrappedExternalBribeFactory.sol';
 
 contract Voter is IVoter {
@@ -248,8 +246,8 @@ contract Voter is IVoter {
         isAlive[_gauge] = true;
         _updateFor(_gauge);
         pools.push(_pool);
-        Pair(_pool).setHasGauge(true); // may need to switch to IPair?
-        Pair(_pool).setExternalBribe(_wxbribe); // Changed this to wrapped external bribe  from
+        IPair(_pool).setHasGauge(true); // may need to switch to IPair?
+        IPair(_pool).setExternalBribe(_wxbribe); // Changed this to wrapped external bribe  from
         emit GaugeCreated(_gauge, msg.sender, _internal_bribe, _external_bribe, _wxbribe, _pool);
         return _gauge;
     }
