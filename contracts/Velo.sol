@@ -15,8 +15,6 @@ contract Velo is IVelo {
 
     bool public initialMinted;
     address public minter;
-    address public redemptionReceiver;
-    address public merkleClaim;
 
     event Transfer(address indexed from, address indexed to, uint value);
     event Approval(address indexed owner, address indexed spender, uint value);
@@ -30,16 +28,6 @@ contract Velo is IVelo {
     function setMinter(address _minter) external {
         require(msg.sender == minter);
         minter = _minter;
-    }
-
-    function setRedemptionReceiver(address _receiver) external {
-        require(msg.sender == minter);
-        redemptionReceiver = _receiver;
-    }
-
-    function setMerkleClaim(address _merkleClaim) external {
-        require(msg.sender == minter);
-        merkleClaim = _merkleClaim;
     }
 
     // NFTs are minted from this amount as well now
@@ -87,12 +75,6 @@ contract Velo is IVelo {
 
     function mint(address account, uint amount) external returns (bool) {
         require(msg.sender == minter);
-        _mint(account, amount);
-        return true;
-    }
-
-    function claim(address account, uint amount) external returns (bool) {
-        require(msg.sender == redemptionReceiver || msg.sender == merkleClaim);
         _mint(account, amount);
         return true;
     }

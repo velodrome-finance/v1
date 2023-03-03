@@ -3,9 +3,6 @@ import { task } from "hardhat/config";
 import optimismConfig from "./constants/optimismConfig";
 import testOptimismConfig from "./constants/testOptimismConfig";
 
-import fantomConfig from "./constants/fantomConfig";
-import testFantomConfig from "./constants/testFantomConfig";
-
 task("deploy:op", "Deploys Optimism contracts").setAction(async function (
   taskArguments,
   { ethers }
@@ -13,7 +10,6 @@ task("deploy:op", "Deploys Optimism contracts").setAction(async function (
   const mainnet = false;
 
   const OP_CONFIG = mainnet ? optimismConfig : testOptimismConfig;
-  const FTM_CONFIG = mainnet ? fantomConfig : testFantomConfig;
 
   // Load
   const [
@@ -29,8 +25,6 @@ task("deploy:op", "Deploys Optimism contracts").setAction(async function (
     Voter,
     Minter,
     VeloGovernor,
-    RedemptionReceiver,
-    MerkleClaim,
   ] = await Promise.all([
     ethers.getContractFactory("Velo"),
     ethers.getContractFactory("GaugeFactory"),
@@ -44,8 +38,6 @@ task("deploy:op", "Deploys Optimism contracts").setAction(async function (
     ethers.getContractFactory("Voter"),
     ethers.getContractFactory("Minter"),
     ethers.getContractFactory("VeloGovernor"),
-    ethers.getContractFactory("RedemptionReceiver"),
-    ethers.getContractFactory("MerkleClaim"),
   ]);
 
   const velo = await Velo.deploy();
@@ -96,7 +88,7 @@ task("deploy:op", "Deploys Optimism contracts").setAction(async function (
   );
   await voter.deployed();
   console.log("Voter deployed to: ", voter.address);
-  console.log("Args: ", 
+  console.log("Args: ",
     escrow.address,
     pairFactory.address,
     gaugeFactory.address,
@@ -111,26 +103,10 @@ task("deploy:op", "Deploys Optimism contracts").setAction(async function (
   );
   await minter.deployed();
   console.log("Minter deployed to: ", minter.address);
-  console.log("Args: ", 
+  console.log("Args: ",
     voter.address,
     escrow.address,
     distributor.address,
-    "\n"
-  );
-
-  const receiver = await RedemptionReceiver.deploy(
-    OP_CONFIG.USDC,
-    velo.address,
-    FTM_CONFIG.lzChainId,
-    OP_CONFIG.lzEndpoint,
-  );
-  await receiver.deployed();
-  console.log("RedemptionReceiver deployed to: ", receiver.address);
-  console.log("Args: ", 
-    OP_CONFIG.USDC,
-    velo.address,
-    FTM_CONFIG.lzChainId,
-    OP_CONFIG.lzEndpoint,
     "\n"
   );
 
@@ -140,20 +116,9 @@ task("deploy:op", "Deploys Optimism contracts").setAction(async function (
   console.log("Args: ", escrow.address, "\n");
 
   // Airdrop
-  const claim = await MerkleClaim.deploy(velo.address, OP_CONFIG.merkleRoot);
-  await claim.deployed();
-  console.log("MerkleClaim deployed to: ", claim.address);
-  console.log("Args: ", velo.address, OP_CONFIG.merkleRoot, "\n");
-
   // Initialize
   await velo.initialMint(OP_CONFIG.teamEOA);
   console.log("Initial minted");
-
-  await velo.setRedemptionReceiver(receiver.address);
-  console.log("RedemptionReceiver set");
-
-  await velo.setMerkleClaim(claim.address);
-  console.log("MerkleClaim set");
 
   await velo.setMinter(minter.address);
   console.log("Minter set");

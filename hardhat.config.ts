@@ -35,10 +35,6 @@ const config: HardhatUserConfig = {
       url: "https://rpc.fantom.network",
       accounts: [process.env.PRIVATE_KEY!],
     },
-    ftmTestnet: {
-      url: "https://rpc.testnet.fantom.network",
-      accounts: [process.env.PRIVATE_KEY!],
-    },
     optimisticEthereum: {
       url: "https://mainnet.optimism.io",
       accounts: [process.env.PRIVATE_KEY!],
@@ -77,8 +73,6 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: {
-      opera: process.env.FTM_SCAN_API_KEY!,
-      ftmTestnet: process.env.FTM_SCAN_API_KEY!,
       optimisticEthereum: process.env.OP_SCAN_API_KEY!,
       optimisticKovan: process.env.OP_SCAN_API_KEY!,
     }

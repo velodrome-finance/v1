@@ -1,7 +1,6 @@
 pragma solidity 0.8.13;
 
 import "solmate/test/utils/mocks/MockERC20.sol";
-import "contracts/redeem/RedemptionSender.sol";
 import "contracts/Gauge.sol";
 import "contracts/Minter.sol";
 import "contracts/Pair.sol";
@@ -22,14 +21,6 @@ contract TestOwner {
 
     function transfer(address _token, address _to, uint256 _amount) public {
         MockERC20(_token).transfer(_to, _amount);
-    }
-
-    /*//////////////////////////////////////////////////////////////
-                             RedemptionSender
-    //////////////////////////////////////////////////////////////*/
-
-    function redeemWEVE(address _sender, uint256 _amount) public {
-        RedemptionSender(_sender).redeemWEVE(_amount, address(0), bytes(''));
     }
 
     /*//////////////////////////////////////////////////////////////
