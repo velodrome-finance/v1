@@ -18,7 +18,7 @@ contract StakingTest is BaseTest {
         amounts[0] = 1e27;
         amounts[1] = 1e27;
         amounts[2] = 1e27;
-        mintVelo(owners, amounts);
+        mintFlow(owners, amounts);
         mintLR(owners, amounts);
         mintStake(owners, amounts);
         escrow = new TestVotingEscrow(address(VELO));
@@ -189,7 +189,7 @@ contract StakingTest is BaseTest {
 
     function notifyRewardsAndCompareOwner2() public {
         notifyRewardsAndCompareOwner1();
-        
+
         owner2.withdrawStake(address(staking), 1e21);
         owner2.withdrawGauge(address(gauge), 1e21);
         owner2.approve(address(stake), address(staking), 1e21);

@@ -13,7 +13,7 @@ task("deploy:op", "Deploys Optimism contracts").setAction(async function (
 
   // Load
   const [
-    Velo,
+    Velocimeter,
     GaugeFactory,
     BribeFactory,
     PairFactory,
@@ -26,7 +26,7 @@ task("deploy:op", "Deploys Optimism contracts").setAction(async function (
     Minter,
     VeloGovernor,
   ] = await Promise.all([
-    ethers.getContractFactory("Velo"),
+    ethers.getContractFactory("Velocimeter"),
     ethers.getContractFactory("GaugeFactory"),
     ethers.getContractFactory("BribeFactory"),
     ethers.getContractFactory("PairFactory"),
@@ -40,9 +40,9 @@ task("deploy:op", "Deploys Optimism contracts").setAction(async function (
     ethers.getContractFactory("VeloGovernor"),
   ]);
 
-  const velo = await Velo.deploy();
-  await velo.deployed();
-  console.log("Velo deployed to: ", velo.address);
+  const flow = await Velocimeter.deploy();
+  await flow.deployed();
+  console.log("FLOW deployed to: ", flow.address);
 
   const gaugeFactory = await GaugeFactory.deploy();
   await gaugeFactory.deployed();
@@ -70,10 +70,10 @@ task("deploy:op", "Deploys Optimism contracts").setAction(async function (
   await artProxy.deployed();
   console.log("VeArtProxy deployed to: ", artProxy.address);
 
-  const escrow = await VotingEscrow.deploy(velo.address, artProxy.address);
+  const escrow = await VotingEscrow.deploy(flow.address, artProxy.address);
   await escrow.deployed();
   console.log("VotingEscrow deployed to: ", escrow.address);
-  console.log("Args: ", velo.address, artProxy.address, "\n");
+  console.log("Args: ", flow.address, artProxy.address, "\n");
 
   const distributor = await RewardsDistributor.deploy(escrow.address);
   await distributor.deployed();
@@ -117,7 +117,7 @@ task("deploy:op", "Deploys Optimism contracts").setAction(async function (
 
   // Airdrop
   // Initialize
-  await velo.setMinter(minter.address);
+  await flow.setMinter(minter.address);
   console.log("Minter set");
 
   await pairFactory.setPauser(OP_CONFIG.teamMultisig);
@@ -142,7 +142,7 @@ task("deploy:op", "Deploys Optimism contracts").setAction(async function (
   console.log("Team set for governor");
 
   // Whitelist
-  const nativeToken = [velo.address];
+  const nativeToken = [flow.address];
   const tokenWhitelist = nativeToken.concat(OP_CONFIG.tokenWhitelist);
   await voter.initialize(tokenWhitelist, minter.address);
   console.log("Whitelist set");

@@ -18,7 +18,7 @@ contract LPRewardsTest is BaseTest {
         uint256[] memory amounts = new uint256[](2);
         amounts[0] = 2 * TOKEN_1M; // use 1/2 for veNFT position
         amounts[1] = TOKEN_1M;
-        mintVelo(owners, amounts);
+        mintFlow(owners, amounts);
 
         // give owner1 veVELO
         VeArtProxy artProxy = new VeArtProxy();

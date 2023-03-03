@@ -1,6 +1,6 @@
 pragma solidity 0.8.13;
 
-interface IVelo {
+interface IFlow {
     function totalSupply() external view returns (uint);
     function balanceOf(address) external view returns (uint);
     function approve(address spender, uint value) external returns (bool);

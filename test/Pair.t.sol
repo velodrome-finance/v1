@@ -27,7 +27,7 @@ contract PairTest is BaseTest {
         amounts[0] = 2e25;
         amounts[1] = 1e25;
         amounts[2] = 1e25;
-        mintVelo(owners, amounts);
+        mintFlow(owners, amounts);
         mintLR(owners, amounts);
 
         VeArtProxy artProxy = new VeArtProxy();
@@ -57,7 +57,7 @@ contract PairTest is BaseTest {
 
     function votingEscrowViews() public {
         increaseLock();
-        
+
         uint256 block_ = escrow.block_number();
         assertEq(escrow.balanceOfAtNFT(1, block_), escrow.balanceOfNFT(1));
         assertEq(escrow.totalSupplyAt(block_), escrow.totalSupply());
@@ -429,7 +429,7 @@ contract PairTest is BaseTest {
 
     function gaugePokeHacking() public {
         voteHacking();
-        
+
         assertEq(voter.usedWeights(1), 0);
         assertEq(voter.votes(1, address(pair)), 0);
         voter.poke(1);
@@ -439,7 +439,7 @@ contract PairTest is BaseTest {
 
     function gaugeVoteAndBribeBalanceOf() public {
         gaugePokeHacking();
-        
+
         address[] memory pools = new address[](2);
         pools[0] = address(pair);
         pools[1] = address(pair2);

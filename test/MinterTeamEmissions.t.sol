@@ -22,7 +22,7 @@ contract MinterTeamEmissions is BaseTest {
         uint256[] memory amountsVelo = new uint256[](2);
         amountsVelo[0] = 1e25;
         amountsVelo[1] = 1e25;
-        mintVelo(owners, amountsVelo);
+        mintFlow(owners, amountsVelo);
         team = new TestOwner();
         VeArtProxy artProxy = new VeArtProxy();
         escrow = new VotingEscrow(address(VELO), address(artProxy));

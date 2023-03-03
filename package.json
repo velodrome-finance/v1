@@ -1,7 +1,7 @@
 {
-  "name": "velodrome",
+  "name": "velocimeter",
   "version": "1.0.0",
-  "description": "Base layer AMM on Optimism",
+  "description": "Base layer AMM on Canto",
   "directories": {
     "lib": "lib"
   },
