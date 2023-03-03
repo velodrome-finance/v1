@@ -33,7 +33,6 @@ contract Voter is IVoter {
     address[] public pools; // all pools viable for incentives
     mapping(address => address) public gauges; // pool => gauge
     mapping(address => address) public poolForGauge; // gauge => pool
-    mapping(address => address) public internal_bribes; // gauge => internal bribe (only fees)
     mapping(address => address) public external_bribes; // gauge => external bribe (real bribes)
     mapping(address => uint256) public weights; // pool => weight
     mapping(uint => mapping(address => uint256)) public votes; // nft => pool => votes
@@ -44,7 +43,7 @@ contract Voter is IVoter {
     mapping(address => bool) public isWhitelisted;
     mapping(address => bool) public isAlive;
 
-    event GaugeCreated(address indexed gauge, address creator, address internal_bribe, address indexed external_bribe, address wxbribe, address indexed pool);
+    event GaugeCreated(address indexed gauge, address creator, address indexed external_bribe, address wxbribe, address indexed pool);
     event GaugeKilled(address indexed gauge);
     event GaugeRevived(address indexed gauge);
     event Voted(address indexed voter, uint tokenId, uint256 weight);
@@ -124,7 +123,6 @@ contract Voter is IVoter {
                 weights[_pool] -= _votes;
                 votes[_tokenId][_pool] -= _votes;
                 if (_votes > 0) {
-                    IBribe(internal_bribes[gauges[_pool]])._withdraw(uint256(_votes), _tokenId);
                     IBribe(external_bribes[gauges[_pool]])._withdraw(uint256(_votes), _tokenId);
                     _totalWeight += _votes;
                 } else {
@@ -177,7 +175,6 @@ contract Voter is IVoter {
 
                 weights[_pool] += _poolWeight;
                 votes[_tokenId][_pool] += _poolWeight;
-                IBribe(internal_bribes[_gauge])._deposit(uint256(_poolWeight), _tokenId);
                 IBribe(external_bribes[_gauge])._deposit(uint256(_poolWeight), _tokenId);
                 _usedWeight += _poolWeight;
                 _totalWeight += _poolWeight;
@@ -232,13 +229,11 @@ contract Voter is IVoter {
             require(isWhitelisted[tokenA] && isWhitelisted[tokenB], "!whitelisted");
         }
 
-        address _internal_bribe = IBribeFactory(bribefactory).createInternalBribe(internalRewards);
         address _external_bribe = IBribeFactory(bribefactory).createExternalBribe(allowedRewards);
         address _wxbribe = IWrappedExternalBribeFactory(wrappedExternalBribeFactory).createBribe(_external_bribe);
-        address _gauge = IGaugeFactory(gaugefactory).createGauge(_pool, _internal_bribe, _external_bribe, _ve, isPair, allowedRewards);
+        address _gauge = IGaugeFactory(gaugefactory).createGauge(_pool, _external_bribe, _ve, isPair, allowedRewards);
 
         IERC20(base).approve(_gauge, type(uint).max);
-        internal_bribes[_gauge] = _internal_bribe;
         external_bribes[_gauge] = _external_bribe;
         gauges[_pool] = _gauge;
         poolForGauge[_gauge] = _pool;
@@ -248,7 +243,7 @@ contract Voter is IVoter {
         pools.push(_pool);
         IPair(_pool).setHasGauge(true);
         IPair(_pool).setExternalBribe(_wxbribe);
-        emit GaugeCreated(_gauge, msg.sender, _internal_bribe, _external_bribe, _wxbribe, _pool);
+        emit GaugeCreated(_gauge, msg.sender, _external_bribe, _wxbribe, _pool);
         return _gauge;
     }
 

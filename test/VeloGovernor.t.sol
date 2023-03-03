@@ -12,7 +12,6 @@ contract VeloGovernorTest is BaseTest {
     RewardsDistributor distributor;
     Minter minter;
     Gauge gauge;
-    InternalBribe bribe;
     VeloGovernor governor;
 
     function setUp() public {
@@ -66,9 +65,7 @@ contract VeloGovernorTest is BaseTest {
         VELO.approve(address(gaugeFactory), 15 * TOKEN_100K);
         voter.createGauge(address(pair));
         address gaugeAddress = voter.gauges(address(pair));
-        address bribeAddress = voter.internal_bribes(gaugeAddress);
         gauge = Gauge(gaugeAddress);
-        bribe = InternalBribe(bribeAddress);
 
         governor = new VeloGovernor(escrow);
         voter.setGovernor(address(governor));

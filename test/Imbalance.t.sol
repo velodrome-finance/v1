@@ -10,7 +10,6 @@ contract ImbalanceTest is BaseTest {
     WrappedExternalBribeFactory wxbribeFactory;
     Voter voter;
     Gauge gauge;
-    InternalBribe bribe;
 
     function deployBaseCoins() public {
         deployOwners();

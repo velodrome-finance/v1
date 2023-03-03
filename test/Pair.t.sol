@@ -15,10 +15,7 @@ contract PairTest is BaseTest {
     Gauge gauge;
     Gauge gauge2;
     Gauge gauge3;
-    InternalBribe bribe;
     ExternalBribe xbribe;
-    InternalBribe bribe2;
-    InternalBribe bribe3;
 
     function deployPairCoins() public {
         vm.warp(block.timestamp + 1 weeks); // put some initial time in
@@ -287,23 +284,17 @@ contract PairTest is BaseTest {
         staking = new TestStakingRewards(address(pair), address(VELO));
 
         address gaugeAddress = voter.gauges(address(pair));
-        address bribeAddress = voter.internal_bribes(gaugeAddress);
         address xBribeAddress = voter.external_bribes(gaugeAddress);
 
         address gaugeAddress2 = voter.gauges(address(pair2));
-        address bribeAddress2 = voter.internal_bribes(gaugeAddress2);
 
         address gaugeAddress3 = voter.gauges(address(pair3));
-        address bribeAddress3 = voter.internal_bribes(gaugeAddress3);
 
         gauge = Gauge(gaugeAddress);
         gauge2 = Gauge(gaugeAddress2);
         gauge3 = Gauge(gaugeAddress3);
 
-        bribe = InternalBribe(bribeAddress);
         xbribe = ExternalBribe(xBribeAddress);
-        bribe2 = InternalBribe(bribeAddress2);
-        bribe3 = InternalBribe(bribeAddress3);
 
         pair.approve(address(gauge), PAIR_1);
         pair.approve(address(staking), PAIR_1);

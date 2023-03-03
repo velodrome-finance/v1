@@ -11,7 +11,6 @@ contract ExternalBribesTest is BaseTest {
     RewardsDistributor distributor;
     Minter minter;
     Gauge gauge;
-    InternalBribe bribe;
     ExternalBribe xbribe;
     PairFactory pairFactory;
 
@@ -61,7 +60,6 @@ contract ExternalBribesTest is BaseTest {
 
         // USDC - FRAX stable
         gauge = Gauge(voter.createGauge(address(pair)));
-        bribe = InternalBribe(gauge.internal_bribe());
         xbribe = ExternalBribe(gauge.external_bribe());
 
         // ve

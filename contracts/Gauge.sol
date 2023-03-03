@@ -14,7 +14,6 @@ contract Gauge is IGauge {
 
     address public immutable stake; // the LP token that needs to be staked for rewards
     address public immutable _ve; // the ve token used for gauges
-    address public immutable internal_bribe;
     address public immutable external_bribe;
     address public immutable voter;
 
@@ -82,9 +81,8 @@ contract Gauge is IGauge {
     event NotifyReward(address indexed from, address indexed reward, uint amount);
     event ClaimRewards(address indexed from, address indexed reward, uint amount);
 
-    constructor(address _stake, address _internal_bribe, address _external_bribe, address  __ve, address _voter, bool _forPair, address[] memory _allowedRewardTokens) {
+    constructor(address _stake, address _external_bribe, address  __ve, address _voter, bool _forPair, address[] memory _allowedRewardTokens) {
         stake = _stake;
-        internal_bribe = _internal_bribe;
         external_bribe = _external_bribe;
         _ve = __ve;
         voter = _voter;

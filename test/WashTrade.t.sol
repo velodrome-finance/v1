@@ -10,7 +10,6 @@ contract WashTradeTest is BaseTest {
     WrappedExternalBribeFactory wxbribeFactory;
     Voter voter;
     Gauge gauge3;
-    InternalBribe bribe3;
 
     function deployBaseCoins() public {
         vm.warp(block.timestamp + 1 weeks); // put some initial time in
@@ -108,11 +107,9 @@ contract WashTradeTest is BaseTest {
         assertFalse(voter.gauges(address(pair3)) == address(0));
 
         address gaugeAddr3 = voter.gauges(address(pair3));
-        address bribeAddr3 = voter.internal_bribes(gaugeAddr3);
 
         gauge3 = Gauge(gaugeAddr3);
 
-        bribe3 = InternalBribe(bribeAddr3);
         uint256 total = pair3.balanceOf(address(owner));
         pair3.approve(address(gauge3), total);
         gauge3.deposit(total, 0);
@@ -170,55 +167,5 @@ contract WashTradeTest is BaseTest {
         weights[1] = 5000;
         voter.vote(1, pairs, weights);
         assertFalse(voter.totalWeight() == 0);
-        assertFalse(bribe3.balanceOf(1) == 0);
-    }
-
-    function bribeClaimRewards() public {
-        voterVoteAndBribeBalanceOf();
-
-        address[] memory tokens = new address[](2);
-        tokens[0] = address(FRAX);
-        tokens[1] = address(DAI);
-        bribe3.getReward(1, tokens);
-        vm.warp(block.timestamp + 691200);
-        vm.roll(block.number + 1);
-        bribe3.getReward(1, tokens);
-    }
-
-    function distributeAndClaimFees() public {
-        bribeClaimRewards();
-
-        vm.warp(block.timestamp + 691200);
-        vm.roll(block.number + 1);
-        address[] memory tokens = new address[](2);
-        tokens[0] = address(FRAX);
-        tokens[1] = address(DAI);
-        bribe3.getReward(1, tokens);
-
-        address[] memory gauges = new address[](1);
-        gauges[0] = address(gauge3);
-    }
-
-    function testBribeClaimRewards() public {
-        distributeAndClaimFees();
-
-        console2.log(bribe3.earned(address(FRAX), 1));
-        console2.log(FRAX.balanceOf(address(owner)));
-        console2.log(FRAX.balanceOf(address(bribe3)));
-        bribe3.batchRewardPerToken(address(FRAX), 200);
-        bribe3.batchRewardPerToken(address(DAI), 200);
-        address[] memory tokens = new address[](2);
-        tokens[0] = address(FRAX);
-        tokens[1] = address(DAI);
-        bribe3.getReward(1, tokens);
-        vm.warp(block.timestamp + 691200);
-        vm.roll(block.number + 1);
-        console2.log(bribe3.earned(address(FRAX), 1));
-        console2.log(FRAX.balanceOf(address(owner)));
-        console2.log(FRAX.balanceOf(address(bribe3)));
-        bribe3.getReward(1, tokens);
-        console2.log(bribe3.earned(address(FRAX), 1));
-        console2.log(FRAX.balanceOf(address(owner)));
-        console2.log(FRAX.balanceOf(address(bribe3)));
     }
 }

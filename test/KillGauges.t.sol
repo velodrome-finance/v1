@@ -14,8 +14,6 @@ contract KillGaugesTest is BaseTest {
   TestStakingRewards staking2;
   Gauge gauge;
   Gauge gauge2;
-  InternalBribe bribe;
-  InternalBribe bribe2;
 
   function setUp() public {
     deployOwners();
@@ -71,16 +69,10 @@ contract KillGaugesTest is BaseTest {
     staking2 = new TestStakingRewards(address(pair2), address(VELO));
 
     address gaugeAddress = voter.gauges(address(pair));
-    address bribeAddress = voter.internal_bribes(gaugeAddress);
-
     gauge = Gauge(gaugeAddress);
-    bribe = InternalBribe(bribeAddress);
 
     address gaugeAddress2 = voter.gauges(address(pair2));
-    address bribeAddress2 = voter.internal_bribes(gaugeAddress2);
-
     gauge2 = Gauge(gaugeAddress2);
-    bribe2 = InternalBribe(bribeAddress2);
   }
 
   function testEmergencyCouncilCanKillAndReviveGauges() public {
