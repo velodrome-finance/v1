@@ -187,9 +187,7 @@ contract Pair is IPair {
             }
             emit TankFees(token0, amount, tank);
         } else {
-            // _safeApprove(token0, externalBribe, amount);  // max abprove when setExternalBribe() is called
             IBribe(externalBribe).notifyRewardAmount(token0, amount); //transfer fees to exBribes
-            //  _safeTransfer(token0, tank, amount);
             uint _ratio = (amount * 1e18) / totalSupply; // 1e18 adjustment is removed during claim
             if (_ratio > 0) {
                 index0 += _ratio;
