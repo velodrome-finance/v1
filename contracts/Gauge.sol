@@ -24,7 +24,6 @@ contract Gauge is IGauge {
     bool public isForPair;
 
     uint internal constant DURATION = 7 days; // rewards are released over 7 days
-    uint internal constant PRECISION = 10 ** 18;
     uint internal constant MAX_REWARD_TOKENS = 16;
 
     // default snx staking contract implementation
@@ -287,7 +286,7 @@ contract Gauge is IGauge {
         if (derivedSupply == 0) {
             return rewardPerTokenStored[token];
         }
-        return rewardPerTokenStored[token] + ((lastTimeRewardApplicable(token) - Math.min(lastUpdateTime[token], periodFinish[token])) * rewardRate[token] * PRECISION / derivedSupply);
+        return rewardPerTokenStored[token] + ((lastTimeRewardApplicable(token) - Math.min(lastUpdateTime[token], periodFinish[token])) * rewardRate[token] * (10**IERC20(token).decimals()) / derivedSupply);
     }
 
     function derivedBalance(address account) public view returns (uint) {
@@ -329,7 +328,7 @@ contract Gauge is IGauge {
 
     function _calcRewardPerToken(address token, uint timestamp1, uint timestamp0, uint supply, uint startTimestamp) internal view returns (uint, uint) {
         uint endTime = Math.max(timestamp1, startTimestamp);
-        return (((Math.min(endTime, periodFinish[token]) - Math.min(Math.max(timestamp0, startTimestamp), periodFinish[token])) * rewardRate[token] * PRECISION / supply), endTime);
+        return (((Math.min(endTime, periodFinish[token]) - Math.min(Math.max(timestamp0, startTimestamp), periodFinish[token])) * rewardRate[token] * (10**IERC20(token).decimals()) / supply), endTime);
     }
 
     /// @dev Update stored rewardPerToken values without the last one snapshot
@@ -406,13 +405,13 @@ contract Gauge is IGauge {
                 Checkpoint memory cp1 = checkpoints[account][i+1];
                 (uint _rewardPerTokenStored0,) = getPriorRewardPerToken(token, cp0.timestamp);
                 (uint _rewardPerTokenStored1,) = getPriorRewardPerToken(token, cp1.timestamp);
-                reward += cp0.balanceOf * (_rewardPerTokenStored1 - _rewardPerTokenStored0) / PRECISION;
+                reward += cp0.balanceOf * (_rewardPerTokenStored1 - _rewardPerTokenStored0) / (10**IERC20(token).decimals());
             }
         }
 
         Checkpoint memory cp = checkpoints[account][_endIndex];
         (uint _rewardPerTokenStored,) = getPriorRewardPerToken(token, cp.timestamp);
-        reward += cp.balanceOf * (rewardPerToken(token) - Math.max(_rewardPerTokenStored, userRewardPerTokenStored[token][account])) / PRECISION;
+        reward += cp.balanceOf * (rewardPerToken(token) - Math.max(_rewardPerTokenStored, userRewardPerTokenStored[token][account])) / (10**IERC20(token).decimals());
 
         return reward;
     }
