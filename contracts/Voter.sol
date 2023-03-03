@@ -140,8 +140,6 @@ contract Voter is IVoter {
         delete poolVote[_tokenId];
     }
 
-    // remove poke function
-
     function poke(uint _tokenId) external {
         require(IVotingEscrow(_ve).isApprovedOrOwner(msg.sender, _tokenId) || msg.sender == governor);
         address[] memory _poolVote = poolVote[_tokenId];
