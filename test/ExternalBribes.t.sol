@@ -54,9 +54,8 @@ contract ExternalBribesTest is BaseTest {
         tokens[4] = address(LR);
         voter.initialize(tokens, address(minter));
 
-        address[] memory claimants = new address[](0);
-        uint[] memory amounts1 = new uint[](0);
-        minter.initialize(claimants, amounts1, 0);
+        Minter.Claim[] memory claims = new Minter.Claim[](0);
+        minter.initialize(claims, 0);
 
         // USDC - FRAX stable
         gauge = Gauge(voter.createGauge(address(pair)));

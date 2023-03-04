@@ -32,6 +32,12 @@ contract Minter is IMinter {
 
     event Mint(address indexed sender, uint weekly, uint circulating_supply, uint circulating_emission);
 
+    struct Claim {
+        address claimant;
+        uint256 amount;
+        uint256 lockTime;
+    }
+
     constructor(
         address __voter, // the voting & distribution system
         address __ve, // the ve(3,3) system that will be locked into
@@ -48,15 +54,18 @@ contract Minter is IMinter {
     }
 
     function initialize(
-        address[] memory claimants, // partnerAddrs
-        uint[] memory amounts, // partnerAmounts
+        Claim[] calldata claims,
         uint max // sum amounts / max = % ownership of top protocols, so if initial 20m is distributed, and target is 25% protocol ownership, then max - 4 x 20m = 80m
     ) external {
         require(initializer == msg.sender);
         _flow.mint(address(this), max);
         _flow.approve(address(_ve), type(uint).max);
-        for (uint i = 0; i < claimants.length; i++) {
-            _ve.create_lock_for(amounts[i], LOCK, claimants[i]);
+        uint256 length = claims.length;
+        for (uint i = 0; i < length;) {
+            _ve.create_lock_for(claims[i].amount, claims[i].lockTime, claims[i].claimant);
+            unchecked {
+                ++i;
+            }
         }
         initializer = address(0);
         active_period = ((block.timestamp) / WEEK) * WEEK; // allow minter.update_period() to mint new emissions THIS Thursday

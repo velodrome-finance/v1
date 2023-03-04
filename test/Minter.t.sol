@@ -69,11 +69,14 @@ contract MinterTest is BaseTest {
     function initializeVotingEscrow() public {
         deployBase();
 
-        address[] memory claimants = new address[](1);
-        claimants[0] = address(owner);
-        uint256[] memory amounts = new uint256[](1);
-        amounts[0] = TOKEN_1M;
-        minter.initialize(claimants, amounts, 2e25);
+        Minter.Claim[] memory claims = new Minter.Claim[](1);
+        claims[0] = Minter.Claim({
+            claimant: address(owner),
+            amount: TOKEN_1M,
+            lockTime: 86400 * 7 * 52 * 4
+        });
+        minter.initialize(claims, 2e25);
+
         assertEq(escrow.ownerOf(2), address(owner));
         assertEq(escrow.ownerOf(3), address(0));
         vm.roll(block.number + 1);

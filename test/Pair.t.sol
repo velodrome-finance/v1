@@ -591,11 +591,15 @@ contract PairTest is BaseTest {
 
         console2.log(distributor.last_token_time());
         console2.log(distributor.timestamp());
-        address[] memory claimants = new address[](1);
-        claimants[0] = address(owner);
-        uint256[] memory amounts = new uint256[](1);
-        amounts[0] = TOKEN_1;
-        minter.initialize(claimants, amounts, TOKEN_1);
+
+        Minter.Claim[] memory claims = new Minter.Claim[](1);
+        claims[0] = Minter.Claim({
+            claimant: address(owner),
+            amount: TOKEN_1,
+            lockTime: 86400 * 7 * 52 * 4
+        });
+        minter.initialize(claims, TOKEN_1);
+
         minter.update_period();
         voter.updateGauge(address(gauge));
         console2.log(FLOW.balanceOf(address(distributor)));

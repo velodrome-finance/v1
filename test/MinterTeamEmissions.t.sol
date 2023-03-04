@@ -85,11 +85,14 @@ contract MinterTeamEmissions is BaseTest {
         weights[0] = 5000;
         voter.vote(1, pools, weights);
 
-        address[] memory claimants = new address[](1);
-        claimants[0] = address(owner);
-        uint256[] memory amountsToMint = new uint256[](1);
-        amountsToMint[0] = TOKEN_1M;
-        minter.initialize(claimants, amountsToMint, 15 * TOKEN_1M);
+        Minter.Claim[] memory claims = new Minter.Claim[](1);
+        claims[0] = Minter.Claim({
+            claimant: address(owner),
+            amount: TOKEN_1M,
+            lockTime: 86400 * 7 * 52 * 4
+        });
+        minter.initialize(claims, 15 * TOKEN_1M);
+
         assertEq(escrow.ownerOf(2), address(owner));
         assertEq(escrow.ownerOf(3), address(0));
         vm.roll(block.number + 1);
