@@ -43,97 +43,112 @@ contract InitialMintAndLock is Script {
         // Mint tokens and lock for veNFT
 
         // 1. Mint to Flow voter EOA
-        Minter.Claim[] memory flowVoterEOAClaim1 = new Minter.Claim[](5);
-        for (uint256 i; i < flowVoterEOAClaim1.length; i++) {
-            flowVoterEOAClaim1[i] = Minter.Claim({claimant: FLOW_VOTER_EOA, amount: ONE_MILLION, lockTime: FOUR_YEARS});
-        }
-        minter.initialMintAndLock(flowVoterEOAClaim1, ONE_MILLION * flowVoterEOAClaim1.length);
+        _batchInitialMintAndLock({
+            owner: FLOW_VOTER_EOA,
+            numberOfVotingEscrow: 5,
+            amountPerVotingEscrow: ONE_MILLION,
+            lockTime: FOUR_YEARS
+        });
 
-        Minter.Claim[] memory flowVoterEOAClaim2 = new Minter.Claim[](5);
-        for (uint256 i; i < flowVoterEOAClaim2.length; i++) {
-            flowVoterEOAClaim2[i] = Minter.Claim({claimant: FLOW_VOTER_EOA, amount: TWO_MILLION, lockTime: FOUR_YEARS});
-        }
-        minter.initialMintAndLock(flowVoterEOAClaim2, TWO_MILLION * flowVoterEOAClaim2.length);
+        _batchInitialMintAndLock({
+            owner: FLOW_VOTER_EOA,
+            numberOfVotingEscrow: 5,
+            amountPerVotingEscrow: TWO_MILLION,
+            lockTime: FOUR_YEARS
+        });
 
-        Minter.Claim[] memory flowVoterEOAClaim3 = new Minter.Claim[](3);
-        for (uint256 i; i < flowVoterEOAClaim3.length; i++) {
-            flowVoterEOAClaim3[i] = Minter.Claim({claimant: FLOW_VOTER_EOA, amount: FOUR_MILLION, lockTime: FOUR_YEARS});
-        }
-        minter.initialMintAndLock(flowVoterEOAClaim3, FOUR_MILLION * flowVoterEOAClaim3.length);
+        _batchInitialMintAndLock({
+            owner: FLOW_VOTER_EOA,
+            numberOfVotingEscrow: 3,
+            amountPerVotingEscrow: FOUR_MILLION,
+            lockTime: FOUR_YEARS
+        });
 
         // 2. Mint to team members
-        Minter.Claim[] memory dunksClaim = new Minter.Claim[](1);
-        dunksClaim[0] = Minter.Claim({claimant: DUNKS, amount: FOUR_MILLION, lockTime: FOUR_YEARS});
-        minter.initialMintAndLock(dunksClaim, FOUR_MILLION);
+        _batchInitialMintAndLock({
+            owner: DUNKS,
+            numberOfVotingEscrow: 1,
+            amountPerVotingEscrow: FOUR_MILLION,
+            lockTime: FOUR_YEARS
+        });
 
-        Minter.Claim[] memory t0rb1kClaim = new Minter.Claim[](3);
-        for (uint256 i; i < t0rb1kClaim.length; i++) {
-            t0rb1kClaim[i] = Minter.Claim({claimant: T0RB1K, amount: FOUR_MILLION, lockTime: FOUR_YEARS});
-        }
-        minter.initialMintAndLock(t0rb1kClaim, FOUR_MILLION * t0rb1kClaim.length);
+        _batchInitialMintAndLock({
+            owner: T0RB1K,
+            numberOfVotingEscrow: 3,
+            amountPerVotingEscrow: FOUR_MILLION,
+            lockTime: FOUR_YEARS
+        });
 
-        Minter.Claim[] memory ceazorClaim = new Minter.Claim[](3);
-        for (uint256 i; i < ceazorClaim.length; i++) {
-            ceazorClaim[i] = Minter.Claim({claimant: CEAZOR, amount: FOUR_MILLION, lockTime: FOUR_YEARS});
-        }
-        minter.initialMintAndLock(ceazorClaim, FOUR_MILLION * ceazorClaim.length);
+        _batchInitialMintAndLock({
+            owner: CEAZOR,
+            numberOfVotingEscrow: 3,
+            amountPerVotingEscrow: FOUR_MILLION,
+            lockTime: FOUR_YEARS
+        });
 
-        Minter.Claim[] memory mottoClaim = new Minter.Claim[](3);
-        for (uint256 i; i < mottoClaim.length; i++) {
-            mottoClaim[i] = Minter.Claim({claimant: MOTTO, amount: FOUR_MILLION, lockTime: FOUR_YEARS});
-        }
-        minter.initialMintAndLock(mottoClaim, FOUR_MILLION * mottoClaim.length);
+        _batchInitialMintAndLock({
+            owner: MOTTO,
+            numberOfVotingEscrow: 3,
+            amountPerVotingEscrow: FOUR_MILLION,
+            lockTime: FOUR_YEARS
+        });
 
-        Minter.Claim[] memory coolieClaim = new Minter.Claim[](3);
-        for (uint256 i; i < coolieClaim.length; i++) {
-            coolieClaim[i] = Minter.Claim({claimant: COOLIE, amount: FOUR_MILLION, lockTime: FOUR_YEARS});
-        }
-        minter.initialMintAndLock(coolieClaim, FOUR_MILLION * coolieClaim.length);
+        _batchInitialMintAndLock({
+            owner: COOLIE,
+            numberOfVotingEscrow: 3,
+            amountPerVotingEscrow: FOUR_MILLION,
+            lockTime: FOUR_YEARS
+        });
 
-        // 3. TODO: Mint to snapshotted veNFT holders
+        // 3. Mint for future partners
+        _batchInitialMintAndLock({
+            owner: ASSET_EOA,
+            numberOfVotingEscrow: 3,
+            amountPerVotingEscrow: FOUR_MILLION,
+            lockTime: FOUR_YEARS
+        });
 
-        // 4. Mint for future partners
-        Minter.Claim[] memory assetEOAClaim1 = new Minter.Claim[](3);
-        for (uint256 i; i < assetEOAClaim1.length; i++) {
-            assetEOAClaim1[i] = Minter.Claim({amount: FOUR_MILLION, claimant: ASSET_EOA, lockTime: FOUR_YEARS});
-        }
-        minter.initialMintAndLock(assetEOAClaim1, FOUR_MILLION * assetEOAClaim1.length);
+        _batchInitialMintAndLock({
+            owner: TEAM_MULTI_SIG,
+            numberOfVotingEscrow: 13,
+            amountPerVotingEscrow: FOUR_MILLION,
+            lockTime: FOUR_YEARS
+        });
 
-        Minter.Claim[] memory multiSigClaim1 = new Minter.Claim[](13);
-        for (uint256 i; i < multiSigClaim1.length; i++) {
-            multiSigClaim1[i] = Minter.Claim({amount: FOUR_MILLION, claimant: TEAM_MULTI_SIG, lockTime: FOUR_YEARS});
-        }
-        minter.initialMintAndLock(multiSigClaim1, FOUR_MILLION * multiSigClaim1.length);
+        _batchInitialMintAndLock({
+            owner: TEAM_MULTI_SIG,
+            numberOfVotingEscrow: 3,
+            amountPerVotingEscrow: TWO_MILLION,
+            lockTime: FOUR_YEARS
+        });
 
-        Minter.Claim[] memory assetEOAClaim2 = new Minter.Claim[](3);
-        for (uint256 i; i < assetEOAClaim2.length; i++) {
-            assetEOAClaim2[i] = Minter.Claim({amount: TWO_MILLION, claimant: ASSET_EOA, lockTime: FOUR_YEARS});
-        }
-        minter.initialMintAndLock(assetEOAClaim1, TWO_MILLION * assetEOAClaim2.length);
+        _batchInitialMintAndLock({
+            owner: TEAM_MULTI_SIG,
+            numberOfVotingEscrow: 15,
+            amountPerVotingEscrow: TWO_MILLION,
+            lockTime: FOUR_YEARS
+        });
 
-        Minter.Claim[] memory multiSigClaim2 = new Minter.Claim[](15);
-        for (uint256 i; i < multiSigClaim2.length; i++) {
-            multiSigClaim2[i] = Minter.Claim({amount: TWO_MILLION, claimant: TEAM_MULTI_SIG, lockTime: FOUR_YEARS});
-        }
-        minter.initialMintAndLock(multiSigClaim2, TWO_MILLION * multiSigClaim2.length);
+        _batchInitialMintAndLock({
+            owner: TEAM_MULTI_SIG,
+            numberOfVotingEscrow: 16,
+            amountPerVotingEscrow: ONE_MILLION,
+            lockTime: FOUR_YEARS
+        });
 
-        Minter.Claim[] memory multiSigClaim3 = new Minter.Claim[](16);
-        for (uint256 i; i < multiSigClaim3.length; i++) {
-            multiSigClaim3[i] = Minter.Claim({amount: ONE_MILLION, claimant: TEAM_MULTI_SIG, lockTime: FOUR_YEARS});
-        }
-        minter.initialMintAndLock(multiSigClaim3, ONE_MILLION * multiSigClaim3.length);
+        _batchInitialMintAndLock({
+            owner: ASSET_EOA,
+            numberOfVotingEscrow: 5,
+            amountPerVotingEscrow: ONE_MILLION,
+            lockTime: TWO_YEARS
+        });
 
-        Minter.Claim[] memory assetEOAClaim3 = new Minter.Claim[](5);
-        for (uint256 i; i < assetEOAClaim3.length; i++) {
-            assetEOAClaim3[i] = Minter.Claim({amount: ONE_MILLION, claimant: ASSET_EOA, lockTime: TWO_YEARS});
-        }
-        minter.initialMintAndLock(assetEOAClaim3, ONE_MILLION * assetEOAClaim3.length);
-
-        Minter.Claim[] memory assetEOAClaim4 = new Minter.Claim[](5);
-        for (uint256 i; i < assetEOAClaim4.length; i++) {
-            assetEOAClaim4[i] = Minter.Claim({amount: ONE_MILLION, claimant: ASSET_EOA, lockTime: ONE_YEAR});
-        }
-        minter.initialMintAndLock(assetEOAClaim4, ONE_MILLION * assetEOAClaim4.length);
+        _batchInitialMintAndLock({
+            owner: ASSET_EOA,
+            numberOfVotingEscrow: 5,
+            amountPerVotingEscrow: ONE_MILLION,
+            lockTime: ONE_YEARS
+        });
 
         _singleInitialMintAndLock(0xd0cC9738866cd82B237A14c92ac60577602d6c18, 1200000000000000000);
         _singleInitialMintAndLock(0x38dAEa6f17E4308b0Da9647dB9ca6D84a3A7E195, 24000000000000000000000);
@@ -328,5 +343,18 @@ contract InitialMintAndLock is Script {
         Minter.Claim[] memory claim = new Minter.Claim[](1);
         claim[0] = Minter.Claim({claimant: owner, amount: amount, lockTime: FOUR_YEARS});
         minter.initialMintAndLock(claim, amount);
+    }
+
+    function _batchInitialMintAndLock(
+        address owner,
+        uint256 numberOfVotingEscrow,
+        uint256 amountPerVotingEscrow,
+        uint256 lockTime
+    ) private {
+        Minter.Claim[] memory claim = new Minter.Claim[](numberOfVotingEscrow);
+        for (uint256 i; i < numberOfVotingEscrow; i++) {
+            claim[i] = Minter.Claim({claimant: owner, amount: amountPerVotingEscrow, lockTime: lockTime});
+        }
+        minter.initialMintAndLock(claim, amountPerVotingEscrow * numberOfVotingEscrow);
     }
 }
