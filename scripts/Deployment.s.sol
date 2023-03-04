@@ -82,7 +82,6 @@ contract Deployment is Script {
             address(votingEscrow),
             address(rewardsDistributor)
         );
-        // TODO: Minter.initialize, Minter.setTeam
 
         // Set flow minter to contract
         flow.setMinter(address(minter));
