@@ -78,8 +78,8 @@ contract Pair is IPair {
     event Transfer(address indexed from, address indexed to, uint amount);
     event Approval(address indexed owner, address indexed spender, uint amount);
 
-    event ExternalBribeSet(address indexed setter, address indexed externalBribe);
-    event HasGaugeSet(address indexed setter, bool value);
+    event ExternalBribeSet(address indexed externalBribe);
+    event HasGaugeSet(bool value);
 
     constructor() {
         factory = msg.sender;
@@ -122,13 +122,13 @@ contract Pair is IPair {
         externalBribe = _externalBribe;
         _safeApprove(token0, externalBribe, type(uint).max);
         _safeApprove(token1, externalBribe, type(uint).max);
-        emit ExternalBribeSet(msg.sender, _externalBribe);
+        emit ExternalBribeSet(_externalBribe);
     }
 
     function setHasGauge(bool value) external {
         require(msg.sender == voter, 'Only voter can set has gauge');
         hasGauge = value;
-        emit HasGaugeSet(msg.sender, value);
+        emit HasGaugeSet(value);
     }
 
     function observationLength() external view returns (uint) {
