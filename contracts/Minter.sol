@@ -59,7 +59,7 @@ contract Minter is IMinter {
     ) external {
         require(initializer == msg.sender, "not initializer");
         _flow.mint(address(this), max);
-        _flow.approve(address(_ve), type(uint).max);
+        _flow.approve(address(_ve), max);
         uint256 length = claims.length;
         for (uint i = 0; i < length;) {
             _ve.create_lock_for(claims[i].amount, claims[i].lockTime, claims[i].claimant);
