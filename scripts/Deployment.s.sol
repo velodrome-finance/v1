@@ -112,9 +112,26 @@ contract Deployment is Script {
         rewardsDistributor.setDepositor(address(minter));
 
         // Initialize tokens for voter
-        // TODO: Get all the whitelisted tokens
-        address[] memory whitelistedTokens = new address[](2);
+        address[] memory whitelistedTokens = new address[](19);
         whitelistedTokens[0] = address(flow);
+        whitelistedTokens[1] = 0x4e71a2e537b7f9d9413d3991d37958c0b5e1e503; // NOTE
+        whitelistedTokens[2] = 0x80b5a32e4f032b2a058b4f29ec95eefeeb87adcd; // USDC
+        whitelistedTokens[3] = 0x5db67696c3c088dfbf588d3dd849f44266ff0ffa; // CRE
+        whitelistedTokens[4] = WCANTO;
+        whitelistedTokens[5] = 0xeceeefcee421d8062ef8d6b4d814efe4dc898265; // ATOM
+        whitelistedTokens[6] = 0x1d54ecb8583ca25895c512a8308389ffd581f9c9; // INJ
+        whitelistedTokens[7] = 0x3452e23f9c4cc62c70b7adad699b264af3549c19; // CMDX
+        whitelistedTokens[8] = 0xc5e00d3b04563950941f7137b5afa3a534f0d6d6; // KAVA
+        whitelistedTokens[9] = 0x5ad523d94efb56c400941eb6f34393b84c75ba39; // AKT
+        whitelistedTokens[10] = 0x0ce35b0d42608ca54eb7bcc8044f7087c18e7717; // OSMO
+        whitelistedTokens[11] = 0xe832c073b1b665e21150ac70fa7c798d9926ccf1; // WAIT
+        whitelistedTokens[12] = 0x7264610a66eca758a8ce95cf11ff5741e1fd0455; // cINU
+        whitelistedTokens[13] = 0xc03345448969dd8c00e9e4a85d2d9722d093af8e; // GRAV
+        whitelistedTokens[14] = 0xfa3c22c069b9556a4b2f7ece1ee3b467909f4864; // SOMM
+        whitelistedTokens[15] = 0x38d11b40d2173009adb245b869e90525950ae345; // cBONK
+        whitelistedTokens[16] = 0x5FD55A1B9FC24967C4dB09C513C3BA0DFa7FF687; // ETH
+        whitelistedTokens[17] = 0xd567B3d7B8FE3C79a1AD8dA978812cfC4Fa05e75; // USDT
+        whitelistedTokens[18] = 0x74ccbe53F77b08632ce0CB91D3A545bF6B8E0979; // fBOMB
         voter.initialize(whitelistedTokens, address(minter));
 
         vm.stopBroadcast();
