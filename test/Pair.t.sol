@@ -31,7 +31,7 @@ contract PairTest is BaseTest {
         mintLR(owners, amounts);
 
         VeArtProxy artProxy = new VeArtProxy();
-        escrow = new VotingEscrow(address(VELO), address(artProxy));
+        escrow = new VotingEscrow(address(VELO), address(artProxy), owners[0]);
     }
 
     function createLock() public {

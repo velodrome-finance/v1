@@ -19,7 +19,7 @@ contract ImbalanceTest is BaseTest {
         amounts[0] = 1e25;
         mintFlow(owners, amounts);
         VeArtProxy artProxy = new VeArtProxy();
-        escrow = new VotingEscrow(address(VELO), address(artProxy));
+        escrow = new VotingEscrow(address(VELO), address(artProxy), owners[0]);
     }
 
     function createLock() public {

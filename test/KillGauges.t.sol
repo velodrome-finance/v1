@@ -25,7 +25,7 @@ contract KillGaugesTest is BaseTest {
     amounts[2] = 1e25;
     mintFlow(owners, amounts);
     VeArtProxy artProxy = new VeArtProxy();
-    escrow = new VotingEscrow(address(VELO), address(artProxy));
+    escrow = new VotingEscrow(address(VELO), address(artProxy), owners[0]);
 
     VELO.approve(address(escrow), 100 * TOKEN_1);
     escrow.create_lock(100 * TOKEN_1, 4 * 365 * 86400);

@@ -22,7 +22,7 @@ contract LPRewardsTest is BaseTest {
 
         // give owner1 veVELO
         VeArtProxy artProxy = new VeArtProxy();
-        escrow = new VotingEscrow(address(VELO), address(artProxy));
+        escrow = new VotingEscrow(address(VELO), address(artProxy), owners[0]);
         VELO.approve(address(escrow), TOKEN_1M);
         escrow.create_lock(TOKEN_1M, 4 * 365 * 86400);
 

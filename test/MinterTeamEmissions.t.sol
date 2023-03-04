@@ -25,7 +25,7 @@ contract MinterTeamEmissions is BaseTest {
         mintFlow(owners, amountsVelo);
         team = new TestOwner();
         VeArtProxy artProxy = new VeArtProxy();
-        escrow = new VotingEscrow(address(VELO), address(artProxy));
+        escrow = new VotingEscrow(address(VELO), address(artProxy), owner);
         factory = new PairFactory();
         router = new Router(address(factory), address(owner));
         gaugeFactory = new GaugeFactory();

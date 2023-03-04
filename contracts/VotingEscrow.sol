@@ -63,7 +63,7 @@ contract VotingEscrow is IERC721, IERC721Metadata, IVotes {
     /*//////////////////////////////////////////////////////////////
                                CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
-
+    address public immutable owner;
     address public immutable token;
     address public voter;
     address public team;
@@ -88,11 +88,12 @@ contract VotingEscrow is IERC721, IERC721Metadata, IVotes {
 
     /// @notice Contract constructor
     /// @param token_addr `VELO` token address
-    constructor(address token_addr, address art_proxy) {
+    constructor(address token_addr, address art_proxy, address _owner) {
         token = token_addr;
         voter = msg.sender;
         team = msg.sender;
         artProxy = art_proxy;
+        owner = _owner;
 
         point_history[0].blk = block.number;
         point_history[0].ts = block.timestamp;
