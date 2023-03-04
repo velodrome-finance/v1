@@ -23,7 +23,7 @@ contract TestVoter {
 
       }
 
-      function isWhitelisted(address token) public pure returns (bool) {
+      function isWhitelisted(address) public pure returns (bool) {
             return true;
       }
 }
