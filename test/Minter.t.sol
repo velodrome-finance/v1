@@ -85,51 +85,64 @@ contract MinterTest is BaseTest {
 
         minter.update_period();
         assertEq(minter.weekly(), 15 * TOKEN_1M); // 15M
-        vm.warp(block.timestamp + ONE_WEEK);
-        vm.roll(block.number + 1);
+
+        _elapseOneWeek();
+
         minter.update_period();
         assertEq(distributor.claimable(1), 0);
         assertLt(minter.weekly(), 15 * TOKEN_1M); // <15M for week shift
-        vm.warp(block.timestamp + ONE_WEEK);
-        vm.roll(block.number + 1);
+
+        _elapseOneWeek();
+
         minter.update_period();
         uint256 claimable = distributor.claimable(1);
         assertGt(claimable, 128115516517529);
+
         distributor.claim(1);
         assertEq(distributor.claimable(1), 0);
 
         uint256 weekly = minter.weekly();
+
         console2.log(weekly);
         console2.log(minter.calculate_growth(weekly));
         console2.log(FLOW.totalSupply());
         console2.log(escrow.totalSupply());
 
-        vm.warp(block.timestamp + ONE_WEEK);
-        vm.roll(block.number + 1);
+        _elapseOneWeek();
+
         minter.update_period();
         console2.log(distributor.claimable(1));
         distributor.claim(1);
-        vm.warp(block.timestamp + ONE_WEEK);
-        vm.roll(block.number + 1);
+
+        _elapseOneWeek();
+
         minter.update_period();
         console2.log(distributor.claimable(1));
         uint256[] memory tokenIds = new uint256[](1);
         tokenIds[0] = 1;
         distributor.claim_many(tokenIds);
-        vm.warp(block.timestamp + ONE_WEEK);
-        vm.roll(block.number + 1);
+
+        _elapseOneWeek();
+
         minter.update_period();
         console2.log(distributor.claimable(1));
         distributor.claim(1);
-        vm.warp(block.timestamp + ONE_WEEK);
-        vm.roll(block.number + 1);
+
+        _elapseOneWeek();
+
         minter.update_period();
         console2.log(distributor.claimable(1));
         distributor.claim_many(tokenIds);
-        vm.warp(block.timestamp + ONE_WEEK);
-        vm.roll(block.number + 1);
+
+        _elapseOneWeek();
+
         minter.update_period();
         console2.log(distributor.claimable(1));
         distributor.claim(1);
+    }
+
+    function _elapseOneWeek() private {
+        vm.warp(block.timestamp + ONE_WEEK);
+        vm.roll(block.number + 1);
     }
 }
