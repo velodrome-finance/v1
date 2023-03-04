@@ -417,14 +417,14 @@ contract PairTest is BaseTest {
 
         voter.vote(1, pools, weights);
         assertEq(voter.usedWeights(1), escrow.balanceOfNFT(1)); // within 1000
-        assertEq(bribe.balanceOf(1), uint256(voter.votes(1, address(pair))));
+        assertEq(xbribe.balanceOf(1), uint256(voter.votes(1, address(pair))));
         vm.warp(block.timestamp + 1 weeks);
 
         voter.reset(1);
         assertLt(voter.usedWeights(1), escrow.balanceOfNFT(1));
         assertEq(voter.usedWeights(1), 0);
-        assertEq(bribe.balanceOf(1), uint256(voter.votes(1, address(pair))));
-        assertEq(bribe.balanceOf(1), 0);
+        assertEq(xbribe.balanceOf(1), uint256(voter.votes(1, address(pair))));
+        assertEq(xbribe.balanceOf(1), 0);
     }
 
     function gaugePokeHacking() public {
@@ -456,7 +456,7 @@ contract PairTest is BaseTest {
         console2.log(voter.usedWeights(1));
         console2.log(voter.usedWeights(4));
         assertFalse(voter.totalWeight() == 0);
-        assertFalse(bribe.balanceOf(1) == 0);
+        assertFalse(xbribe.balanceOf(1) == 0);
     }
 
     function gaugePokeHacking2() public {
@@ -481,7 +481,7 @@ contract PairTest is BaseTest {
         voter.vote(1, pools, weights);
 
         assertEq(voter.usedWeights(1), escrow.balanceOfNFT(1)); // within 1000
-        assertEq(bribe.balanceOf(1), uint256(voter.votes(1, address(pair))));
+        assertEq(xbribe.balanceOf(1), uint256(voter.votes(1, address(pair))));
     }
 
     function gaugePokeHacking3() public {
@@ -506,10 +506,10 @@ contract PairTest is BaseTest {
 
         address[] memory rewards = new address[](1);
         rewards[0] = address(VELO);
-        bribe.getReward(1, rewards);
+        xbribe.getReward(1, rewards);
         vm.warp(block.timestamp + 691200);
         vm.roll(block.number + 1);
-        bribe.getReward(1, rewards);
+        xbribe.getReward(1, rewards);
     }
 
     function routerPair1GetAmountsOutAndSwapExactTokensForTokens2() public {
@@ -580,7 +580,7 @@ contract PairTest is BaseTest {
         address[] memory rewards = new address[](2);
         rewards[0] = address(FRAX);
         rewards[1] = address(USDC);
-        bribe.getReward(1, rewards);
+        xbribe.getReward(1, rewards);
 
         address[] memory gauges = new address[](1);
         gauges[0] = address(gauge);
@@ -714,7 +714,7 @@ contract PairTest is BaseTest {
         gaugeClaimRewardsAfterExpiry();
 
         address[] memory bribes_ = new address[](1);
-        bribes_[0] = address(bribe);
+        bribes_[0] = address(xbribe);
         address[][] memory rewards = new address[][](1);
         address[] memory reward = new address[](1);
         reward[0] = address(DAI);

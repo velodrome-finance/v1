@@ -52,7 +52,7 @@ contract StakingTest is BaseTest {
         gaugeFactory = new GaugeFactory();
         address[] memory allowedRewards = new address[](1);
         vm.prank(address(voter));
-        gaugeFactory.createGauge(address(stake), address(owner), address(owner), address(escrow), false, allowedRewards);
+        gaugeFactory.createGauge(address(stake), address(owner), address(escrow), false, allowedRewards);
         address gaugeAddr = gaugeFactory.last_gauge();
         gauge = Gauge(gaugeAddr);
 

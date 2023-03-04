@@ -16,8 +16,6 @@ contract ExternalBribe is IBribe {
     uint internal constant DURATION = 7 days; // rewards are released over the voting period
     uint internal constant MAX_REWARD_TOKENS = 16;
 
-    uint internal constant PRECISION = 10 ** 18;
-
     uint public totalSupply;
     mapping(uint => uint) public balanceOf;
     mapping(address => mapping(uint => uint)) public tokenRewardsPerEpoch;
