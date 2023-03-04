@@ -221,18 +221,18 @@ contract VotingEscrow is IERC721, IERC721Metadata, IVotes {
     /// @param _approved Address to be approved for the given NFT ID.
     /// @param _tokenId ID of the token to be approved.
     function approve(address _approved, uint _tokenId) public {
-        address owner = idToOwner[_tokenId];
+        address tokenOwner = idToOwner[_tokenId];
         // Throws if `_tokenId` is not a valid NFT
-        require(owner != address(0));
+        require(tokenOwner != address(0));
         // Throws if `_approved` is the current owner
-        require(_approved != owner);
+        require(_approved != tokenOwner);
         // Check requirements
         bool senderIsOwner = (idToOwner[_tokenId] == msg.sender);
-        bool senderIsApprovedForAll = (ownerToOperators[owner])[msg.sender];
+        bool senderIsApprovedForAll = (ownerToOperators[tokenOwner])[msg.sender];
         require(senderIsOwner || senderIsApprovedForAll);
         // Set the approval
         idToApprovals[_tokenId] = _approved;
-        emit Approval(owner, _approved, _tokenId);
+        emit Approval(tokenOwner, _approved, _tokenId);
     }
 
     /// @dev Enables or disables approval for a third party ("operator") to manage all of
@@ -265,10 +265,10 @@ contract VotingEscrow is IERC721, IERC721Metadata, IVotes {
     /// @param _tokenId uint ID of the token to be transferred
     /// @return bool whether the msg.sender is approved for the given token ID, is an operator of the owner, or is the owner of the token
     function _isApprovedOrOwner(address _spender, uint _tokenId) internal view returns (bool) {
-        address owner = idToOwner[_tokenId];
-        bool spenderIsOwner = owner == _spender;
+        address tokenOwner = idToOwner[_tokenId];
+        bool spenderIsOwner = tokenOwner == _spender;
         bool spenderIsApproved = _spender == idToApprovals[_tokenId];
-        bool spenderIsApprovedForAll = (ownerToOperators[owner])[_spender];
+        bool spenderIsApprovedForAll = (ownerToOperators[tokenOwner])[_spender];
         return spenderIsOwner || spenderIsApproved || spenderIsApprovedForAll;
     }
 
@@ -501,15 +501,15 @@ contract VotingEscrow is IERC721, IERC721Metadata, IVotes {
     function _burn(uint _tokenId) internal {
         require(_isApprovedOrOwner(msg.sender, _tokenId), "caller is not owner nor approved");
 
-        address owner = ownerOf(_tokenId);
+        address tokenOwner = ownerOf(_tokenId);
 
         // Clear approval
         approve(address(0), _tokenId);
         // checkpoint for gov
-        _moveTokenDelegates(delegates(owner), address(0), _tokenId);
+        _moveTokenDelegates(delegates(tokenOwner), address(0), _tokenId);
         // Remove token
         _removeTokenFrom(msg.sender, _tokenId);
-        emit Transfer(owner, address(0), _tokenId);
+        emit Transfer(tokenOwner, address(0), _tokenId);
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -1261,7 +1261,7 @@ contract VotingEscrow is IERC721, IERC721Metadata, IVotes {
     }
 
     function _moveAllDelegates(
-        address owner,
+        address tokenOwner,
         address srcRep,
         address dstRep
     ) internal {
@@ -1276,10 +1276,10 @@ contract VotingEscrow is IERC721, IERC721Metadata, IVotes {
                 uint[] storage srcRepNew = checkpoints[srcRep][
                     nextSrcRepNum
                 ].tokenIds;
-                // All the same except what owner owns
+                // All the same except what tokenOwner owns
                 for (uint i = 0; i < srcRepOld.length; i++) {
                     uint tId = srcRepOld[i];
-                    if (idToOwner[tId] != owner) {
+                    if (idToOwner[tId] != tokenOwner) {
                         srcRepNew.push(tId);
                     }
                 }
@@ -1296,7 +1296,7 @@ contract VotingEscrow is IERC721, IERC721Metadata, IVotes {
                 uint[] storage dstRepNew = checkpoints[dstRep][
                     nextDstRepNum
                 ].tokenIds;
-                uint ownerTokenCount = ownerToNFTokenCount[owner];
+                uint ownerTokenCount = ownerToNFTokenCount[tokenOwner];
                 require(
                     dstRepOld.length + ownerTokenCount <= MAX_DELEGATES,
                     "dstRep would have too many tokenIds"
@@ -1308,7 +1308,7 @@ contract VotingEscrow is IERC721, IERC721Metadata, IVotes {
                 }
                 // Plus all that's owned
                 for (uint i = 0; i < ownerTokenCount; i++) {
-                    uint tId = ownerToNFTokenIdList[owner][i];
+                    uint tId = ownerToNFTokenIdList[tokenOwner][i];
                     dstRepNew.push(tId);
                 }
 
