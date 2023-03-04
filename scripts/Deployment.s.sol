@@ -90,8 +90,9 @@ contract Deployment is Script {
         pairFactory.setPauser(TEAM_MULTI_SIG);
         pairFactory.setTank(TANK);
 
-        // Set voting escrow's voter
+        // Set voting escrow's voter and art proxy
         votingEscrow.setVoter(address(voter));
+        votingEscrow.setArtProxy(address(veArtProxy));
 
         // Set minter and voting escrow's team
         votingEscrow.setTeam(TEAM_MULTI_SIG);
