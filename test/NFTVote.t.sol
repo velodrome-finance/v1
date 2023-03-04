@@ -18,6 +18,7 @@ contract NFTVoteTest is BaseTest {
   FlagCondition flag;
 
   function setUp() public {
+    deployOwners();
     deployCoins();
 
     VeArtProxy artProxy = new VeArtProxy();
