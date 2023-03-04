@@ -20,7 +20,7 @@ contract Flow is IFlow {
 
     constructor(address initialSupplyRecipient) {
         minter = msg.sender;
-        _mint(initialSupplyRecipient, 300 * 1e6 * 1e18);
+        _mint(initialSupplyRecipient, 82 * 1e6 * 1e18);
     }
 
     // No checks as its meant to be once off to set minting rights to BaseV1 Minter
