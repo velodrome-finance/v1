@@ -148,12 +148,14 @@ task("deploy:op", "Deploys Optimism contracts").setAction(async function (
   console.log("Whitelist set");
 
   // Initial veFLOW distro
-  await minter.initialize(
+  await minter.initialMintAndLock(
     OP_CONFIG.partnerAddrs,
     OP_CONFIG.partnerAmts,
     OP_CONFIG.partnerMax
   );
+  await minter.startActivePeriod();
   console.log("veFLOW distributed");
+
 
   await minter.setTeam(OP_CONFIG.teamMultisig)
   console.log("Team set for minter");

@@ -91,7 +91,8 @@ contract MinterTeamEmissions is BaseTest {
             amount: TOKEN_1M,
             lockTime: 86400 * 7 * 52 * 4
         });
-        minter.initialize(claims, 15 * TOKEN_1M);
+        minter.initialMintAndLock(claims, 15 * TOKEN_1M);
+        minter.startActivePeriod();
 
         assertEq(escrow.ownerOf(2), address(owner));
         assertEq(escrow.ownerOf(3), address(0));

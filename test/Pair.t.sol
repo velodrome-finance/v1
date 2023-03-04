@@ -598,7 +598,8 @@ contract PairTest is BaseTest {
             amount: TOKEN_1,
             lockTime: 86400 * 7 * 52 * 4
         });
-        minter.initialize(claims, TOKEN_1);
+        minter.initialMintAndLock(claims, TOKEN_1);
+        minter.startActivePeriod();
 
         minter.update_period();
         voter.updateGauge(address(gauge));

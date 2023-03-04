@@ -204,6 +204,7 @@ contract Deployment is Script {
             amounts,
             max
         );
+        minter.startActivePeriod();
 
         vm.stopBroadcast();
     }

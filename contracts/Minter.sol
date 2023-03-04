@@ -53,11 +53,11 @@ contract Minter is IMinter {
         active_period = ((block.timestamp + (2 * WEEK)) / WEEK) * WEEK;
     }
 
-    function initialize(
+    function initialMintAndLock(
         Claim[] calldata claims,
         uint max // sum amounts / max = % ownership of top protocols, so if initial 20m is distributed, and target is 25% protocol ownership, then max - 4 x 20m = 80m
     ) external {
-        require(initializer == msg.sender);
+        require(initializer == msg.sender, "not initializer");
         _flow.mint(address(this), max);
         _flow.approve(address(_ve), type(uint).max);
         uint256 length = claims.length;
@@ -67,8 +67,13 @@ contract Minter is IMinter {
                 ++i;
             }
         }
+    }
+
+    function startActivePeriod() external {
+        require(initializer == msg.sender, "not initializer");
         initializer = address(0);
-        active_period = ((block.timestamp) / WEEK) * WEEK; // allow minter.update_period() to mint new emissions THIS Thursday
+        // allow minter.update_period() to mint new emissions THIS Thursday
+        active_period = ((block.timestamp) / WEEK) * WEEK;
     }
 
     function setTeam(address _team) external {

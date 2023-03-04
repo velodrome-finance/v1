@@ -75,7 +75,8 @@ contract MinterTest is BaseTest {
             amount: TOKEN_1M,
             lockTime: 86400 * 7 * 52 * 4
         });
-        minter.initialize(claims, 2e25);
+        minter.initialMintAndLock(claims, 2e25);
+        minter.startActivePeriod();
 
         assertEq(escrow.ownerOf(2), address(owner));
         assertEq(escrow.ownerOf(3), address(0));
