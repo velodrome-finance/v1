@@ -29,6 +29,7 @@ contract Deployment is Script {
 
     // address to receive veNFT to be distributed to partners in the future
     address private constant FLOW_VOTER_EOA = 0xcC06464C7bbCF81417c08563dA2E1847c22b703a;
+    address private constant ASSET_EOA = 0x1bae1083cf4125ed5deeb778985c1effac0ecc06;
 
     // team member addresses
     address private constant DUNKS = 0x069e85d4f1010dd961897dc8c095fbb5ff297434;
@@ -133,66 +134,70 @@ contract Deployment is Script {
         voter.initialize(whitelistedTokens, address(minter));
 
         // Mint tokens and lock for veNFT
-        address[] memory claimants = new claimants[]();
-        uint256[] memory amounts = new amounts[]();
+        Minter.Claim[] memory claims = new Minter.Claim[](30);
 
         // 1. Mint to Flow voter EOA
-        claimants[0] = FLOW_VOTER_EOA;
-        claimants[1] = FLOW_VOTER_EOA;
-        claimants[2] = FLOW_VOTER_EOA;
-        claimants[3] = FLOW_VOTER_EOA;
-        claimants[4] = FLOW_VOTER_EOA;
-        claimants[5] = FLOW_VOTER_EOA;
-        claimants[6] = FLOW_VOTER_EOA;
-        claimants[7] = FLOW_VOTER_EOA;
-        claimants[8] = FLOW_VOTER_EOA;
-        claimants[9] = FLOW_VOTER_EOA;
-        claimants[10] = FLOW_VOTER_EOA;
-        claimants[11] = FLOW_VOTER_EOA;
-        claimants[12] = FLOW_VOTER_EOA;
+        for (uint256 i = 0; i <= 4; i++) {
+            claims[i] = Minter.Claim({claimant: FLOW_VOTER_EOA, amount: ONE_MILLION, lockTime: FOUR_YEARS});
+        }
 
-        amounts[0] = ONE_MILLION;
-        amounts[1] = ONE_MILLION;
-        amounts[2] = ONE_MILLION;
-        amounts[3] = ONE_MILLION;
-        amounts[4] = ONE_MILLION;
-        amounts[5] = TWO_MILLION;
-        amounts[6] = TWO_MILLION;
-        amounts[7] = TWO_MILLION;
-        amounts[8] = TWO_MILLION;
-        amounts[9] = TWO_MILLION;
-        amounts[10] = FOUR_MILLION;
-        amounts[11] = FOUR_MILLION;
-        amounts[12] = FOUR_MILLION;
+        for (uint256 i = 5; i <= 9; i++) {
+            claims[i] = Minter.Claim({claimant: FLOW_VOTER_EOA, amount: TWO_MILLION, lockTime: FOUR_YEARS});
+        }
+
+        for (uint256 i = 10; i <= 12; i++) {
+            claims[i] = Minter.Claim({claimant: FLOW_VOTER_EOA, amount: FOUR_MILLION, lockTime: FOUR_YEARS});
+        }
 
         // 2. Mint to team members
-        claimants[13] = DUNKS;
-        claimants[14] = T0RB1K;
-        claimants[15] = T0RB1K;
-        claimants[16] = T0RB1K;
-        claimants[17] = CEAZOR;
-        claimants[18] = CEAZOR;
-        claimants[19] = CEAZOR;
-        claimants[20] = MOTTO;
-        claimants[21] = MOTTO;
-        claimants[22] = MOTTO;
-        claimants[22] = COOLIE;
-        claimants[23] = COOLIE;
-        claimants[24] = COOLIE;
+        claims[13] = Minter.Claim({claimant: DUNKS, amount: FOUR_MILLION, lockTime: FOUR_YEARS});
 
-        amounts[13] = FOUR_MILLION;
-        amounts[14] = FOUR_MILLION;
-        amounts[15] = FOUR_MILLION;
-        amounts[16] = FOUR_MILLION;
-        amounts[17] = FOUR_MILLION;
-        amounts[18] = FOUR_MILLION;
-        amounts[19] = FOUR_MILLION;
-        amounts[20] = FOUR_MILLION;
-        amounts[21] = FOUR_MILLION;
-        amounts[22] = FOUR_MILLION;
-        amounts[22] = FOUR_MILLION;
-        amounts[23] = FOUR_MILLION;
-        amounts[24] = FOUR_MILLION;
+        for (uint256 i = 14; i <= 16; i++) {
+            claims[i] = Minter.Claim({claimant: T0RB1K, amount: FOUR_MILLION, lockTime: FOUR_YEARS});
+        }
+
+        for (uint256 i = 17; i <= 19; i++) {
+            claims[i] = Minter.Claim({claimant: CEAZOR, amount: FOUR_MILLION, lockTime: FOUR_YEARS});
+        }
+
+        for (uint256 i = 20; i <= 22; i++) {
+            claims[i] = Minter.Claim({claimant: MOTTO, amount: FOUR_MILLION, lockTime: FOUR_YEARS});
+        }
+
+        for (uint256 i = 23; i <= 25; i++) {
+            claims[i] = Minter.Claim({claimant: COOLIE, amount: FOUR_MILLION, lockTime: FOUR_YEARS});
+        }
+
+        // 3. Mint to snapshotted veNFT holders
+
+        // 4. Mint for future partners
+        for (uint256 i = 26; i <= 28; i++) {
+            claims[i] = Minter.Claim({amount: FOUR_MILLION, claimant: ASSET_EOA, lockTime: FOUR_YEARS});
+        }
+
+        for (uint256 i = 29; i <= 42; i++) {
+            claims[i] = Minter.Claim({amount: FOUR_MILLION, claimant: TEAM_MULTI_SIG, lockTime: FOUR_YEARS});
+        }
+
+        for (uint256 i = 43; i <= 45; i++) {
+            claims[i] = Minter.Claim({amount: TWO_MILLION, claimant: ASSET_EOA, lockTime: FOUR_YEARS});
+        }
+
+        for (uint256 i = 46; i <= 60; i++) {
+            claims[i] = Minter.Claim({amount: TWO_MILLION, claimant: TEAM_MULTI_SIG, lockTime: FOUR_YEARS});
+        }
+
+        for (uint256 i = 61; i <= 76; i++) {
+            claims[i] = Minter.Claim({amount: ONE_MILLION, claimant: TEAM_MULTI_SIG, lockTime: FOUR_YEARS});
+        }
+
+        for (uint256 i = 77; i <= 81; i++) {
+            claims[i] = Minter.Claim({amount: ONE_MILLION, claimant: ASSET_EOA, lockTime: TWO_YEARS});
+        }
+
+        for (uint256 i = 82; i <= 86; i++) {
+            claims[i] = Minter.Claim({amount: ONE_MILLION, claimant: ASSET_EOA, lockTime: ONE_YEAR});
+        }
 
         minter.initialize(
             claimants,
