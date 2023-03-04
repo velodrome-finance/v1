@@ -14,7 +14,7 @@ import "contracts/Pair.sol";
 import "contracts/RewardsDistributor.sol";
 import "contracts/Router.sol";
 import "contracts/Flow.sol";
-import "contracts/VelodromeLibrary.sol";
+import "contracts/VelocimeterLibrary.sol";
 import "contracts/Voter.sol";
 import "contracts/VeArtProxy.sol";
 import "contracts/VotingEscrow.sol";
@@ -49,7 +49,7 @@ abstract contract BaseTest is Test, TestOwner {
     TestToken stake;
     PairFactory factory;
     Router router;
-    VelodromeLibrary lib;
+    VelocimeterLibrary lib;
     Pair pair;
     Pair pair2;
     Pair pair3;
@@ -123,7 +123,7 @@ abstract contract BaseTest is Test, TestOwner {
 
         router = new Router(address(factory), address(WETH));
         assertEq(router.factory(), address(factory));
-        lib = new VelodromeLibrary(address(router));
+        lib = new VelocimeterLibrary(address(router));
     }
 
     function deployPairWithOwner(address _owner) public {
