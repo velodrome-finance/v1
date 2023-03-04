@@ -47,7 +47,7 @@ contract VeloVotingTest is BaseTest {
         tokens[1] = address(FLOW);
         voter.initialize(tokens, address(owner));
         FLOW.approve(address(escrow), TOKEN_1);
-        escrow.create_lock(TOKEN_1, 4 * 365 * 86400);
+        escrow.create_lock(TOKEN_1, FOUR_YEARS);
         distributor = new RewardsDistributor(address(escrow));
         escrow.setVoter(address(voter));
 

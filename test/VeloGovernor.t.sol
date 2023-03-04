@@ -28,13 +28,13 @@ contract VeloGovernorTest is BaseTest {
         escrow = new VotingEscrow(address(FLOW), address(artProxy), owners[0]);
 
         FLOW.approve(address(escrow), 97 * TOKEN_1);
-        escrow.create_lock(97 * TOKEN_1, 4 * 365 * 86400);
+        escrow.create_lock(97 * TOKEN_1, FOUR_YEARS);
         vm.roll(block.number + 1);
 
         // owner2 owns less than quorum, 3%
         vm.startPrank(address(owner2));
         FLOW.approve(address(escrow), 3 * TOKEN_1);
-        escrow.create_lock(3 * TOKEN_1, 4 * 365 * 86400);
+        escrow.create_lock(3 * TOKEN_1, FOUR_YEARS);
         vm.roll(block.number + 1);
         vm.stopPrank();
 
@@ -97,7 +97,7 @@ contract VeloGovernorTest is BaseTest {
         // owner2 + owner3 > quorum
         vm.startPrank(address(owner3));
         FLOW.approve(address(escrow), 3 * TOKEN_1);
-        escrow.create_lock(3 * TOKEN_1, 4 * 365 * 86400);
+        escrow.create_lock(3 * TOKEN_1, FOUR_YEARS);
         vm.roll(block.number + 1);
         uint256 pre2 = escrow.getVotes(address(owner2));
         uint256 pre3 = escrow.getVotes(address(owner3));
@@ -115,7 +115,7 @@ contract VeloGovernorTest is BaseTest {
         assertApproxEqAbs(
             pre2 + pre3,
             post2,
-            4 * 365 * 86400 // merge rounds down time lock
+            FOUR_YEARS // merge rounds down time lock
         );
     }
 

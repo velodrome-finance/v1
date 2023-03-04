@@ -24,7 +24,7 @@ contract LPRewardsTest is BaseTest {
         VeArtProxy artProxy = new VeArtProxy();
         escrow = new VotingEscrow(address(FLOW), address(artProxy), owners[0]);
         FLOW.approve(address(escrow), TOKEN_1M);
-        escrow.create_lock(TOKEN_1M, 4 * 365 * 86400);
+        escrow.create_lock(TOKEN_1M, FOUR_YEARS);
 
         deployPairFactoryAndRouter();
 

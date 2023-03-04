@@ -28,7 +28,7 @@ contract KillGaugesTest is BaseTest {
     escrow = new VotingEscrow(address(FLOW), address(artProxy), owners[0]);
 
     FLOW.approve(address(escrow), 100 * TOKEN_1);
-    escrow.create_lock(100 * TOKEN_1, 4 * 365 * 86400);
+    escrow.create_lock(100 * TOKEN_1, FOUR_YEARS);
     vm.roll(block.number + 1);
 
     deployPairFactoryAndRouter();

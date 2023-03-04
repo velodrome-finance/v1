@@ -29,21 +29,21 @@ contract StakingTest is BaseTest {
         deployBaseCoins();
 
         FLOW.approve(address(escrow), TOKEN_1);
-        escrow.create_lock(TOKEN_1, 4 * 365 * 86400);
+        escrow.create_lock(TOKEN_1, FOUR_YEARS);
     }
 
     function createLock2() public {
         createLock();
 
         owner2.approve(address(FLOW), address(escrow), TOKEN_1);
-        owner2.create_lock(address(escrow), TOKEN_1, 4 * 365 * 86400);
+        owner2.create_lock(address(escrow), TOKEN_1, FOUR_YEARS);
     }
 
     function createLock3() public {
         createLock2();
 
         owner3.approve(address(FLOW), address(escrow), TOKEN_1);
-        owner3.create_lock(address(escrow), TOKEN_1, 4 * 365 * 86400);
+        owner3.create_lock(address(escrow), TOKEN_1, FOUR_YEARS);
     }
 
     function deployFactory() public {

@@ -26,7 +26,7 @@ contract ImbalanceTest is BaseTest {
         deployBaseCoins();
 
         FLOW.approve(address(escrow), TOKEN_1);
-        escrow.create_lock(TOKEN_1, 4 * 365 * 86400);
+        escrow.create_lock(TOKEN_1, FOUR_YEARS);
         vm.warp(1);
         assertGt(escrow.balanceOfNFT(1), 995063075414519385);
         assertEq(FLOW.balanceOf(address(escrow)), TOKEN_1);
@@ -36,7 +36,7 @@ contract ImbalanceTest is BaseTest {
         createLock();
 
         FLOW.approve(address(escrow), TOKEN_1);
-        escrow.create_lock(TOKEN_1, 4 * 365 * 86400);
+        escrow.create_lock(TOKEN_1, FOUR_YEARS);
         assertGt(escrow.balanceOfNFT(2), 995063075414519385);
         assertEq(FLOW.balanceOf(address(escrow)), 2 * TOKEN_1);
         escrow.merge(2, 1);
