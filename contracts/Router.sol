@@ -478,14 +478,14 @@ contract Router is IRouter {
     // requires the initial amount to have already been sent to the first pair
     function _swapSupportingFeeOnTransferTokens(route[] memory routes, address _to) internal virtual {
         for (uint i; i < routes.length; i++) {
-        	(address input, address output, bool stable) = (routes[i].from, routes[i].to, routes[i].stable);
+            (address input, address output,) = (routes[i].from, routes[i].to, routes[i].stable);
             (address token0,) = sortTokens(input, output);
             IPair pair = IPair(pairFor(routes[i].from, routes[i].to, routes[i].stable));
             uint amountInput;
             uint amountOutput;
             { // scope to avoid stack too deep errors
             (uint reserve0, uint reserve1,) = pair.getReserves();
-            (uint reserveInput, uint reserveOutput) = input == token0 ? (reserve0, reserve1) : (reserve1, reserve0);
+            (uint reserveInput,) = input == token0 ? (reserve0, reserve1) : (reserve1, reserve0);
             amountInput = IERC20(input).balanceOf(address(pair)) - reserveInput;
             amountOutput = pair.getAmountOut(amountInput, input);
             }
