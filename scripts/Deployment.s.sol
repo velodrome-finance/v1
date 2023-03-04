@@ -86,8 +86,9 @@ contract Deployment is Script {
         // Set flow minter to contract
         flow.setMinter(address(minter));
 
-        // Set pair factory pauser
+        // Set pair factory pauser and tank
         pairFactory.setPauser(TEAM_MULTI_SIG);
+        pairFactory.setTank(TANK);
 
         // Set voting escrow's voter
         votingEscrow.setVoter(address(voter));
