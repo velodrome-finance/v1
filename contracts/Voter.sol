@@ -79,7 +79,7 @@ contract Voter is IVoter {
     }
 
     modifier onlyNewEpoch(uint _tokenId) {
-        // ensure new epoch since last vote 
+        // ensure new epoch since last vote
         require((block.timestamp / DURATION) * DURATION > lastVoted[_tokenId], "TOKEN_ALREADY_VOTED_THIS_EPOCH");
         _;
     }
@@ -241,8 +241,10 @@ contract Voter is IVoter {
         isAlive[_gauge] = true;
         _updateFor(_gauge);
         pools.push(_pool);
-        IPair(_pool).setHasGauge(true);
-        IPair(_pool).setExternalBribe(_wxbribe);
+        if (isPair) {
+            IPair(_pool).setHasGauge(true);
+            IPair(_pool).setExternalBribe(_wxbribe);
+        }
         emit GaugeCreated(_gauge, msg.sender, _external_bribe, _wxbribe, _pool);
         return _gauge;
     }
