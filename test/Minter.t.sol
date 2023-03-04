@@ -88,13 +88,13 @@ contract MinterTest is BaseTest {
         initializeVotingEscrow();
 
         minter.update_period();
-        assertEq(minter.weekly(), 15 * TOKEN_1M); // 15M
+        assertEq(minter.weekly(), 13 * TOKEN_1M); // 13M
 
         _elapseOneWeek();
 
         minter.update_period();
         assertEq(distributor.claimable(1), 0);
-        assertLt(minter.weekly(), 15 * TOKEN_1M); // <15M for week shift
+        assertLt(minter.weekly(), 13 * TOKEN_1M); // <13M for week shift
 
         _elapseOneWeek();
 
@@ -102,13 +102,13 @@ contract MinterTest is BaseTest {
         uint256 claimable = distributor.claimable(1);
         /**
          * This has been updated from 128115516517529 to
-         * 197073360700 because originally in VELO the
+         * 170796912607 because originally in VELO the
          * constructor mints 0 tokens, but now we are minting
          * an initial supply instead of using the initialMint
          * function.
          */
 
-        assertGt(claimable, 197073360700);
+        assertGt(claimable, 170796912607);
 
         distributor.claim(1);
         assertEq(distributor.claimable(1), 0);
