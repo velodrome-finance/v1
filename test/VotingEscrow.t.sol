@@ -15,11 +15,11 @@ contract VotingEscrowTest is BaseTest {
         mintFlow(owners, amounts);
 
         VeArtProxy artProxy = new VeArtProxy();
-        escrow = new VotingEscrow(address(VELO), address(artProxy), owners[0]);
+        escrow = new VotingEscrow(address(FLOW), address(artProxy), owners[0]);
     }
 
     function testCreateLock() public {
-        VELO.approve(address(escrow), 1e21);
+        FLOW.approve(address(escrow), 1e21);
         uint256 lockDuration = 7 * 24 * 3600; // 1 week
 
         // Balance should be zero before and 1 after creating the lock
@@ -30,7 +30,7 @@ contract VotingEscrowTest is BaseTest {
     }
 
     function testCreateLockOutsideAllowedZones() public {
-        VELO.approve(address(escrow), 1e21);
+        FLOW.approve(address(escrow), 1e21);
         uint256 oneWeek = 7 * 24 * 3600;
         uint256 fourYears = 4 * 365 * 24 * 3600;
         vm.expectRevert(abi.encodePacked('Voting lock can be 4 years max'));
@@ -38,7 +38,7 @@ contract VotingEscrowTest is BaseTest {
     }
 
     function testWithdraw() public {
-        VELO.approve(address(escrow), 1e21);
+        FLOW.approve(address(escrow), 1e21);
         uint256 lockDuration = 7 * 24 * 3600; // 1 week
         escrow.create_lock(1e21, lockDuration);
 
@@ -51,7 +51,7 @@ contract VotingEscrowTest is BaseTest {
         vm.roll(block.number + 1); // mine the next block
         escrow.withdraw(tokenId);
 
-        assertEq(VELO.balanceOf(address(owner)), 1e21);
+        assertEq(FLOW.balanceOf(address(owner)), 1e21);
         // Check that the NFT is burnt
         assertEq(escrow.balanceOfNFT(tokenId), 0);
         assertEq(escrow.ownerOf(tokenId), address(0));
@@ -61,7 +61,7 @@ contract VotingEscrowTest is BaseTest {
         // tokenURI should not work for non-existent token ids
         vm.expectRevert(abi.encodePacked("Query for nonexistent token"));
         escrow.tokenURI(999);
-        VELO.approve(address(escrow), 1e21);
+        FLOW.approve(address(escrow), 1e21);
         uint256 lockDuration = 7 * 24 * 3600; // 1 week
         escrow.create_lock(1e21, lockDuration);
 

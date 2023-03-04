@@ -147,13 +147,13 @@ task("deploy:op", "Deploys Optimism contracts").setAction(async function (
   await voter.initialize(tokenWhitelist, minter.address);
   console.log("Whitelist set");
 
-  // Initial veVELO distro
+  // Initial veFLOW distro
   await minter.initialize(
     OP_CONFIG.partnerAddrs,
     OP_CONFIG.partnerAmts,
     OP_CONFIG.partnerMax
   );
-  console.log("veVELO distributed");
+  console.log("veFLOW distributed");
 
   await minter.setTeam(OP_CONFIG.teamMultisig)
   console.log("Team set for minter");

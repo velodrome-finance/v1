@@ -25,9 +25,9 @@ contract KillGaugesTest is BaseTest {
     amounts[2] = 1e25;
     mintFlow(owners, amounts);
     VeArtProxy artProxy = new VeArtProxy();
-    escrow = new VotingEscrow(address(VELO), address(artProxy), owners[0]);
+    escrow = new VotingEscrow(address(FLOW), address(artProxy), owners[0]);
 
-    VELO.approve(address(escrow), 100 * TOKEN_1);
+    FLOW.approve(address(escrow), 100 * TOKEN_1);
     escrow.create_lock(100 * TOKEN_1, 4 * 365 * 86400);
     vm.roll(block.number + 1);
 
@@ -53,20 +53,20 @@ contract KillGaugesTest is BaseTest {
 
     minter = new Minter(address(voter), address(escrow), address(distributor));
     distributor.setDepositor(address(minter));
-    VELO.setMinter(address(minter));
+    FLOW.setMinter(address(minter));
     address[] memory tokens = new address[](4);
     tokens[0] = address(USDC);
     tokens[1] = address(FRAX);
     tokens[2] = address(DAI);
-    tokens[3] = address(VELO);
+    tokens[3] = address(FLOW);
     voter.initialize(tokens, address(minter));
 
-    VELO.approve(address(gaugeFactory), 15 * TOKEN_100K);
+    FLOW.approve(address(gaugeFactory), 15 * TOKEN_100K);
     voter.createGauge(address(pair));
     voter.createGauge(address(pair2));
 
-    staking = new TestStakingRewards(address(pair), address(VELO));
-    staking2 = new TestStakingRewards(address(pair2), address(VELO));
+    staking = new TestStakingRewards(address(pair), address(FLOW));
+    staking2 = new TestStakingRewards(address(pair2), address(FLOW));
 
     address gaugeAddress = voter.gauges(address(pair));
     gauge = Gauge(gaugeAddress);
@@ -132,7 +132,7 @@ contract KillGaugesTest is BaseTest {
     minter.update_period();
     voter.updateGauge(address(gauge));
     uint256 claimable = voter.claimable(address(gauge));
-    VELO.approve(address(staking), claimable);
+    FLOW.approve(address(staking), claimable);
     staking.notifyRewardAmount(claimable);
     address[] memory gauges = new address[](1);
     gauges[0] = address(gauge);
@@ -150,7 +150,7 @@ contract KillGaugesTest is BaseTest {
     minter.update_period();
     voter.updateGauge(address(gauge));
     uint256 claimable = voter.claimable(address(gauge));
-    VELO.approve(address(staking), claimable);
+    FLOW.approve(address(staking), claimable);
     staking.notifyRewardAmount(claimable);
     address[] memory gauges = new address[](1);
     gauges[0] = address(gauge);
@@ -170,11 +170,11 @@ contract KillGaugesTest is BaseTest {
 
     uint256 claimable = voter.claimable(address(gauge));
     console2.log(claimable);
-    VELO.approve(address(staking), claimable);
+    FLOW.approve(address(staking), claimable);
     staking.notifyRewardAmount(claimable);
 
     uint256 claimable2 = voter.claimable(address(gauge2));
-    VELO.approve(address(staking), claimable2);
+    FLOW.approve(address(staking), claimable2);
     staking.notifyRewardAmount(claimable2);
 
     address[] memory gauges = new address[](2);

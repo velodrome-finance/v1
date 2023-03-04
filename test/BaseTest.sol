@@ -43,7 +43,7 @@ abstract contract BaseTest is Test, TestOwner {
     MockERC20 FRAX;
     MockERC20 DAI;
     TestWETH WETH; // Mock WETH token
-    Flow VELO;
+    Flow FLOW;
     MockERC20 WEVE;
     MockERC20 LR; // late reward
     TestToken stake;
@@ -68,7 +68,7 @@ abstract contract BaseTest is Test, TestOwner {
         USDC = new MockERC20("USDC", "USDC", 6);
         FRAX = new MockERC20("FRAX", "FRAX", 18);
         DAI = new MockERC20("DAI", "DAI", 18);
-        VELO = new Flow(msg.sender);
+        FLOW = new Flow(msg.sender);
         WEVE = new MockERC20("WEVE", "WEVE", 18);
         LR = new MockERC20("LR", "LR", 18);
         WETH = new TestWETH();
@@ -85,7 +85,7 @@ abstract contract BaseTest is Test, TestOwner {
 
     function mintFlow(address[] memory _accounts, uint256[] memory _amounts) public {
         for (uint256 i = 0; i < _amounts.length; i++) {
-            VELO.mint(_accounts[i], _amounts[i]);
+            FLOW.mint(_accounts[i], _amounts[i]);
         }
     }
 

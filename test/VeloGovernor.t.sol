@@ -25,15 +25,15 @@ contract VeloGovernorTest is BaseTest {
         mintFlow(owners, amounts);
 
         VeArtProxy artProxy = new VeArtProxy();
-        escrow = new VotingEscrow(address(VELO), address(artProxy), owners[0]);
+        escrow = new VotingEscrow(address(FLOW), address(artProxy), owners[0]);
 
-        VELO.approve(address(escrow), 97 * TOKEN_1);
+        FLOW.approve(address(escrow), 97 * TOKEN_1);
         escrow.create_lock(97 * TOKEN_1, 4 * 365 * 86400);
         vm.roll(block.number + 1);
 
         // owner2 owns less than quorum, 3%
         vm.startPrank(address(owner2));
-        VELO.approve(address(escrow), 3 * TOKEN_1);
+        FLOW.approve(address(escrow), 3 * TOKEN_1);
         escrow.create_lock(3 * TOKEN_1, 4 * 365 * 86400);
         vm.roll(block.number + 1);
         vm.stopPrank();
@@ -57,12 +57,12 @@ contract VeloGovernorTest is BaseTest {
 
         minter = new Minter(address(voter), address(escrow), address(distributor));
         distributor.setDepositor(address(minter));
-        VELO.setMinter(address(minter));
+        FLOW.setMinter(address(minter));
 
         address address1 = factory.getPair(address(FRAX), address(USDC), true);
         pair = Pair(address1);
 
-        VELO.approve(address(gaugeFactory), 15 * TOKEN_100K);
+        FLOW.approve(address(gaugeFactory), 15 * TOKEN_100K);
         voter.createGauge(address(pair));
         address gaugeAddress = voter.gauges(address(pair));
         gauge = Gauge(gaugeAddress);
@@ -96,7 +96,7 @@ contract VeloGovernorTest is BaseTest {
     function testVeVeloMergesAutoDelegates() public {
         // owner2 + owner3 > quorum
         vm.startPrank(address(owner3));
-        VELO.approve(address(escrow), 3 * TOKEN_1);
+        FLOW.approve(address(escrow), 3 * TOKEN_1);
         escrow.create_lock(3 * TOKEN_1, 4 * 365 * 86400);
         vm.roll(block.number + 1);
         uint256 pre2 = escrow.getVotes(address(owner2));

@@ -31,28 +31,28 @@ contract PairTest is BaseTest {
         mintLR(owners, amounts);
 
         VeArtProxy artProxy = new VeArtProxy();
-        escrow = new VotingEscrow(address(VELO), address(artProxy), owners[0]);
+        escrow = new VotingEscrow(address(FLOW), address(artProxy), owners[0]);
     }
 
     function createLock() public {
         deployPairCoins();
 
-        VELO.approve(address(escrow), 5e17);
+        FLOW.approve(address(escrow), 5e17);
         escrow.create_lock(5e17, 4 * 365 * 86400);
         vm.roll(block.number + 1); // fwd 1 block because escrow.balanceOfNFT() returns 0 in same block
         assertGt(escrow.balanceOfNFT(1), 495063075414519385);
-        assertEq(VELO.balanceOf(address(escrow)), 5e17);
+        assertEq(FLOW.balanceOf(address(escrow)), 5e17);
     }
 
     function increaseLock() public {
         createLock();
 
-        VELO.approve(address(escrow), 5e17);
+        FLOW.approve(address(escrow), 5e17);
         escrow.increase_amount(1, 5e17);
         vm.expectRevert(abi.encodePacked('Can only increase lock duration'));
         escrow.increase_unlock_time(1, 4 * 365 * 86400);
         assertGt(escrow.balanceOfNFT(1), 995063075414519385);
-        assertEq(VELO.balanceOf(address(escrow)), TOKEN_1);
+        assertEq(FLOW.balanceOf(address(escrow)), TOKEN_1);
     }
 
     function votingEscrowViews() public {
@@ -63,7 +63,7 @@ contract PairTest is BaseTest {
         assertEq(escrow.totalSupplyAt(block_), escrow.totalSupply());
 
         assertGt(escrow.balanceOfNFT(1), 995063075414519385);
-        assertEq(VELO.balanceOf(address(escrow)), TOKEN_1);
+        assertEq(FLOW.balanceOf(address(escrow)), TOKEN_1);
     }
 
     function stealNFT() public {
@@ -80,10 +80,10 @@ contract PairTest is BaseTest {
     function votingEscrowMerge() public {
         stealNFT();
 
-        VELO.approve(address(escrow), TOKEN_1);
+        FLOW.approve(address(escrow), TOKEN_1);
         escrow.create_lock(TOKEN_1, 4 * 365 * 86400);
         assertGt(escrow.balanceOfNFT(2), 995063075414519385);
-        assertEq(VELO.balanceOf(address(escrow)), 2 * TOKEN_1);
+        assertEq(FLOW.balanceOf(address(escrow)), 2 * TOKEN_1);
         console2.log(escrow.totalSupply());
         escrow.merge(2, 1);
         console2.log(escrow.totalSupply());
@@ -92,10 +92,10 @@ contract PairTest is BaseTest {
         (int256 id, uint256 amount) = escrow.locked(2);
         assertEq(amount, 0);
         assertEq(escrow.ownerOf(2), address(0));
-        VELO.approve(address(escrow), TOKEN_1);
+        FLOW.approve(address(escrow), TOKEN_1);
         escrow.create_lock(TOKEN_1, 4 * 365 * 86400);
         assertGt(escrow.balanceOfNFT(3), 995063075414519385);
-        assertEq(VELO.balanceOf(address(escrow)), 3 * TOKEN_1);
+        assertEq(FLOW.balanceOf(address(escrow)), 3 * TOKEN_1);
         console2.log(escrow.totalSupply());
         escrow.merge(3, 1);
         console2.log(escrow.totalSupply());
@@ -262,12 +262,12 @@ contract PairTest is BaseTest {
 
         minter = new Minter(address(voter), address(escrow), address(distributor));
         distributor.setDepositor(address(minter));
-        VELO.setMinter(address(minter));
+        FLOW.setMinter(address(minter));
         address[] memory tokens = new address[](5);
         tokens[0] = address(USDC);
         tokens[1] = address(FRAX);
         tokens[2] = address(DAI);
-        tokens[3] = address(VELO);
+        tokens[3] = address(FLOW);
         tokens[4] = address(LR);
         voter.initialize(tokens, address(minter));
     }
@@ -275,13 +275,13 @@ contract PairTest is BaseTest {
     function deployPairFactoryGauge() public {
         deployMinter();
 
-        VELO.approve(address(gaugeFactory), 15 * TOKEN_100K);
+        FLOW.approve(address(gaugeFactory), 15 * TOKEN_100K);
         voter.createGauge(address(pair));
         voter.createGauge(address(pair2));
         voter.createGauge(address(pair3));
         assertFalse(voter.gauges(address(pair)) == address(0));
 
-        staking = new TestStakingRewards(address(pair), address(VELO));
+        staking = new TestStakingRewards(address(pair), address(FLOW));
 
         address gaugeAddress = voter.gauges(address(pair));
         address xBribeAddress = voter.external_bribes(gaugeAddress);
@@ -354,17 +354,17 @@ contract PairTest is BaseTest {
     function addGaugeAndBribeRewards() public {
         withdrawGaugeStake();
 
-        VELO.approve(address(gauge), PAIR_1);
-        VELO.approve(address(xbribe), PAIR_1);
-        VELO.approve(address(staking), PAIR_1);
+        FLOW.approve(address(gauge), PAIR_1);
+        FLOW.approve(address(xbribe), PAIR_1);
+        FLOW.approve(address(staking), PAIR_1);
 
-        gauge.notifyRewardAmount(address(VELO), PAIR_1);
-        xbribe.notifyRewardAmount(address(VELO), PAIR_1);
+        gauge.notifyRewardAmount(address(FLOW), PAIR_1);
+        xbribe.notifyRewardAmount(address(FLOW), PAIR_1);
         staking.notifyRewardAmount(PAIR_1);
 
-        assertEq(gauge.rewardRate(address(VELO)), 1653);
+        assertEq(gauge.rewardRate(address(FLOW)), 1653);
         // no reward rate, all or nothing
-        // assertEq(xbribe.rewardRate(address(VELO)), 1653);
+        // assertEq(xbribe.rewardRate(address(FLOW)), 1653);
         assertEq(staking.rewardRate(), 1653);
     }
 
@@ -399,11 +399,11 @@ contract PairTest is BaseTest {
     function createLock2() public {
         voterPokeSelf();
 
-        VELO.approve(address(escrow), TOKEN_1);
+        FLOW.approve(address(escrow), TOKEN_1);
         escrow.create_lock(TOKEN_1, 4 * 365 * 86400);
         vm.warp(block.timestamp + 1);
         assertGt(escrow.balanceOfNFT(1), 995063075414519385);
-        assertEq(VELO.balanceOf(address(escrow)), 4 * TOKEN_1);
+        assertEq(FLOW.balanceOf(address(escrow)), 4 * TOKEN_1);
     }
 
     function voteHacking() public {
@@ -495,7 +495,7 @@ contract PairTest is BaseTest {
     function gaugeDistributeBasedOnVoting() public {
         gaugePokeHacking3();
 
-        VELO.approve(address(voter), PAIR_1);
+        FLOW.approve(address(voter), PAIR_1);
         voter.notifyRewardAmount(PAIR_1);
         voter.updateAll();
         voter.distro();
@@ -505,7 +505,7 @@ contract PairTest is BaseTest {
         gaugeDistributeBasedOnVoting();
 
         address[] memory rewards = new address[](1);
-        rewards[0] = address(VELO);
+        rewards[0] = address(FLOW);
         xbribe.getReward(1, rewards);
         vm.warp(block.timestamp + 691200);
         vm.roll(block.number + 1);
@@ -598,10 +598,10 @@ contract PairTest is BaseTest {
         minter.initialize(claimants, amounts, TOKEN_1);
         minter.update_period();
         voter.updateGauge(address(gauge));
-        console2.log(VELO.balanceOf(address(distributor)));
+        console2.log(FLOW.balanceOf(address(distributor)));
         console2.log(distributor.claimable(1));
         uint256 claimable = voter.claimable(address(gauge));
-        VELO.approve(address(staking), claimable);
+        FLOW.approve(address(staking), claimable);
         staking.notifyRewardAmount(claimable);
         voter.distro();
         vm.warp(block.timestamp + 1800);
@@ -621,25 +621,25 @@ contract PairTest is BaseTest {
         gauge.deposit(PAIR_1, 0);
         staking.getReward();
         vm.warp(block.timestamp + 1);
-        uint256 before = VELO.balanceOf(address(owner));
+        uint256 before = FLOW.balanceOf(address(owner));
         vm.warp(block.timestamp + 1);
-        gauge.batchRewardPerToken(address(VELO), 200);
+        gauge.batchRewardPerToken(address(FLOW), 200);
         vm.warp(block.timestamp + 1);
-        gauge.batchRewardPerToken(address(VELO), 200);
+        gauge.batchRewardPerToken(address(FLOW), 200);
         vm.warp(block.timestamp + 1);
-        gauge.batchRewardPerToken(address(VELO), 200);
+        gauge.batchRewardPerToken(address(FLOW), 200);
         vm.warp(block.timestamp + 1);
-        gauge.batchRewardPerToken(address(VELO), 200);
+        gauge.batchRewardPerToken(address(FLOW), 200);
         vm.warp(block.timestamp + 1);
-        gauge.batchRewardPerToken(address(VELO), 200);
+        gauge.batchRewardPerToken(address(FLOW), 200);
         vm.warp(block.timestamp + 1);
-        uint256 earned = gauge.earned(address(VELO), address(owner));
+        uint256 earned = gauge.earned(address(FLOW), address(owner));
         address[] memory rewards = new address[](1);
-        rewards[0] = address(VELO);
+        rewards[0] = address(FLOW);
         vm.warp(block.timestamp + 1);
         gauge.getReward(address(owner), rewards);
         vm.warp(block.timestamp + 1);
-        uint256 after_ = VELO.balanceOf(address(owner));
+        uint256 after_ = FLOW.balanceOf(address(owner));
         uint256 received = after_ - before;
 
         gauge.withdraw(gauge.balanceOf(address(owner)));
@@ -676,7 +676,7 @@ contract PairTest is BaseTest {
         gaugeClaimRewards();
 
         address[] memory rewards = new address[](1);
-        rewards[0] = address(VELO);
+        rewards[0] = address(FLOW);
         pair.approve(address(gauge), PAIR_1);
         gauge.deposit(PAIR_1, 1);
         gauge.getReward(address(owner), rewards);
@@ -755,16 +755,16 @@ contract PairTest is BaseTest {
         owner3.approve(address(pair), address(gauge), PAIR_1);
         owner3.deposit(address(gauge), PAIR_1, 0);
         owner3.withdrawGauge(address(gauge), gauge.balanceOf(address(owner3)));
-        gauge.batchRewardPerToken(address(VELO), 200);
+        gauge.batchRewardPerToken(address(FLOW), 200);
         owner3.approve(address(pair), address(gauge), PAIR_1);
         owner3.deposit(address(gauge), PAIR_1, 0);
-        gauge.batchRewardPerToken(address(VELO), 200);
-        gauge.batchRewardPerToken(address(VELO), 200);
-        gauge.batchRewardPerToken(address(VELO), 200);
-        gauge.batchRewardPerToken(address(VELO), 200);
+        gauge.batchRewardPerToken(address(FLOW), 200);
+        gauge.batchRewardPerToken(address(FLOW), 200);
+        gauge.batchRewardPerToken(address(FLOW), 200);
+        gauge.batchRewardPerToken(address(FLOW), 200);
 
         address[] memory rewards = new address[](1);
-        rewards[0] = address(VELO);
+        rewards[0] = address(FLOW);
         owner3.getGaugeReward(address(gauge), address(owner3), rewards);
         owner3.withdrawGauge(address(gauge), gauge.balanceOf(address(owner3)));
         owner3.approve(address(pair), address(gauge), PAIR_1);
@@ -792,7 +792,7 @@ contract PairTest is BaseTest {
         minter.update_period();
         voter.updateGauge(address(gauge));
         uint256 claimable = voter.claimable(address(gauge));
-        VELO.approve(address(staking), claimable);
+        FLOW.approve(address(staking), claimable);
         staking.notifyRewardAmount(claimable);
         address[] memory gauges = new address[](1);
         gauges[0] = address(gauge);
@@ -800,30 +800,30 @@ contract PairTest is BaseTest {
         voter.distro();
         address[][] memory tokens = new address[][](1);
         address[] memory token = new address[](1);
-        token[0] = address(VELO);
+        token[0] = address(FLOW);
         tokens[0] = token;
         voter.claimRewards(gauges, tokens);
-        assertEq(gauge.rewardRate(address(VELO)), staking.rewardRate());
-        console2.log(gauge.rewardPerTokenStored(address(VELO)));
+        assertEq(gauge.rewardRate(address(FLOW)), staking.rewardRate());
+        console2.log(gauge.rewardPerTokenStored(address(FLOW)));
     }
 
     function gaugeClaimRewardsOwner3NextCycle() public {
         minterMint2();
 
         owner3.withdrawGauge(address(gauge), gauge.balanceOf(address(owner3)));
-        console2.log(gauge.rewardPerTokenStored(address(VELO)));
+        console2.log(gauge.rewardPerTokenStored(address(FLOW)));
         owner3.approve(address(pair), address(gauge), PAIR_1);
         owner3.deposit(address(gauge), PAIR_1, 0);
-        uint256 before = VELO.balanceOf(address(owner3));
+        uint256 before = FLOW.balanceOf(address(owner3));
         vm.warp(block.timestamp + 1);
-        // uint256 earned = gauge.earned(address(VELO), address(owner3));
+        // uint256 earned = gauge.earned(address(FLOW), address(owner3));
         address[] memory rewards = new address[](1);
-        rewards[0] = address(VELO);
+        rewards[0] = address(FLOW);
         owner3.getGaugeReward(address(gauge), address(owner3), rewards);
-        uint256 after_ = VELO.balanceOf(address(owner3));
+        uint256 after_ = FLOW.balanceOf(address(owner3));
         uint256 received = after_ - before;
         assertGt(received, 0);
-        console2.log(gauge.rewardPerTokenStored(address(VELO)));
+        console2.log(gauge.rewardPerTokenStored(address(FLOW)));
 
         owner3.withdrawGauge(address(gauge), gauge.balanceOf(address(owner)));
         owner3.approve(address(pair), address(gauge), PAIR_1);
@@ -857,8 +857,8 @@ contract PairTest is BaseTest {
 
         pair.approve(address(gauge), PAIR_1);
         gauge.deposit(PAIR_1, 0);
-        VELO.approve(address(gauge), VELO.balanceOf(address(owner)));
-        gauge.notifyRewardAmount(address(VELO), VELO.balanceOf(address(owner)));
+        FLOW.approve(address(gauge), FLOW.balanceOf(address(owner)));
+        gauge.notifyRewardAmount(address(FLOW), FLOW.balanceOf(address(owner)));
 
         vm.warp(block.timestamp + 604800);
         vm.roll(block.number + 1);

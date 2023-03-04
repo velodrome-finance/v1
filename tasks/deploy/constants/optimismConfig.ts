@@ -54,13 +54,13 @@ const optimismConfig = {
     "0x8aE125E8653821E851F12A49F7765db9a9ce7384", // DOLA
     "0x10010078a54396F62c96dF8532dc2B4847d47ED3", // HND
     // "", // BTRFLY -- N/A
-    // "", // pxVELO -- N/A
+    // "", // pxFLOW -- N/A
     "0xc40F949F8a4e094D1b49a23ea9241D289B7b2819", // LUSD
     // "", // wstETH -- N/A
     // "", // HOP -- N/A
   ],
   partnerAddrs: [
-    TEAM_EOA, // VELO
+    TEAM_EOA, // FLOW
     "0x4a84675512949f81EBFEAAcC6C00D03eDd329de5", // OP
     TEAM_EOA, // SNX -- custodied
     "0xa283139017a2f5BAdE8d8e25412C600055D318F8", // INV

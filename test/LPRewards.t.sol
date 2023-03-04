@@ -20,10 +20,10 @@ contract LPRewardsTest is BaseTest {
         amounts[1] = TOKEN_1M;
         mintFlow(owners, amounts);
 
-        // give owner1 veVELO
+        // give owner1 veFLOW
         VeArtProxy artProxy = new VeArtProxy();
-        escrow = new VotingEscrow(address(VELO), address(artProxy), owners[0]);
-        VELO.approve(address(escrow), TOKEN_1M);
+        escrow = new VotingEscrow(address(FLOW), address(artProxy), owners[0]);
+        FLOW.approve(address(escrow), TOKEN_1M);
         escrow.create_lock(TOKEN_1M, 4 * 365 * 86400);
 
         deployPairFactoryAndRouter();
@@ -40,7 +40,7 @@ contract LPRewardsTest is BaseTest {
         tokens[0] = address(USDC);
         tokens[1] = address(FRAX);
         tokens[2] = address(DAI);
-        tokens[3] = address(VELO);
+        tokens[3] = address(FLOW);
         voter.initialize(tokens, address(owner));
         escrow.setVoter(address(voter));
     }
@@ -72,7 +72,7 @@ contract LPRewardsTest is BaseTest {
         vm.roll(block.number + 1);
 
         address[] memory rewards = new address[](1);
-        rewards[0] = address(VELO);
+        rewards[0] = address(FLOW);
 
         // check derived balance is the same
         assertEq(gauge.derivedBalance(address(owner)), gauge.derivedBalance(address(owner2)));
