@@ -34,7 +34,9 @@ abstract contract BaseTest is Test, TestOwner {
     uint256 constant TOKEN_100M = 1e26; // 1e8 = 100M tokens with 18 decimals
     uint256 constant TOKEN_10B = 1e28; // 1e10 = 10B tokens with 18 decimals
     uint256 constant PAIR_1 = 1e9;
-    uint256 constant internal FOUR_YEARS = 4 * 365 * 86400;
+    uint256 constant private ONE_DAY = 86400;
+    uint256 constant internal ONE_WEEK = ONE_DAY * 7;
+    uint256 constant internal FOUR_YEARS = 4 * 365 * ONE_DAY;
 
     TestOwner owner;
     TestOwner owner2;

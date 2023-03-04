@@ -787,7 +787,7 @@ contract PairTest is BaseTest {
     function minterMint2() public {
         gaugeClaimRewardsOwner3();
 
-        vm.warp(block.timestamp + 86400 * 7 * 2);
+        vm.warp(block.timestamp + ONE_WEEK * 2);
         vm.roll(block.number + 1);
         minter.update_period();
         voter.updateGauge(address(gauge));

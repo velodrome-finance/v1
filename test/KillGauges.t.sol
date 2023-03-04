@@ -127,7 +127,7 @@ contract KillGaugesTest is BaseTest {
   }
 
   function testKilledGaugeCanUpdateButGoesToZero() public {
-    vm.warp(block.timestamp + 86400 * 7 * 2);
+    vm.warp(block.timestamp + ONE_WEEK * 2);
     vm.roll(block.number + 1);
     minter.update_period();
     voter.updateGauge(address(gauge));
@@ -145,7 +145,7 @@ contract KillGaugesTest is BaseTest {
   }
 
   function testKilledGaugeCanDistributeButGoesToZero() public {
-    vm.warp(block.timestamp + 86400 * 7 * 2);
+    vm.warp(block.timestamp + ONE_WEEK * 2);
     vm.roll(block.number + 1);
     minter.update_period();
     voter.updateGauge(address(gauge));
@@ -162,7 +162,7 @@ contract KillGaugesTest is BaseTest {
   }
 
   function testCanStillDistroAllWithKilledGauge() public {
-    vm.warp(block.timestamp + 86400 * 7 * 2);
+    vm.warp(block.timestamp + ONE_WEEK * 2);
     vm.roll(block.number + 1);
     minter.update_period();
     voter.updateGauge(address(gauge));

@@ -102,7 +102,7 @@ contract VeloVotingTest is BaseTest {
         uint256 after_ = FLOW.balanceOf(address(owner));
         assertEq(minter.weekly(), 15 * TOKEN_1M);
         assertEq(after_ - before, 0);
-        vm.warp(block.timestamp + 86400 * 7);
+        vm.warp(block.timestamp + ONE_WEEK);
         vm.roll(block.number + 1);
         before = FLOW.balanceOf(address(owner));
         minter.update_period(); // initial period week 2

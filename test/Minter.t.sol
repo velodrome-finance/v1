@@ -85,12 +85,12 @@ contract MinterTest is BaseTest {
 
         minter.update_period();
         assertEq(minter.weekly(), 15 * TOKEN_1M); // 15M
-        vm.warp(block.timestamp + 86400 * 7);
+        vm.warp(block.timestamp + ONE_WEEK);
         vm.roll(block.number + 1);
         minter.update_period();
         assertEq(distributor.claimable(1), 0);
         assertLt(minter.weekly(), 15 * TOKEN_1M); // <15M for week shift
-        vm.warp(block.timestamp + 86400 * 7);
+        vm.warp(block.timestamp + ONE_WEEK);
         vm.roll(block.number + 1);
         minter.update_period();
         uint256 claimable = distributor.claimable(1);
@@ -104,29 +104,29 @@ contract MinterTest is BaseTest {
         console2.log(FLOW.totalSupply());
         console2.log(escrow.totalSupply());
 
-        vm.warp(block.timestamp + 86400 * 7);
+        vm.warp(block.timestamp + ONE_WEEK);
         vm.roll(block.number + 1);
         minter.update_period();
         console2.log(distributor.claimable(1));
         distributor.claim(1);
-        vm.warp(block.timestamp + 86400 * 7);
+        vm.warp(block.timestamp + ONE_WEEK);
         vm.roll(block.number + 1);
         minter.update_period();
         console2.log(distributor.claimable(1));
         uint256[] memory tokenIds = new uint256[](1);
         tokenIds[0] = 1;
         distributor.claim_many(tokenIds);
-        vm.warp(block.timestamp + 86400 * 7);
+        vm.warp(block.timestamp + ONE_WEEK);
         vm.roll(block.number + 1);
         minter.update_period();
         console2.log(distributor.claimable(1));
         distributor.claim(1);
-        vm.warp(block.timestamp + 86400 * 7);
+        vm.warp(block.timestamp + ONE_WEEK);
         vm.roll(block.number + 1);
         minter.update_period();
         console2.log(distributor.claimable(1));
         distributor.claim_many(tokenIds);
-        vm.warp(block.timestamp + 86400 * 7);
+        vm.warp(block.timestamp + ONE_WEEK);
         vm.roll(block.number + 1);
         minter.update_period();
         console2.log(distributor.claimable(1));
