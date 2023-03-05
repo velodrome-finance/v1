@@ -48,7 +48,7 @@ contract Deployment is Script {
         Router router = new Router(address(pairFactory), WCANTO);
 
         // VelocimeterLibrary
-        VelocimeterLibrary velocimeterLib = new VelocimeterLibrary(address(router));
+        new VelocimeterLibrary(address(router));
 
         // VeArtProxy
         VeArtProxy veArtProxy = new VeArtProxy();
