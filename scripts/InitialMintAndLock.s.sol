@@ -11,14 +11,14 @@ contract InitialMintAndLock is Script {
 
     // address to receive veNFT to be distributed to partners in the future
     address private constant FLOW_VOTER_EOA = 0xcC06464C7bbCF81417c08563dA2E1847c22b703a;
-    address private constant ASSET_EOA = 0x1bae1083cf4125ed5deeb778985c1effac0ecc06;
+    address private constant ASSET_EOA = 0x1bAe1083CF4125eD5dEeb778985C1Effac0ecC06;
 
     // team member addresses
-    address private constant DUNKS = 0x069e85d4f1010dd961897dc8c095fbb5ff297434;
-    address private constant T0RB1K = 0x0b776552c1aef1dc33005dd25acda22493b6615d;
-    address private constant CEAZOR = 0x06b16991b53632c2362267579ae7c4863c72fdb8;
-    address private constant MOTTO = 0x78e801136f77805239a7f533521a7a5570f572c8;
-    address private constant COOLIE = 0x03b88dacb7c21b54cefecc297d981e5b721a9df1;
+    address private constant DUNKS = 0x069e85D4F1010DD961897dC8C095FBB5FF297434;
+    address private constant T0RB1K = 0x0b776552c1Aef1Dc33005DD25AcDA22493b6615d;
+    address private constant CEAZOR = 0x06b16991B53632C2362267579AE7C4863c72fDb8;
+    address private constant MOTTO = 0x78e801136F77805239A7F533521A7a5570F572C8;
+    address private constant COOLIE = 0x03B88DacB7c21B54cEfEcC297D981E5b721A9dF1;
 
     // token amounts
     uint256 private constant ONE_MILLION = 1e24; // 1e24 == 1e6 (1m) ** 1e18 (decimals)
