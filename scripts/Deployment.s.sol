@@ -19,12 +19,12 @@ import {Minter} from "../contracts/Minter.sol";
 
 contract Deployment is Script {
     // token addresses
-    address private constant WCANTO = 0x826551890dc65655a0aceca109ab11abdbd7a07b;
+    address private constant WCANTO = 0x826551890Dc65655a0Aceca109aB11AbDbD7a07B;
 
     // privileged accounts
-    address private constant COUNCIL = 0x06b16991b53632c2362267579ae7c4863c72fdb8;
+    address private constant COUNCIL = 0x06b16991B53632C2362267579AE7C4863c72fDb8;
     address private constant TEAM_MULTI_SIG = 0x13eeB8EdfF60BbCcB24Ec7Dd5668aa246525Dc51;
-    address private constant GOVERNOR = 0x06b16991b53632c2362267579ae7c4863c72fdb8;
+    address private constant GOVERNOR = 0x06b16991B53632C2362267579AE7C4863c72fDb8;
     address private constant TANK = 0x0A868fd1523a1ef58Db1F2D135219F0e30CBf7FB;
 
     function run() external {
@@ -114,21 +114,21 @@ contract Deployment is Script {
         // Initialize tokens for voter
         address[] memory whitelistedTokens = new address[](19);
         whitelistedTokens[0] = address(flow);
-        whitelistedTokens[1] = 0x4e71a2e537b7f9d9413d3991d37958c0b5e1e503; // NOTE
-        whitelistedTokens[2] = 0x80b5a32e4f032b2a058b4f29ec95eefeeb87adcd; // USDC
-        whitelistedTokens[3] = 0x5db67696c3c088dfbf588d3dd849f44266ff0ffa; // CRE
+        whitelistedTokens[1] = 0x4e71A2E537B7f9D9413D3991D37958c0b5e1e503; // NOTE
+        whitelistedTokens[2] = 0x80b5a32E4F032B2a058b4F29EC95EEfEEB87aDcd; // USDC
+        whitelistedTokens[3] = 0x5db67696C3c088DfBf588d3dd849f44266ff0ffa; // CRE
         whitelistedTokens[4] = WCANTO;
-        whitelistedTokens[5] = 0xeceeefcee421d8062ef8d6b4d814efe4dc898265; // ATOM
-        whitelistedTokens[6] = 0x1d54ecb8583ca25895c512a8308389ffd581f9c9; // INJ
-        whitelistedTokens[7] = 0x3452e23f9c4cc62c70b7adad699b264af3549c19; // CMDX
-        whitelistedTokens[8] = 0xc5e00d3b04563950941f7137b5afa3a534f0d6d6; // KAVA
-        whitelistedTokens[9] = 0x5ad523d94efb56c400941eb6f34393b84c75ba39; // AKT
-        whitelistedTokens[10] = 0x0ce35b0d42608ca54eb7bcc8044f7087c18e7717; // OSMO
-        whitelistedTokens[11] = 0xe832c073b1b665e21150ac70fa7c798d9926ccf1; // WAIT
-        whitelistedTokens[12] = 0x7264610a66eca758a8ce95cf11ff5741e1fd0455; // cINU
-        whitelistedTokens[13] = 0xc03345448969dd8c00e9e4a85d2d9722d093af8e; // GRAV
-        whitelistedTokens[14] = 0xfa3c22c069b9556a4b2f7ece1ee3b467909f4864; // SOMM
-        whitelistedTokens[15] = 0x38d11b40d2173009adb245b869e90525950ae345; // cBONK
+        whitelistedTokens[5] = 0xecEEEfCEE421D8062EF8d6b4D814efe4dc898265; // ATOM
+        whitelistedTokens[6] = 0x1D54EcB8583Ca25895c512A8308389fFD581F9c9; // INJ
+        whitelistedTokens[7] = 0x3452e23F9c4cC62c70B7ADAd699B264AF3549C19; // CMDX
+        whitelistedTokens[8] = 0xC5e00D3b04563950941f7137B5AfA3a534F0D6d6; // KAVA
+        whitelistedTokens[9] = 0x5aD523d94Efb56C400941eb6F34393b84c75ba39; // AKT
+        whitelistedTokens[10] = 0x0CE35b0D42608Ca54Eb7bcc8044f7087C18E7717; // OSMO
+        whitelistedTokens[11] = 0xe832c073b1b665E21150aC70Fa7c798d9926cCf1; // WAIT
+        whitelistedTokens[12] = 0x7264610A66EcA758A8ce95CF11Ff5741E1fd0455; // cINU
+        whitelistedTokens[13] = 0xc03345448969Dd8C00e9E4A85d2d9722d093aF8E; // GRAV
+        whitelistedTokens[14] = 0xFA3C22C069B9556A4B2f7EcE1Ee3B467909f4864; // SOMM
+        whitelistedTokens[15] = 0x38D11B40D2173009aDB245b869e90525950aE345; // cBONK
         whitelistedTokens[16] = 0x5FD55A1B9FC24967C4dB09C513C3BA0DFa7FF687; // ETH
         whitelistedTokens[17] = 0xd567B3d7B8FE3C79a1AD8dA978812cfC4Fa05e75; // USDT
         whitelistedTokens[18] = 0x74ccbe53F77b08632ce0CB91D3A545bF6B8E0979; // fBOMB
