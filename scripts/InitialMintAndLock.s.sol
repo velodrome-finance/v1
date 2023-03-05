@@ -346,7 +346,7 @@ contract InitialMintAndLock is Script {
         vm.stopBroadcast();
     }
 
-    function _singleInitialAndLock(address owner, uint256 amount) private {
+    function _singleInitialMintAndLock(address owner, uint256 amount) private {
         Minter.Claim[] memory claim = new Minter.Claim[](1);
         claim[0] = Minter.Claim({claimant: owner, amount: amount, lockTime: FOUR_YEARS});
         minter.initialMintAndLock(claim, amount);
