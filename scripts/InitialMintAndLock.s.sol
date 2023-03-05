@@ -75,7 +75,7 @@ contract InitialMintAndLock is Script {
         _batchInitialMintAndLock({
             owner: DUNKS,
             numberOfVotingEscrow: 1,
-            amountPerVotingEscrow: ONE_MILLION,
+            amountPerVotingEscrow: TWO_MILLION,
             lockTime: FOUR_YEARS
         });
 
