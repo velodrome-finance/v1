@@ -20,7 +20,7 @@ contract FlowConvertorDeployment is Script {
 
         flowConvertor.transferOwnership(TEAM_MULTI_SIG);
 
-        IERC20(FLOW).transfer(address(flowConvertor), 55_000_000e18);
+        IERC20(FLOW).transfer(address(flowConvertor), 50_000_000e18);
 
         vm.stopBroadcast();
     }

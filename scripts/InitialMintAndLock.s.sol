@@ -132,21 +132,21 @@ contract InitialMintAndLock is Script {
 
         _batchInitialMintAndLock({
             owner: TEAM_MULTI_SIG,
-            numberOfVotingEscrow: 15,
+            numberOfVotingEscrow: 14,
             amountPerVotingEscrow: TWO_MILLION,
             lockTime: FOUR_YEARS
         });
 
         _batchInitialMintAndLock({
             owner: TEAM_MULTI_SIG,
-            numberOfVotingEscrow: 16,
+            numberOfVotingEscrow: 15,
             amountPerVotingEscrow: ONE_MILLION,
             lockTime: FOUR_YEARS
         });
 
         _batchInitialMintAndLock({
             owner: ASSET_EOA,
-            numberOfVotingEscrow: 4,
+            numberOfVotingEscrow: 5,
             amountPerVotingEscrow: ONE_MILLION,
             lockTime: TWO_YEARS
         });
