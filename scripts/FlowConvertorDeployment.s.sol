@@ -18,7 +18,7 @@ contract FlowConvertorDeployment is Script {
 
         FlowConvertor flowConvertor = new FlowConvertor({_v1: 0x2baec546a92ca3469f71b7a091f7df61e5569889, _v2: FLOW});
 
-        floeConvertor.transferOwnership(TEAM_MULTI_SIG);
+        flowConvertor.transferOwnership(TEAM_MULTI_SIG);
 
         IERC20(FLOW).transfer(address(flowConvertor), 55_000_000e18);
 
