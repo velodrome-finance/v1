@@ -123,14 +123,13 @@ contract Deployment is Script {
         whitelistedTokens[8] = 0xC5e00D3b04563950941f7137B5AfA3a534F0D6d6; // KAVA
         whitelistedTokens[9] = 0x5aD523d94Efb56C400941eb6F34393b84c75ba39; // AKT
         whitelistedTokens[10] = 0x0CE35b0D42608Ca54Eb7bcc8044f7087C18E7717; // OSMO
-        whitelistedTokens[11] = 0xe832c073b1b665E21150aC70Fa7c798d9926cCf1; // WAIT
-        whitelistedTokens[12] = 0x7264610A66EcA758A8ce95CF11Ff5741E1fd0455; // cINU
-        whitelistedTokens[13] = 0xc03345448969Dd8C00e9E4A85d2d9722d093aF8E; // GRAV
-        whitelistedTokens[14] = 0xFA3C22C069B9556A4B2f7EcE1Ee3B467909f4864; // SOMM
-        whitelistedTokens[15] = 0x38D11B40D2173009aDB245b869e90525950aE345; // cBONK
-        whitelistedTokens[16] = 0x5FD55A1B9FC24967C4dB09C513C3BA0DFa7FF687; // ETH
-        whitelistedTokens[17] = 0xd567B3d7B8FE3C79a1AD8dA978812cfC4Fa05e75; // USDT
-        whitelistedTokens[18] = 0x74ccbe53F77b08632ce0CB91D3A545bF6B8E0979; // fBOMB
+        whitelistedTokens[11] = 0x7264610A66EcA758A8ce95CF11Ff5741E1fd0455; // cINU
+        whitelistedTokens[12] = 0xc03345448969Dd8C00e9E4A85d2d9722d093aF8E; // GRAV
+        whitelistedTokens[13] = 0xFA3C22C069B9556A4B2f7EcE1Ee3B467909f4864; // SOMM
+        whitelistedTokens[14] = 0x38D11B40D2173009aDB245b869e90525950aE345; // cBONK
+        whitelistedTokens[15] = 0x5FD55A1B9FC24967C4dB09C513C3BA0DFa7FF687; // ETH
+        whitelistedTokens[16] = 0xd567B3d7B8FE3C79a1AD8dA978812cfC4Fa05e75; // USDT
+        whitelistedTokens[17] = 0x74ccbe53F77b08632ce0CB91D3A545bF6B8E0979; // fBOMB
         voter.initialize(whitelistedTokens, address(minter));
 
         vm.stopBroadcast();
