@@ -98,7 +98,7 @@ contract Voter is IVoter {
     }
 
     function setEmergencyCouncil(address _council) public {
-        require(msg.sender == emergencyCouncil);
+        require(msg.sender == governor);
         emergencyCouncil = _council;
     }
 

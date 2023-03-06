@@ -87,7 +87,6 @@ contract Deployment is Script {
         flow.setMinter(address(minter));
 
         // Set pair factory pauser and tank
-        pairFactory.setPauser(TEAM_MULTI_SIG);
         pairFactory.setTank(TANK);
 
         // Set voting escrow's art proxy
@@ -96,16 +95,15 @@ contract Deployment is Script {
         // Set minter and voting escrow's team
         votingEscrow.setTeam(TEAM_MULTI_SIG);
         minter.setTeam(TEAM_MULTI_SIG);
-        pairFactory.setTeam(TEAM_MULTI_SIG);
 
-        // Set fee manager
-        pairFactory.setFeeManager(TEAM_MULTI_SIG);
-
-        // Set voter's governor
-        voter.setGovernor(TEAM_MULTI_SIG);
+        // Transfer pairfactory ownership to MSIG (team)
+        pairFactory.transferOwnership(TEAM_MULTI_SIG);
 
         // Set voter's emergency council
         voter.setEmergencyCouncil(TEAM_MULTI_SIG);
+        
+        // Set voter's governor
+        voter.setGovernor(TEAM_MULTI_SIG);
 
         // Set rewards distributor's depositor to minter contract
         rewardsDistributor.setDepositor(address(minter));
