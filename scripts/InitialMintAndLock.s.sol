@@ -23,6 +23,7 @@ contract InitialMintAndLock is Script {
     // token amounts
     uint256 private constant ONE_MILLION = 1e24; // 1e24 == 1e6 (1m) ** 1e18 (decimals)
     uint256 private constant TWO_MILLION = 2e24; // 2e24 == 1e6 (1m) ** 1e18 (decimals)
+    uint256 private constant THREE_MILLION = 3e24; // 3e24 == 1e6 (1m) ** 1e18 (decimals)
     uint256 private constant FOUR_MILLION = 4e24; // 4e24 == 1e6 (1m) ** 1e18 (decimals)
 
     // time
@@ -52,15 +53,15 @@ contract InitialMintAndLock is Script {
 
         _batchInitialMintAndLock({
             owner: FLOW_VOTER_EOA,
-            numberOfVotingEscrow: 5,
+            numberOfVotingEscrow: 6,
             amountPerVotingEscrow: TWO_MILLION,
             lockTime: FOUR_YEARS
         });
 
         _batchInitialMintAndLock({
             owner: FLOW_VOTER_EOA,
-            numberOfVotingEscrow: 3,
-            amountPerVotingEscrow: FOUR_MILLION,
+            numberOfVotingEscrow: 2,
+            amountPerVotingEscrow: THREE_MILLION,
             lockTime: FOUR_YEARS
         });
 
@@ -110,21 +111,21 @@ contract InitialMintAndLock is Script {
         // 3. Mint for future partners
         _batchInitialMintAndLock({
             owner: ASSET_EOA,
-            numberOfVotingEscrow: 3,
-            amountPerVotingEscrow: FOUR_MILLION,
+            numberOfVotingEscrow: 4,
+            amountPerVotingEscrow: THREE_MILLION,
             lockTime: FOUR_YEARS
         });
 
         _batchInitialMintAndLock({
             owner: TEAM_MULTI_SIG,
-            numberOfVotingEscrow: 14,
-            amountPerVotingEscrow: FOUR_MILLION,
+            numberOfVotingEscrow: 18,
+            amountPerVotingEscrow: THREE_MILLION,
             lockTime: FOUR_YEARS
         });
 
         _batchInitialMintAndLock({
-            owner: TEAM_MULTI_SIG,
-            numberOfVotingEscrow: 3,
+            owner: ASSET_EOA,
+            numberOfVotingEscrow: 4,
             amountPerVotingEscrow: TWO_MILLION,
             lockTime: FOUR_YEARS
         });
@@ -156,7 +157,17 @@ contract InitialMintAndLock is Script {
             amountPerVotingEscrow: ONE_MILLION,
             lockTime: ONE_YEAR
         });
+        // Mint for current partners and presale
+        _singleInitialMintAndLock(0x69224dbA1D77bfe6eA99409aB595d04631D95C22, 1205636240970620000000000);
+        _singleInitialMintAndLock(0x69224dbA1D77bfe6eA99409aB595d04631D95C22, 1201854505093560000000000);
+        _singleInitialMintAndLock(0x69224dbA1D77bfe6eA99409aB595d04631D95C22, 1207527108909160000000000);
+        _singleInitialMintAndLock(0x69224dbA1D77bfe6eA99409aB595d04631D95C22, 1207527108909160000000000);
+        _singleInitialMintAndLock(0x69224dbA1D77bfe6eA99409aB595d04631D95C22, 1207527108909160000000000);
+        _singleInitialMintAndLock(0xCFFC6e659DF622e2d41c7A879C76E6d33F37925E, 1207527108909160000000000);
+        _singleInitialMintAndLock(0xF09d213EE8a8B159C884b276b86E08E26B3bfF75, 5000000000000000000000000);
+        _singleInitialMintAndLock(0x50149b01f19c2D4A403B1FE4469c117a5cEdb4fc, 1006272590757630000000000);
 
+        // Mint for snapshot recipients, quants already 1.2x
         _singleInitialMintAndLock(0xd0cC9738866cd82B237A14c92ac60577602d6c18, 1200000000000000000);
         _singleInitialMintAndLock(0x38dAEa6f17E4308b0Da9647dB9ca6D84a3A7E195, 24000000000000000000000);
         _singleInitialMintAndLock(0xaA970e6bD6E187492f8327e514c9E8c36c81f11E, 24000000000000000000000);
