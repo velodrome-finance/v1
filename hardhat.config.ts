@@ -47,6 +47,10 @@ const config: HardhatUserConfig = {
       url: "https://kovan.optimism.io",
       accounts: [process.env.PRIVATE_KEY!],
     },
+    conflux_epsace_testnet: {
+      url: "https://evmtestnet.confluxrpc.com",
+      accounts: [process.env.PRIVATE_KEY!]
+    }
   },
   solidity: {
     version: "0.8.13",
