@@ -194,4 +194,91 @@ contract ExternalBribesTest is BaseTest {
 
         assertEq(diff + diff2, TOKEN_1 - 1); // -1 for rounding
     }
+    
+    // Verify the knwon issue of Velodrom is fixed: users can claim eligible rewards from ExternalBribe contracts more than once
+    // https://github.com/velodrome-finance/docs/blob/main/pages/security.md
+    function testCanOnlyClaimOnce() public {
+        vm.warp(block.timestamp + 1 weeks / 2);
+
+        // create a bribe
+        LR.approve(address(xbribe), TOKEN_1);
+        xbribe.notifyRewardAmount(address(LR), TOKEN_1);
+
+        // vote
+        address[] memory pools = new address[](1);
+        pools[0] = address(pair);
+        uint256[] memory weights = new uint256[](1);
+        weights[0] = 10000;
+        voter.vote(1, pools, weights);
+
+        vm.startPrank(address(owner2));
+        voter.vote(2, pools, weights);
+        vm.stopPrank();
+
+        // fwd half a week
+        vm.warp(block.timestamp + 1 weeks / 2);
+
+        uint256 pre = LR.balanceOf(address(owner));
+        uint256 earned = xbribe.earned(address(LR), 1);
+        assertEq(earned, TOKEN_1 / 2);
+
+        // rewards
+        address[] memory rewards = new address[](1);
+        rewards[0] = address(LR);
+
+        vm.startPrank(address(voter));
+        // once
+        xbribe.getRewardForOwner(1, rewards);
+        uint256 post = LR.balanceOf(address(owner));
+        // twice
+        xbribe.getRewardForOwner(1, rewards);
+        vm.stopPrank();
+
+        uint256 post_post = LR.balanceOf(address(owner));
+        assertEq(post_post, post);
+        assertEq(post_post - pre, TOKEN_1 / 2);
+    }
+    
+    function testCanClaimOnlyOnceArray() public {
+        vm.warp(block.timestamp + 1 weeks / 2);
+
+        // create a bribe
+        LR.approve(address(xbribe), TOKEN_1);
+        xbribe.notifyRewardAmount(address(LR), TOKEN_1);
+
+        // vote
+        address[] memory pools = new address[](1);
+        pools[0] = address(pair);
+        uint256[] memory weights = new uint256[](1);
+        weights[0] = 10000;
+        voter.vote(1, pools, weights);
+
+        vm.startPrank(address(owner2));
+        voter.vote(2, pools, weights);
+        vm.stopPrank();
+
+        // fwd half a week
+        vm.warp(block.timestamp + 1 weeks / 2);
+
+        uint256 pre = LR.balanceOf(address(owner));
+        uint256 earned = xbribe.earned(address(LR), 1);
+        assertEq(earned, TOKEN_1 / 2);
+
+        // rewards
+        address[] memory rewards = new address[](2);
+        rewards[0] = address(LR);
+        rewards[1] = address(LR);
+
+        vm.startPrank(address(voter));
+        // once
+        xbribe.getRewardForOwner(1, rewards);
+        uint256 post = LR.balanceOf(address(owner));
+        // twice
+        xbribe.getRewardForOwner(1, rewards);
+        vm.stopPrank();
+
+        uint256 post_post = LR.balanceOf(address(owner));
+        assertEq(post_post, post);
+        assertEq(post_post - pre, TOKEN_1 / 2);
+    }
 }

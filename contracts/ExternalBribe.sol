@@ -245,8 +245,12 @@ contract ExternalBribe is IBribe {
         uint _lastEpochStart = _bribeStart(cp.timestamp);
         uint _lastEpochEnd = _lastEpochStart + DURATION;
 
-        if (block.timestamp > _lastEpochEnd) {
-          reward += cp.balanceOf * tokenRewardsPerEpoch[token][_lastEpochStart] / supplyCheckpoints[getPriorSupplyIndex(_lastEpochEnd)].supply;
+        // _startTimestamp is the last time the user claimed rewards. We use it to calculate the reward
+        // This should fix the knwon issue in Velodrome: users can claim eligible rewards from ExternalBribe contracts more than once
+        // Description: https://github.com/velodrome-finance/docs/blob/main/pages/security.md
+        if (block.timestamp > _lastEpochEnd && _startTimestamp < _lastEpochEnd) {
+            SupplyCheckpoint memory scp = supplyCheckpoints[getPriorSupplyIndex(_lastEpochEnd)];
+            reward += cp.balanceOf * tokenRewardsPerEpoch[token][_lastEpochStart] / scp.supply;
         }
 
         return reward;

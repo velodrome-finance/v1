@@ -54,12 +54,13 @@ contract Voter is IVoter {
     event Detach(address indexed owner, address indexed gauge, uint tokenId);
     event Whitelisted(address indexed whitelister, address indexed token);
 
-    constructor(address __ve, address _factory, address  _gauges, address _bribes) {
+    constructor(address __ve, address _factory, address _gaugeFactory, address _bribeFactory) {
         _ve = __ve;
         factory = _factory;
         base = IVotingEscrow(__ve).token();
-        gaugefactory = _gauges;
-        bribefactory = _bribes;
+        gaugefactory = _gaugeFactory;
+        bribefactory = _bribeFactory;
+
         minter = msg.sender;
         governor = msg.sender;
         emergencyCouncil = msg.sender;
