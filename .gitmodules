@@ -13,3 +13,6 @@
 [submodule "lib/LayerZero"]
 	path = lib/LayerZero
 	url = https://github.com/LayerZero-Labs/LayerZero
+[submodule "lib/foundry-zksync-era"]
+	path = lib/foundry-zksync-era
+	url = https://github.com/omurovec/foundry-zksync-era
