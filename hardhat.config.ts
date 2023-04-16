@@ -5,6 +5,9 @@ import "@typechain/hardhat";
 import "hardhat-preprocessor";
 import "hardhat-abi-exporter";
 
+import "@matterlabs/hardhat-zksync-deploy";
+import "@matterlabs/hardhat-zksync-solc";
+
 import "./tasks/accounts";
 import "./tasks/deploy";
 
@@ -23,6 +26,7 @@ const remappings = fs
   .map((line) => line.trim().split("="));
 
 const config: HardhatUserConfig = {
+  defaultNetwork: "zkTestnet",
   networks: {
     hardhat: {
       initialBaseFeePerGas: 0,
@@ -34,28 +38,45 @@ const config: HardhatUserConfig = {
     opera: {
       url: "https://rpc.fantom.network",
       accounts: [process.env.PRIVATE_KEY!],
+      zksync: false,
     },
     ftmTestnet: {
       url: "https://rpc.testnet.fantom.network",
       accounts: [process.env.PRIVATE_KEY!],
+      zksync: false,
     },
     optimisticEthereum: {
       url: "https://mainnet.optimism.io",
       accounts: [process.env.PRIVATE_KEY!],
+      zksync: false,
     },
     optimisticKovan: {
       url: "https://kovan.optimism.io",
       accounts: [process.env.PRIVATE_KEY!],
+      zksync: false,
     },
+    zkTestnet: {
+      url: "https://testnet.era.zksync.dev",
+      ethNetwork: "goerli", // Can also be the RPC URL of the Ethereum network (e.g. `https://goerli.infura.io/v3/<API_KEY>`)
+      zksync: true,
+    },
+  },
+  // solidity: {
+  //   version: "0.8.13",
+  //   settings: {
+  //     optimizer: {
+  //       enabled: true,
+  //       runs: 200,
+  //     },
+  //   },
+  // },
+  zksolc: {
+    version: "1.3.5",
+    compilerSource: "binary",
+    settings: {},
   },
   solidity: {
     version: "0.8.13",
-    settings: {
-      optimizer: {
-        enabled: true,
-        runs: 200,
-      },
-    },
   },
   // This fully resolves paths for imports in the ./lib directory for Hardhat
   preprocess: {

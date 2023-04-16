@@ -10,10 +10,13 @@ out/
 # JS
 node_modules/
 package-lock.json
+yarn.lock
 
 # Hardhat files
 cache_hardhat/
 artifacts/
+artifacts-zk/
+cache-zk/
 
 # Hardhat plugin files
 typechain-types/
