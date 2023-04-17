@@ -1092,6 +1092,7 @@ contract VotingEscrow is IERC721, IERC721Metadata, IVotes {
         // check permission and vote
         require(attachments[_tokenId] == 0 && !voted[_tokenId], "attached");
         require(_isApprovedOrOwner(msg.sender, _tokenId));
+        require(amounts.length > 1 && amounts.length <= 20, "invalid length");
 
         // save old data and totalWeight
         address _to = idToOwner[_tokenId];
