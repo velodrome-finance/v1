@@ -133,7 +133,7 @@ contract MinterTeamEmissions is BaseTest {
         minter.update_period(); // new period
         uint256 afterTeamSupply = VELO.balanceOf(address(team));
         uint256 newTeamVelo = afterTeamSupply - beforeTeamSupply;
-        assertEq(((weekly + growth + newTeamVelo) * 30) / 1000, newTeamVelo); // check 3% of new emissions to team
+        assertEq(((weekly + growth + newTeamVelo) * 200) / 10000, newTeamVelo); // check 2% of new emissions to team
 
         vm.warp(block.timestamp + 86400 * 7);
         vm.roll(block.number + 1);
@@ -143,7 +143,7 @@ contract MinterTeamEmissions is BaseTest {
         minter.update_period(); // new period
         afterTeamSupply = VELO.balanceOf(address(team));
         newTeamVelo = afterTeamSupply - beforeTeamSupply;
-        assertEq(((weekly + growth + newTeamVelo) * 30) / 1000, newTeamVelo); // check 3% of new emissions to team
+        assertEq(((weekly + growth + newTeamVelo) * 200) / 10000, newTeamVelo); // check 2% of new emissions to team
 
         // rate is right even when VELO is sent to Minter contract
         vm.warp(block.timestamp + 86400 * 7);
@@ -155,7 +155,7 @@ contract MinterTeamEmissions is BaseTest {
         minter.update_period(); // new period
         afterTeamSupply = VELO.balanceOf(address(team));
         newTeamVelo = afterTeamSupply - beforeTeamSupply;
-        assertEq(((weekly + growth + newTeamVelo) * 30) / 1000, newTeamVelo); // check 3% of new emissions to team
+        assertEq(((weekly + growth + newTeamVelo) * 200) / 10000, newTeamVelo); // check 2% of new emissions to team
     }
 
     function testChangeTeamEmissionsRate() public {
@@ -164,14 +164,14 @@ contract MinterTeamEmissions is BaseTest {
 
         // expect revert from owner3 setting team
         vm.expectRevert(abi.encodePacked("not team"));
-        owner3.setTeamEmissions(address(minter), 50);
+        owner3.setTeamEmissions(address(minter), 500);
 
         // expect revert for out-of-bounds rate
         vm.expectRevert(abi.encodePacked("rate too high"));
-        team.setTeamEmissions(address(minter), 60);
+        team.setTeamEmissions(address(minter), 600);
 
         // new rate in bounds
-        team.setTeamEmissions(address(minter), 50);
+        team.setTeamEmissions(address(minter), 500);
 
         vm.warp(block.timestamp + 86400 * 7);
         vm.roll(block.number + 1);
@@ -181,6 +181,6 @@ contract MinterTeamEmissions is BaseTest {
         minter.update_period(); // new period
         uint256 afterTeamSupply = VELO.balanceOf(address(team));
         uint256 newTeamVelo = afterTeamSupply - beforeTeamSupply;
-        assertEq(((weekly + growth + newTeamVelo) * 50) / 1000, newTeamVelo); // check 5% of new emissions to team
+        assertEq(((weekly + growth + newTeamVelo) * 500) / 10000, newTeamVelo); // check 5% of new emissions to team
     }
 }

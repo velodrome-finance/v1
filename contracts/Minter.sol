@@ -12,9 +12,9 @@ import "contracts/interfaces/IVotingEscrow.sol";
 
 contract Minter is IMinter {
     uint internal constant WEEK = 86400 * 7; // allows minting once per week (reset every Thursday 00:00 UTC)
-    uint internal constant EMISSION = 990;
-    uint internal constant TAIL_EMISSION = 2;
-    uint internal constant PRECISION = 1000;
+    uint internal constant EMISSION_BPS = 9900;
+    uint internal constant TAIL_EMISSION_BPS = 20;
+    uint internal constant PRECISION_BPS = 10000;
     IVelo public immutable _velo;
     IVoter public immutable _voter;
     IVotingEscrow public immutable _ve;
@@ -27,7 +27,7 @@ contract Minter is IMinter {
     address public team;
     address public pendingTeam;
     uint public teamRate;
-    uint public constant MAX_TEAM_RATE = 50; // 50 bps = 0.05%
+    uint public constant MAX_TEAM_RATE = 500; // 500 bps = 5%
 
     event Mint(address indexed sender, uint weekly, uint circulating_supply, uint circulating_emission);
 
@@ -38,7 +38,7 @@ contract Minter is IMinter {
     ) {
         initializer = msg.sender;
         team = msg.sender;
-        teamRate = 30; // 30 bps = 0.03%
+        teamRate = 200; // 200 bps = 2%
         _velo = IVelo(IVotingEscrow(__ve).token());
         _voter = IVoter(__voter);
         _ve = IVotingEscrow(__ve);
@@ -84,7 +84,7 @@ contract Minter is IMinter {
 
     // emission calculation is 1% of available supply to mint adjusted by circulating / total supply
     function calculate_emission() public view returns (uint) {
-        return (weekly * EMISSION) / PRECISION;
+        return (weekly * EMISSION_BPS) / PRECISION_BPS;
     }
 
     // weekly emission takes the max of calculated (aka target) emission versus circulating tail end emission
@@ -94,7 +94,7 @@ contract Minter is IMinter {
 
     // calculates tail end (infinity) emissions as 0.2% of total supply
     function circulating_emission() public view returns (uint) {
-        return (circulating_supply() * TAIL_EMISSION) / PRECISION;
+        return (circulating_supply() * TAIL_EMISSION_BPS) / PRECISION_BPS;
     }
 
     // calculate inflation and adjust ve balances accordingly
@@ -118,7 +118,7 @@ contract Minter is IMinter {
 
             uint _growth = calculate_growth(weekly);
             uint _teamEmissions = (teamRate * (_growth + weekly)) /
-                (PRECISION - teamRate);
+                (PRECISION_BPS - teamRate);
             uint _required = _growth + weekly + _teamEmissions;
             uint _balanceOf = _velo.balanceOf(address(this));
             if (_balanceOf < _required) {
