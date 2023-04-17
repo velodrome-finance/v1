@@ -1088,7 +1088,7 @@ contract VotingEscrow is IERC721, IERC721Metadata, IVotes {
      * @param amounts % of split
      * @param _tokenId NFT ID
      */
-    function split(uint[] memory amounts, uint _tokenId) external {
+    function split(uint[] calldata amounts, uint _tokenId) external {
         // check permission and vote
         require(attachments[_tokenId] == 0 && !voted[_tokenId], "attached");
         require(_isApprovedOrOwner(msg.sender, _tokenId));

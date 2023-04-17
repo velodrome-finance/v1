@@ -57,6 +57,37 @@ contract VotingEscrowTest is BaseTest {
         assertEq(escrow.ownerOf(tokenId), address(0));
     }
 
+    function testSplit() public {
+        VELO.approve(address(escrow), 1e21);
+        uint256 lockDuration = 7 * 24 * 3600; // 1 week
+        escrow.create_lock(1e21, lockDuration);
+
+        // due to rounding errors, we verify the voting power / scale is consistent
+        uint256 scale = 100000000;
+        uint256 originalBalance = escrow.balanceOfNFT(1);
+        uint256 originalVotingPower = escrow.balanceOfNFT(1) / scale;
+
+        uint256[] memory percentages = new uint256[](2);
+        percentages[0] = 10;
+        percentages[1] = 90;
+        escrow.split(percentages, 1);
+
+        // Check that the NFT is burnt
+        assertEq(escrow.balanceOfNFT(1), 0);
+        assertEq(escrow.ownerOf(1), address(0));
+
+        // Check that 2 new NFTs are created
+        assertEq(escrow.balanceOf(address(owner)), 2);
+        assertEq(escrow.ownerOf(2), address(owner));
+        assertEq(escrow.balanceOfNFT(2) / scale, originalVotingPower * 10 / 100);
+
+        assertEq(escrow.ownerOf(3), address(owner));
+        assertEq(escrow.balanceOfNFT(3) / scale - 1, originalVotingPower * 90 / 100);
+
+        // Check that the total balance is consistent
+        assertEq(escrow.balanceOfNFT(2) + escrow.balanceOfNFT(3), originalBalance);
+    }
+
     function testCheckTokenURICalls() public {
         // tokenURI should not work for non-existent token ids
         vm.expectRevert(abi.encodePacked("Query for nonexistent token"));
