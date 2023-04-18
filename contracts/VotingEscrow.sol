@@ -72,6 +72,8 @@ contract VotingEscrow is IERC721, IERC721Metadata, IVotes {
 
     mapping(uint => Point) public point_history; // epoch -> unsigned point
 
+    mapping(uint => bool) public isFrozen; // tokenId -> bool (whether it's frozen or not. fronzen means unable to transfer NFT)
+
     /// @dev Mapping of interface id to bool about whether or not it's supported
     mapping(bytes4 => bool) internal supportedInterfaces;
 
@@ -123,6 +125,35 @@ contract VotingEscrow is IERC721, IERC721Metadata, IVotes {
         _entered_state = _not_entered;
     }
 
+    
+
+    /*//////////////////////////////////////////////////////////////
+                            PRIVILEGED FUNCTIONS
+    //////////////////////////////////////////////////////////////*/
+    
+    function setTeam(address _team) external {
+        require(msg.sender == team, "not team");
+        team = _team;
+    }
+
+    function setArtProxy(address _proxy) external {
+        require(msg.sender == team, "not team");
+        artProxy = _proxy;
+    }
+
+    function setFreeze(uint _tokenId, bool _isFrozen) external {
+        require(msg.sender == team, "not team");
+        isFrozen[_tokenId] = _isFrozen;
+    }
+
+    function batchSetFreeze(uint[] memory _tokenIds, bool[] memory _isFrozen) external {
+        require(msg.sender == team, "not team");
+        require(_tokenIds.length == _isFrozen.length);
+        for (uint i = 0; i < _tokenIds.length; i++) {
+            isFrozen[_tokenIds[i]] = _isFrozen[i];
+        }
+    }
+
     /*///////////////////////////////////////////////////////////////
                              METADATA STORAGE
     //////////////////////////////////////////////////////////////*/
@@ -131,16 +162,6 @@ contract VotingEscrow is IERC721, IERC721Metadata, IVotes {
     string constant public symbol = "veNFT";
     string constant public version = "1.0.0";
     uint8 constant public decimals = 18;
-
-    function setTeam(address _team) external {
-        require(msg.sender == team);
-        team = _team;
-    }
-
-    function setArtProxy(address _proxy) external {
-        require(msg.sender == team);
-        artProxy = _proxy;
-    }
 
     /// @dev Returns current token URI metadata
     /// @param _tokenId Token ID to fetch URI for.
@@ -490,6 +511,8 @@ contract VotingEscrow is IERC721, IERC721Metadata, IVotes {
     function _removeTokenFrom(address _from, uint _tokenId) internal {
         // Throws if `_from` is not the current owner
         assert(idToOwner[_tokenId] == _from);
+        // Throws if token is frozen and cannot be transferred
+        require(!isFrozen[_tokenId], "frozen");
         // Change the owner
         idToOwner[_tokenId] = address(0);
         // Update owner token index tracking
@@ -832,6 +855,10 @@ contract VotingEscrow is IERC721, IERC721Metadata, IVotes {
 
         LockedBalance memory _locked = locked[_tokenId];
         require(block.timestamp >= _locked.end, "The lock didn't expire");
+
+        // after the lock has expired, isFrozen status will be set to false to allow burning NFT
+        isFrozen[_tokenId] = false;
+
         uint value = uint(int256(_locked.amount));
 
         locked[_tokenId] = LockedBalance(0,0);

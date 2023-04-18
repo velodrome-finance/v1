@@ -18,6 +18,44 @@ contract VotingEscrowTest is BaseTest {
         escrow = new VotingEscrow(address(VELO), address(artProxy));
     }
 
+    function testFreeze() public {
+        VELO.approve(address(escrow), 1e22);
+        uint256 lockDuration = 7 * 24 * 3600; // 1 week
+        escrow.create_lock(1e20, lockDuration);
+
+        escrow.setFreeze(1, true);
+
+        // Try to transferFrom frozen NFT
+        vm.expectRevert(abi.encodePacked('frozen'));
+        escrow.transferFrom(address(owner), address(owner2), 1);
+
+        // Try to merge frozen NFT
+        escrow.create_lock(1e20, lockDuration);
+        vm.expectRevert(abi.encodePacked('frozen'));
+        escrow.merge(1, 2);
+
+        // Try to split frozen NFT
+        uint256[] memory percentages = new uint256[](2);
+        percentages[0] = 10;
+        percentages[1] = 90;
+        vm.expectRevert(abi.encodePacked('frozen'));
+        escrow.split(percentages, 1);
+    }
+
+    function testWithdrawFrozenAfterUnlock() public {
+        VELO.approve(address(escrow), 1e22);
+        uint256 lockDuration = 7 * 24 * 3600; // 1 week
+        escrow.create_lock(1e20, lockDuration);
+
+        escrow.setFreeze(1, true);
+        
+        // After unlock time, NFT should be transferable
+        vm.warp(block.timestamp + 86400 * 10);
+        vm.roll(block.number + 1);
+
+        escrow.withdraw(1);
+    }
+
     function testCreateLock() public {
         VELO.approve(address(escrow), 1e21);
         uint256 lockDuration = 7 * 24 * 3600; // 1 week
