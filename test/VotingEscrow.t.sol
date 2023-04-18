@@ -49,7 +49,7 @@ contract VotingEscrowTest is BaseTest {
 
         escrow.setFreeze(1, true);
         
-        // After unlock time, NFT should be transferable
+        // After unlock time, token should be withdrawable
         vm.warp(block.timestamp + 86400 * 10);
         vm.roll(block.number + 1);
 
