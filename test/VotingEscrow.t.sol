@@ -21,9 +21,8 @@ contract VotingEscrowTest is BaseTest {
     function testFreeze() public {
         VELO.approve(address(escrow), 1e22);
         uint256 lockDuration = 7 * 24 * 3600; // 1 week
-        escrow.create_lock(1e20, lockDuration);
-
-        escrow.setFreeze(1, true);
+        escrow.create_lock_and_freeze_for(1e20, lockDuration, address(this));
+        assertTrue(escrow.isFrozen(1));
 
         // Try to transferFrom frozen NFT
         vm.expectRevert(abi.encodePacked('frozen'));
@@ -45,15 +44,26 @@ contract VotingEscrowTest is BaseTest {
     function testWithdrawFrozenAfterUnlock() public {
         VELO.approve(address(escrow), 1e22);
         uint256 lockDuration = 7 * 24 * 3600; // 1 week
-        escrow.create_lock(1e20, lockDuration);
-
-        escrow.setFreeze(1, true);
+        escrow.create_lock_and_freeze_for(1e20, lockDuration, address(this));
         
         // After unlock time, token should be withdrawable
         vm.warp(block.timestamp + 86400 * 10);
         vm.roll(block.number + 1);
 
         escrow.withdraw(1);
+    }
+    
+    function testTransferAfterUnfreeze() public {
+        VELO.approve(address(escrow), 1e22);
+        uint256 lockDuration = 7 * 24 * 3600; // 1 week
+        escrow.create_lock_and_freeze_for(1e20, lockDuration, address(this));
+
+        assertTrue(escrow.isFrozen(1));
+        escrow.unfreeze(1);
+        assertFalse(escrow.isFrozen(1));
+        
+        // token should be transferable
+        escrow.transferFrom(address(owner), address(owner2), 1);
     }
 
     function testCreateLock() public {

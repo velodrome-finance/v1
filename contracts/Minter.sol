@@ -46,10 +46,12 @@ contract Minter is IMinter {
         active_period = ((block.timestamp + (2 * WEEK)) / WEEK) * WEEK;
     }
 
+    // initialize the minter, minting initial supply and creating veNFTs for the claimants
+    // notice: if you want to airdrop untransferable veNFT to protocols, use `mintFrozen` instead
     function initialize(
         address[] memory claimants,
         uint[] memory amounts,
-        uint max // sum amounts / max = % ownership of top protocols, so if initial 20m is distributed, and target is 25% protocol ownership, then max - 4 x 20m = 80m
+        uint max 
     ) external {
         require(initializer == msg.sender);
         _velo.mint(address(this), max);
@@ -75,6 +77,17 @@ contract Minter is IMinter {
         require(msg.sender == team, "not team");
         require(_teamRate <= MAX_TEAM_RATE, "rate too high");
         teamRate = _teamRate;
+    }
+
+    function mintFrozen(
+        address[] memory claimants,
+        uint[] memory amounts
+    ) external {
+        require(msg.sender == team, "not team");
+        require(claimants.length == amounts.length, "length mismatch");
+        for (uint i = 0; i < claimants.length; i++) {
+            _ve.create_lock_and_freeze_for(amounts[i], LOCK, claimants[i]);
+        }
     }
 
     // calculate circulating supply as total token supply - locked supply

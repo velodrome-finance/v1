@@ -74,6 +74,23 @@ contract MinterTest is BaseTest {
         vm.roll(block.number + 1);
         assertEq(VELO.balanceOf(address(minter)), 19 * TOKEN_1M);
     }
+    
+    function testMintFrozen() public {
+        deployBase();
+        address[] memory initialClaimants;
+        uint256[] memory initialAmounts;
+        minter.initialize(initialClaimants, initialAmounts, 1e25);
+
+        address[] memory claimants = new address[](2);
+        claimants[0] = address(owner);
+        claimants[1] = address(owner2);
+        uint256[] memory amounts = new uint256[](2);
+        amounts[0] = 1e24;
+        amounts[1] = 1e24;
+        minter.mintFrozen(claimants, amounts);
+        assertTrue(escrow.isFrozen(2));
+        assertTrue(escrow.isFrozen(3));
+    }
 
     function testMinterWeeklyDistribute() public {
         initializeVotingEscrow();

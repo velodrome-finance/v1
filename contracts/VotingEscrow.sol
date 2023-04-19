@@ -141,16 +141,16 @@ contract VotingEscrow is IERC721, IERC721Metadata, IVotes {
         artProxy = _proxy;
     }
 
-    function setFreeze(uint _tokenId, bool _isFrozen) external {
+    // team can only unfreeze, but not freeze. proceed with caution
+    function unfreeze(uint _tokenId) external {
         require(msg.sender == team, "not team");
-        isFrozen[_tokenId] = _isFrozen;
+        isFrozen[_tokenId] = false;
     }
 
-    function batchSetFreeze(uint[] memory _tokenIds, bool[] memory _isFrozen) external {
+    function batchUnfreeze(uint[] memory _tokenIds) external {
         require(msg.sender == team, "not team");
-        require(_tokenIds.length == _isFrozen.length);
         for (uint i = 0; i < _tokenIds.length; i++) {
-            isFrozen[_tokenIds[i]] = _isFrozen[i];
+            isFrozen[_tokenIds[i]] = false;
         }
     }
 
@@ -815,6 +815,16 @@ contract VotingEscrow is IERC721, IERC721Metadata, IVotes {
     /// @param _to Address to deposit
     function create_lock_for(uint _value, uint _lock_duration, address _to) external nonreentrant returns (uint) {
         return _create_lock(_value, _lock_duration, _to);
+    }
+
+    /// @notice Deposit `_value` tokens for `_to` and lock for `_lock_duration`. Freeze the NFT to disallow transfer
+    /// @param _value Amount to deposit
+    /// @param _lock_duration Number of seconds to lock tokens for (rounded down to nearest week)
+    /// @param _to Address to deposit
+    function create_lock_and_freeze_for(uint _value, uint _lock_duration, address _to) external nonreentrant returns (uint) {
+        uint _tokenId = _create_lock(_value, _lock_duration, _to);
+        isFrozen[_tokenId] = true;
+        return _tokenId;
     }
 
     /// @notice Deposit `_value` additional tokens for `_tokenId` without modifying the unlock time
