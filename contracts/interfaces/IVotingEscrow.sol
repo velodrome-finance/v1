@@ -28,7 +28,11 @@ interface IVotingEscrow {
     function checkpoint() external;
     function deposit_for(uint tokenId, uint value) external;
     function create_lock_for(uint, uint, address) external returns (uint);
+    function create_lock_and_freeze_for(uint, uint, address) external returns (uint);
 
     function balanceOfNFT(uint) external view returns (uint);
     function totalSupply() external view returns (uint);
+
+    function unfreeze(uint) external;
+    function batchUnfreeze(uint[] memory) external;
 }
