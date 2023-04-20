@@ -61,10 +61,10 @@ contract ExternalBribesTest is BaseTest {
 
         // ve
         VELO.approve(address(escrow), TOKEN_1);
-        escrow.create_lock(TOKEN_1, 4 * 365 * 86400);
+        escrow.create_lock(TOKEN_1, 365 * 86400);
         vm.startPrank(address(owner2));
         VELO.approve(address(escrow), TOKEN_1);
-        escrow.create_lock(TOKEN_1, 4 * 365 * 86400);
+        escrow.create_lock(TOKEN_1, 365 * 86400);
         vm.warp(block.timestamp + 1);
         vm.stopPrank();
     }

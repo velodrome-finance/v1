@@ -80,9 +80,9 @@ contract VotingEscrowTest is BaseTest {
     function testCreateLockOutsideAllowedZones() public {
         VELO.approve(address(escrow), 1e21);
         uint256 oneWeek = 7 * 24 * 3600;
-        uint256 fourYears = 4 * 365 * 24 * 3600;
-        vm.expectRevert(abi.encodePacked('Voting lock can be 4 years max'));
-        escrow.create_lock(1e21, fourYears + oneWeek);
+        uint256 oneYear = 365 * 24 * 3600;
+        vm.expectRevert(abi.encodePacked('Voting lock can be 1 year max'));
+        escrow.create_lock(1e21, oneYear + oneWeek);
     }
 
     function testWithdraw() public {
@@ -130,7 +130,7 @@ contract VotingEscrowTest is BaseTest {
         assertEq(escrow.balanceOfNFT(2) / scale, originalVotingPower * 10 / 100);
 
         assertEq(escrow.ownerOf(3), address(owner));
-        assertEq(escrow.balanceOfNFT(3) / scale - 1, originalVotingPower * 90 / 100);
+        assertEq(escrow.balanceOfNFT(3) / scale, originalVotingPower * 90 / 100);
 
         // Check that the total balance is consistent
         assertEq(escrow.balanceOfNFT(2) + escrow.balanceOfNFT(3), originalBalance);
