@@ -29,7 +29,7 @@ contract KillGaugesTest is BaseTest {
     escrow = new VotingEscrow(address(VELO), address(artProxy));
 
     VELO.approve(address(escrow), 100 * TOKEN_1);
-    escrow.create_lock(100 * TOKEN_1, 4 * 365 * 86400);
+    escrow.create_lock(100 * TOKEN_1, 365 * 86400);
     vm.roll(block.number + 1);
 
     deployPairFactoryAndRouter();

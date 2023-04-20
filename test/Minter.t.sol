@@ -34,7 +34,7 @@ contract MinterTest is BaseTest {
         tokens[1] = address(VELO);
         voter.initialize(tokens, address(owner));
         VELO.approve(address(escrow), TOKEN_1);
-        escrow.create_lock(TOKEN_1, 4 * 365 * 86400);
+        escrow.create_lock(TOKEN_1, 365 * 86400);
         distributor = new RewardsDistributor(address(escrow));
         escrow.setVoter(address(voter));
 
