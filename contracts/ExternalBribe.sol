@@ -229,6 +229,9 @@ contract ExternalBribe is IBribe {
             for (uint i = _startIndex; i <= _endIndex - 1; i++) {
                 Checkpoint memory cp0 = checkpoints[tokenId][i];
                 uint _nextEpochStart = _bribeStart(cp0.timestamp);
+
+                _prevSupply = supplyCheckpoints[getPriorSupplyIndex(_nextEpochStart + DURATION)].supply;
+                prevRewards.balanceOf = cp0.balanceOf * tokenRewardsPerEpoch[token][_nextEpochStart] / _prevSupply;
                 // check that you've earned it
                 // this won't happen until a week has passed
                 if (_nextEpochStart > prevRewards.timestamp) {
@@ -236,8 +239,7 @@ contract ExternalBribe is IBribe {
                 }
 
                 prevRewards.timestamp = _nextEpochStart;
-                _prevSupply = supplyCheckpoints[getPriorSupplyIndex(_nextEpochStart + DURATION)].supply;
-                prevRewards.balanceOf = cp0.balanceOf * tokenRewardsPerEpoch[token][_nextEpochStart] / _prevSupply;
+                
             }
         }
 
