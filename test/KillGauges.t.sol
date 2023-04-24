@@ -189,6 +189,6 @@ contract KillGaugesTest is BaseTest {
     voter.killGauge(address(gauge));
 
     // should be able to claim from gauge2, just not from gauge
-    voter.distro();
+    voter.distribute();
   }
 }

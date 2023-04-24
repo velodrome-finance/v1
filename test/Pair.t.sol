@@ -515,7 +515,7 @@ contract PairTest is BaseTest {
         VELO.approve(address(voter), PAIR_1);
         voter.notifyRewardAmount(PAIR_1);
         voter.updateAll();
-        voter.distro();
+        voter.distribute();
     }
 
     function bribeClaimRewards() public {
@@ -621,7 +621,7 @@ contract PairTest is BaseTest {
         uint256 claimable = voter.claimable(address(gauge));
         VELO.approve(address(staking), claimable);
         staking.notifyRewardAmount(claimable);
-        voter.distro();
+        voter.distribute();
         vm.warp(block.timestamp + 1800);
         vm.roll(block.number + 1);
     }
@@ -738,7 +738,6 @@ contract PairTest is BaseTest {
         reward[0] = address(DAI);
         rewards[0] = reward;
         voter.claimBribes(bribes_, rewards, 1);
-        voter.claimFees(bribes_, rewards, 1);
         uint256 supply = escrow.totalSupply();
         assertGt(supply, 0);
         vm.warp(block.timestamp + 4*365*86400);
@@ -815,7 +814,7 @@ contract PairTest is BaseTest {
         address[] memory gauges = new address[](1);
         gauges[0] = address(gauge);
         voter.updateFor(gauges);
-        voter.distro();
+        voter.distribute();
         address[][] memory tokens = new address[][](1);
         address[] memory token = new address[](1);
         token[0] = address(VELO);

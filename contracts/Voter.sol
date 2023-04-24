@@ -14,13 +14,14 @@ import 'contracts/interfaces/IVoter.sol';
 import 'contracts/interfaces/IVotingEscrow.sol';
 
 contract Voter is IVoter {
+    
+    uint internal constant DURATION = 7 days; // rewards are released over 7 days
 
     address public immutable _ve; // the ve token that governs these contracts
     address public immutable factory; // the PairFactory
-    address internal immutable base;
+    address public immutable baseToken; // the base token for the ve token
     address public immutable gaugefactory;
     address public immutable bribefactory;
-    uint internal constant DURATION = 7 days; // rewards are released over 7 days
     address public minter;
     address public governor; // should be set to an IGovernor
     address public emergencyCouncil; // credibly neutral party similar to Curve's Emergency DAO
@@ -40,6 +41,11 @@ contract Voter is IVoter {
     mapping(address => bool) public isGauge;
     mapping(address => bool) public isWhitelisted;
     mapping(address => bool) public isAlive;
+    
+    // reward distribution related
+    uint internal globalRewardIndex;
+    mapping(address => uint) internal supplyIndex;
+    mapping(address => uint) public claimable;
 
     event GaugeCreated(address indexed gauge, address creator, address internal_bribe, address indexed external_bribe, address indexed pool);
     event GaugeKilled(address indexed gauge);
@@ -57,7 +63,7 @@ contract Voter is IVoter {
     constructor(address __ve, address _factory, address _gaugeFactory, address _bribeFactory) {
         _ve = __ve;
         factory = _factory;
-        base = IVotingEscrow(__ve).token();
+        baseToken = IVotingEscrow(__ve).token();
         gaugefactory = _gaugeFactory;
         bribefactory = _bribeFactory;
 
@@ -217,8 +223,8 @@ contract Voter is IVoter {
             internalRewards[0] = tokenA;
             internalRewards[1] = tokenB;
 
-            if (base != tokenA && base != tokenB) {
-              allowedRewards[2] = base;
+            if (baseToken != tokenA && baseToken != tokenB) {
+              allowedRewards[2] = baseToken;
             }
         }
 
@@ -231,7 +237,7 @@ contract Voter is IVoter {
         address _external_bribe = IBribeFactory(bribefactory).createExternalBribe(allowedRewards);
         address _gauge = IGaugeFactory(gaugefactory).createGauge(_pool, _internal_bribe, _external_bribe, _ve, isPair, allowedRewards);
 
-        IERC20(base).approve(_gauge, type(uint).max);
+        IERC20(baseToken).approve(_gauge, type(uint).max);
         internal_bribes[_gauge] = _internal_bribe;
         external_bribes[_gauge] = _external_bribe;
         gauges[_pool] = _gauge;
@@ -287,17 +293,13 @@ contract Voter is IVoter {
         return pools.length;
     }
 
-    uint internal index;
-    mapping(address => uint) internal supplyIndex;
-    mapping(address => uint) public claimable;
-
     function notifyRewardAmount(uint amount) external {
-        _safeTransferFrom(base, msg.sender, address(this), amount); // transfer the distro in
+        _safeTransferFrom(baseToken, msg.sender, address(this), amount); // transfer the distro in
         uint256 _ratio = amount * 1e18 / totalWeight; // 1e18 adjustment is removed during claim
         if (_ratio > 0) {
-            index += _ratio;
+            globalRewardIndex += _ratio;
         }
-        emit NotifyReward(msg.sender, base, amount);
+        emit NotifyReward(msg.sender, baseToken, amount);
     }
 
     function updateFor(address[] memory _gauges) external {
@@ -325,9 +327,9 @@ contract Voter is IVoter {
         uint256 _supplied = weights[_pool];
         if (_supplied > 0) {
             uint _supplyIndex = supplyIndex[_gauge];
-            uint _index = index; // get global index0 for accumulated distro
-            supplyIndex[_gauge] = _index; // update _gauge current position to global position
-            uint _delta = _index - _supplyIndex; // see if there is any difference that need to be accrued
+            uint _globalIndex = globalRewardIndex; // get global reward index for accumulated distro
+            supplyIndex[_gauge] = _globalIndex; // update _gauge current position to global position
+            uint _delta = _globalIndex - _supplyIndex; // see if there is any difference that need to be accrued
             if (_delta > 0) {
                 uint _share = uint(_supplied) * _delta / 1e18; // add accrued difference for each supplied token
                 if (isAlive[_gauge]) {
@@ -335,7 +337,7 @@ contract Voter is IVoter {
                 }
             }
         } else {
-            supplyIndex[_gauge] = index; // new users are set to the default global state
+            supplyIndex[_gauge] = globalRewardIndex; // new users are set to the default global state
         }
     }
 
@@ -352,13 +354,6 @@ contract Voter is IVoter {
         }
     }
 
-    function claimFees(address[] memory _fees, address[][] memory _tokens, uint _tokenId) external {
-        require(IVotingEscrow(_ve).isApprovedOrOwner(msg.sender, _tokenId));
-        for (uint i = 0; i < _fees.length; i++) {
-            IBribe(_fees[i]).getRewardForOwner(_tokenId, _tokens[i]);
-        }
-    }
-
     function distributeFees(address[] memory _gauges) external {
         for (uint i = 0; i < _gauges.length; i++) {
             if (IGauge(_gauges[i]).isForPair()){
@@ -371,15 +366,11 @@ contract Voter is IVoter {
         IMinter(minter).update_period();
         _updateFor(_gauge); // should set claimable to 0 if killed
         uint _claimable = claimable[_gauge];
-        if (_claimable > IGauge(_gauge).left(base) && _claimable / DURATION > 0) {
+        if (_claimable > IGauge(_gauge).left(baseToken) && _claimable / DURATION > 0) {
             claimable[_gauge] = 0;
-            IGauge(_gauge).notifyRewardAmount(base, _claimable);
+            IGauge(_gauge).notifyRewardAmount(baseToken, _claimable);
             emit DistributeReward(msg.sender, _gauge, _claimable);
         }
-    }
-
-    function distro() external {
-        distribute(0, pools.length);
     }
 
     function distribute() external {
