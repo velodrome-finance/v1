@@ -203,12 +203,82 @@ contract ExternalBribesTest is BaseTest {
         vm.prank(address(voter));
         xbribe.getRewardForOwner(2, rewards);
         uint256 post = LR.balanceOf(address(owner2));
-        assertEq(post - initialBalance2, TOKEN_1); // fail here: post - initialBalance2 = 500000000000000000
+        assertEq(post - initialBalance2, TOKEN_1);
 
         vm.prank(address(voter));
         xbribe.getRewardForOwner(3, rewards);
         post = LR.balanceOf(address(owner3));
-        assertEq(post - initialBalance3, TOKEN_1); // fail here: post - initialBalance2 = 500000000000000000
+        assertEq(post - initialBalance3, TOKEN_1);
+    }
+
+    function testCanClaimExternalBribeProRataAfterManyWeeks2() public {
+        // fwd half a week
+        vm.warp(block.timestamp + 1 weeks / 2);
+
+        // create a bribe with some rewards
+        LR.approve(address(xbribe), TOKEN_1 * 10);
+        xbribe.notifyRewardAmount(address(LR), TOKEN_1);
+        assertEq(LR.balanceOf(address(xbribe)), TOKEN_1);
+
+        uint256 initialBalance2 = LR.balanceOf(address(owner2));
+        uint256 initialBalance3 = LR.balanceOf(address(owner3));
+
+        // owner2 and owner3 vote
+        address[] memory pools = new address[](1);
+        pools[0] = address(pair);
+        uint256[] memory weights = new uint256[](1);
+        weights[0] = 10000;
+
+        vm.prank(address(owner2));
+        voter.vote(2, pools, weights);
+
+        vm.prank(address(owner3));
+        voter.vote(3, pools, weights);
+
+        // fwd 1 week
+        vm.warp(block.timestamp + 1 weeks);
+
+        // hand out some more rewards
+        xbribe.notifyRewardAmount(address(LR), TOKEN_1);
+        assertEq(LR.balanceOf(address(xbribe)), TOKEN_1 * 2);
+
+        // vote again
+        vm.prank(address(owner2));
+        voter.vote(2, pools, weights);
+
+        vm.prank(address(owner3));
+        voter.vote(3, pools, weights);
+
+        // fwd 3 weeks
+        vm.warp(block.timestamp + 3 weeks);
+
+        // hand out some more rewards
+        xbribe.notifyRewardAmount(address(LR), TOKEN_1 * 2);
+        assertEq(LR.balanceOf(address(xbribe)), TOKEN_1 * 4);
+
+        // vote again
+        vm.prank(address(owner2));
+        voter.vote(2, pools, weights);
+
+        vm.prank(address(owner3));
+        voter.vote(3, pools, weights);
+
+        // fwd 3 weeks
+        vm.warp(block.timestamp + 3 weeks);
+
+        // claim bribe
+        address[] memory rewards = new address[](1);
+        rewards[0] = address(LR);
+
+        vm.prank(address(voter));
+        xbribe.getRewardForOwner(2, rewards);
+        uint256 post = LR.balanceOf(address(owner2));
+        assertEq(post - initialBalance2, TOKEN_1 * 2);
+
+        vm.prank(address(voter));
+        xbribe.getRewardForOwner(3, rewards);
+        post = LR.balanceOf(address(owner3));
+        assertEq(post - initialBalance3, TOKEN_1 * 2);
     }
     
     function testCanClaimExternalBribeProRataEveryWeek() public {
