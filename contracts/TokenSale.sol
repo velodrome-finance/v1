@@ -75,9 +75,11 @@ contract TokenSale is Ownable, ReentrancyGuard {
         require(success, "Failed to transfer ether");
     }
 
-    // user address + index + capAmount must match merkle proof
+    // user address + capAmount must match merkle proof
     // capAmount is the max amount of ETH user can commit for WL sale
-    function commitWhitelist(uint256 index, uint256 capAmount, bytes32[] calldata merkleProof) external payable nonReentrant {
+    function commitWhitelist(uint256 capAmount, bytes32[] calldata merkleProof) external payable nonReentrant {
+        require(msg.value > 0, "No ETH sent");
+        require(capAmount > 0, "Cap amount must be > 0");
         require(started, "Not started yet");
         require(!finished, "Already finished");
         require(!publicRoundStarted, "Public round already started");
@@ -85,7 +87,7 @@ contract TokenSale is Ownable, ReentrancyGuard {
         // Verify the merkle proof
         bytes32 node = keccak256(bytes.concat(keccak256(abi.encode(msg.sender, capAmount))));
         require(MerkleProof.verify(merkleProof, merkleRoot, node), "Invalid proof");
-        require(wlCommitments[msg.sender] < capAmount, "Individual cap reached");
+        require(wlCommitments[msg.sender] + msg.value <= capAmount, "Individual cap reached");
 
         uint256 tokenAmount = msg.value * wlRate;
 

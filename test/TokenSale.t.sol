@@ -40,15 +40,21 @@ contract TokenSaleTest is BaseTest {
         bytes32[] memory proof1 = new bytes32[](2);
         proof1[0] = 0x91febd0c2d769895ead0f7873c044f3a367bf2ff9849f6800bc4d2187443cb30;
         proof1[1] = 0xc0fe84ab9aa5f745f7cc7efa9948f35d0a09665a15e62073e466e8841a593c47;
-        sale.commitWhitelist{value: 0.1 ether}(0, 0.25e18, proof1);
-        sale.commitWhitelist{value: 0.15 ether}(0, 0.25e18, proof1);
+        sale.commitWhitelist{value: 0.1 ether}(0.25e18, proof1);
+        sale.commitWhitelist{value: 0.14 ether}(0.25e18, proof1);
 
         // test: claimable amount is correct
-        assertEq(sale.getClaimableAmount(user1), 5000e18);
+        assertEq(sale.getClaimableAmount(user1), 4800e18);
 
         // test: individual WL cap reached
         vm.expectRevert("Individual cap reached");
-        sale.commitWhitelist{value: 0.01 ether}(0, 0.25e18, proof1);
+        sale.commitWhitelist{value: 0.02 ether}(0.25e18, proof1);
+        
+        // fill up the rest of WL cap
+        sale.commitWhitelist{value: 0.01 ether}(0.25e18, proof1);
+
+        // test: claimable amount is correct
+        assertEq(sale.getClaimableAmount(user1), 5000e18);
 
         vm.stopPrank();
 
@@ -57,7 +63,7 @@ contract TokenSaleTest is BaseTest {
         bytes32[] memory proof2 = new bytes32[](2);
         proof2[0] = 0x7ea9b5357dd8c851ccc7bbd872f3a8f62b9725cf3da0e8431afe31d6544a73e1;
         proof2[1] = 0xc0fe84ab9aa5f745f7cc7efa9948f35d0a09665a15e62073e466e8841a593c47;
-        sale.commitWhitelist{value: 0.1 ether}(1, 0.25e18, proof2);
+        sale.commitWhitelist{value: 0.1 ether}(0.25e18, proof2);
 
         // test: claimable amount is correct
         assertEq(sale.getClaimableAmount(user2), 2000e18);
@@ -66,7 +72,7 @@ contract TokenSaleTest is BaseTest {
         // test: user 3 uses invalid merkle proof
         vm.startPrank(user3);
         vm.expectRevert("Invalid proof");
-        sale.commitWhitelist{value: 0.25 ether}(1, 0.25e18, proof2);
+        sale.commitWhitelist{value: 0.25 ether}(0.25e18, proof2);
         vm.stopPrank();
 
         sale.startPublicRound();
@@ -74,7 +80,7 @@ contract TokenSaleTest is BaseTest {
         vm.startPrank(user3);
         // test: commitWhitelist should revert
         vm.expectRevert("Public round already started");
-        sale.commitWhitelist{value: 0.25 ether}(1, 0.25e18, proof2);
+        sale.commitWhitelist{value: 0.25 ether}(0.25e18, proof2);
 
         // test: user 3 commits public round
         sale.commitPublic{value: 0.8 ether}();
