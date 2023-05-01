@@ -26,26 +26,13 @@ contract Velo is IVelo {
         _mint(msg.sender, 0);
     }
 
-    // No checks as its meant to be once off to set minting rights to BaseV1 Minter
+    // It's meant to be once off to set minting rights to Minter
     function setMinter(address _minter) external {
         require(msg.sender == minter);
         minter = _minter;
     }
 
-    function setRedemptionReceiver(address _receiver) external {
-        require(msg.sender == minter);
-        redemptionReceiver = _receiver;
-    }
-
-    function setMerkleClaim(address _merkleClaim) external {
-        require(msg.sender == minter);
-        merkleClaim = _merkleClaim;
-    }
-
-    // Initial mint: total 82M
-    //  4M for "Genesis" pools
-    // 30M for liquid team allocation (40M excl init veNFT)
-    // 48M for future partners
+    // Initial mint. Can only be called once.
     function initialMint(address _recipient) external {
         require(msg.sender == minter && !initialMinted);
         initialMinted = true;
@@ -90,12 +77,6 @@ contract Velo is IVelo {
 
     function mint(address account, uint amount) external returns (bool) {
         require(msg.sender == minter);
-        _mint(account, amount);
-        return true;
-    }
-
-    function claim(address account, uint amount) external returns (bool) {
-        require(msg.sender == redemptionReceiver || msg.sender == merkleClaim);
         _mint(account, amount);
         return true;
     }
