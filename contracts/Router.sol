@@ -43,15 +43,15 @@ contract Router is IRouter {
         require(token0 != address(0), 'Router: ZERO_ADDRESS');
     }
 
-    // calculates the CREATE2 address for a pair without making any external calls
+    /* It will fetches from the storage instead of calculation with CREATE2,
+     * because the limitation of zkSync
+     * Reference: https://era.zksync.io/docs/dev/building-on-zksync/contracts/differences-with-ethereum.html#create-create2
+     * 
+     * Note it will returns `address(0)` for non-exist pairs.
+     * Consider reuse the pair address to avoid multiple storage accesses.
+     */
     function pairFor(address tokenA, address tokenB, bool stable) public view returns (address pair) {
-        (address token0, address token1) = sortTokens(tokenA, tokenB);
-        pair = address(uint160(uint256(keccak256(abi.encodePacked(
-            hex'ff',
-            factory,
-            keccak256(abi.encodePacked(token0, token1, stable)),
-            pairCodeHash // init code hash
-        )))));
+        return IPairFactory(factory).getPair(tokenA, tokenB, stable);
     }
 
     // given some amount of an asset and pair reserves, returns an equivalent amount of the other asset
