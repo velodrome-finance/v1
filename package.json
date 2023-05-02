@@ -31,5 +31,10 @@
     "typechain": "^8.0.0",
     "typescript": "^5.0.4",
     "zksync-web3": "^0.14.3"
+  },
+  "dependencies": {
+    "@openzeppelin/merkle-tree": "^1.0.4",
+    "commander": "^10.0.1",
+    "ethereumjs-util": "7.1.5"
   }
 }

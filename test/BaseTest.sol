@@ -14,6 +14,7 @@ import "contracts/Pair.sol";
 import "contracts/PairFees.sol";
 import "contracts/RewardsDistributor.sol";
 import "contracts/Router.sol";
+import "contracts/TokenSale.sol";
 import "contracts/Velo.sol";
 import "contracts/VelodromeLibrary.sol";
 import "contracts/Voter.sol";

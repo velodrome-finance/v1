@@ -1,6 +1,14 @@
-# Velodrome
+# VeSync
 
-This repo contains the contracts for Velodrome Finance, an AMM on Optimism inspired by Solidly.
+This repo contains the contracts for VeSync, a ve(3,3) DEX on zkSync Era inspired by Velodrome Finance and Solidly.
+
+## How to generate merkle proof for whitelist
+
+1. Put addresses and sales cap ETH amount (in Wei) in `whitelist.json`
+
+2. `yarn ts-node ./scripts/whitelist-generator/main.ts -i ./whitelist.json`
+
+3. Use the `root` variable from the output `proof.json` file to configure `TokenSale` contract.
 
 ## Testing
 
