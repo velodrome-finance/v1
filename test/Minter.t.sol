@@ -92,6 +92,43 @@ contract MinterTest is BaseTest {
         assertTrue(escrow.isFrozen(3));
     }
 
+    function testWeeklyOverride() public {
+        initializeVotingEscrow();
+
+        // end of 1st week
+        vm.warp(block.timestamp + 1 weeks);
+        minter.setWeeklyOverride(2 * TOKEN_1M);
+        uint voterBalanceBefore = VELO.balanceOf(address(voter));
+        minter.update_period();
+        uint voterBalanceAfter = VELO.balanceOf(address(voter));
+        assertEq(minter.weekly(), 15 * TOKEN_1M * 9900 / 10000); // 15M, weekly value is not changed by override
+        assertEq(voterBalanceAfter - voterBalanceBefore, 2 * TOKEN_1M); // voter balance changes by override amount
+
+        // 2nd week, cancel override
+        vm.warp(block.timestamp + 1 weeks);
+        minter.setWeeklyOverride(0);
+        voterBalanceBefore = VELO.balanceOf(address(voter));
+        minter.update_period();
+        voterBalanceAfter = VELO.balanceOf(address(voter));
+        assertEq(minter.weekly(), 15 * TOKEN_1M * 9900 / 10000 * 9900 / 10000);
+        assertEq(voterBalanceAfter - voterBalanceBefore, minter.weekly()); // voter balance changes by weekly amount
+
+        // 3rd week, set override to 3M
+        vm.warp(block.timestamp + 1 weeks);
+        minter.setWeeklyOverride(3 * TOKEN_1M);
+        voterBalanceBefore = VELO.balanceOf(address(voter));
+        minter.update_period();
+        voterBalanceAfter = VELO.balanceOf(address(voter));
+        assertEq(voterBalanceAfter - voterBalanceBefore, 3 * TOKEN_1M); // voter balance changes by override amount
+
+        // 4th week, even though override is set, weekly value is not changed
+        vm.warp(block.timestamp + 1 weeks);
+        voterBalanceBefore = VELO.balanceOf(address(voter));
+        minter.update_period();
+        voterBalanceAfter = VELO.balanceOf(address(voter));
+        assertEq(minter.weekly(), voterBalanceAfter - voterBalanceBefore);
+    }
+
     function testMinterWeeklyDistribute() public {
         initializeVotingEscrow();
 
