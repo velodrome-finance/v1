@@ -7,6 +7,9 @@ import "contracts/interfaces/IVotingEscrow.sol";
 import "openzeppelin-contracts/contracts/utils/cryptography/MerkleProof.sol";
 import "openzeppelin-contracts/contracts/access/Ownable.sol";
 import "openzeppelin-contracts/contracts/security/ReentrancyGuard.sol";
+// import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+// import "@openzeppelin/contracts/access/Ownable.sol";
+// import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 contract TokenSale is Ownable, ReentrancyGuard {
     // Status of the sale
@@ -130,7 +133,7 @@ contract TokenSale is Ownable, ReentrancyGuard {
         require(MerkleProof.verify(merkleProof, merkleRoot, node), "Invalid proof");
         require(wlCommitments[msg.sender] + msg.value <= capAmount, "Individual cap reached");
 
-        uint256 tokenAmount = msg.value * wlRate;
+        uint256 tokenAmount = msg.value * wlRate/ 10**6;
 
         require(totalTokensSold + tokenAmount <= tokensToSell, "Global cap reached");
 
@@ -143,7 +146,7 @@ contract TokenSale is Ownable, ReentrancyGuard {
     function commitPublic() external payable nonReentrant {
         require(status == Status.PUBLIC_ROUND, "Not public round");
 
-        uint256 tokenAmount = msg.value * publicRate;
+        uint256 tokenAmount = msg.value * publicRate / 10**6;
         require(totalTokensSold + tokenAmount <= tokensToSell, "Global cap reached");
         claimableAmounts[msg.sender] += tokenAmount;
         totalTokensSold += tokenAmount;

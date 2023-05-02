@@ -25,7 +25,7 @@ contract TokenSaleTest is BaseTest {
         // public rate 1E = 10000 Token
         // cap 15000 Token
         // max 30% bonus
-        sale = new TokenSale(IERC20(address(VELO)), IVotingEscrow(address(ve)), 20000, 10000, 15000e18);
+        sale = new TokenSale(IERC20(address(VELO)), IVotingEscrow(address(ve)), 20000 * 1e6, 10000 * 1e6, 15000e18);
 
         // merkle root is generated in example_proof.json
         sale.setMerkleRoot(0x8d8edd611c4eda08c1a22a6a9b6c3eadc6e4d2e5c7a475268b5be06aaa269de1);
