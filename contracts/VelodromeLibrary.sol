@@ -7,9 +7,24 @@ import "contracts/interfaces/IRouter.sol";
 
 contract VelodromeLibrary {
     IRouter internal immutable router;
+    event Log(uint r0, uint r1, bool st, uint sample);
 
     constructor(address _router) {
         router = IRouter(_router);
+    }
+
+    struct Diffs {
+        uint256[] aDiffs;
+        uint256[] bDiffs;
+    }
+
+    struct PairData {
+        uint256 dec0;
+        uint256 dec1;
+        uint256 r0;
+        uint256 r1;
+        bool st;
+        address t0;
     }
 
     function _f(uint x0, uint y) internal pure returns (uint) {
@@ -44,10 +59,34 @@ contract VelodromeLibrary {
         return y;
     }
 
+    function getTradeDiffs(uint[] memory amountIn, address[] memory tokenIn, address[] memory tokenOut, bool[] memory stable) external view returns (uint[] memory a, uint[] memory b) {
+        Diffs memory diffs;
+        diffs.aDiffs = new uint256[]( amountIn.length );
+        diffs.bDiffs = new uint256[]( amountIn.length );
+        for (uint16 i = 0; i < amountIn.length; i++) {
+            PairData memory pairData;
+            (pairData.dec0, pairData.dec1, pairData.r0, pairData.r1, pairData.st, pairData.t0,) = IPair(router.pairFor(tokenIn[i], tokenOut[i], stable[i])).metadata();
+            if (stable[i]) {
+                uint sample = tokenIn[i] == pairData.t0 ? pairData.r0*pairData.dec1/pairData.r1 : pairData.r1*pairData.dec0/pairData.r0;
+                diffs.aDiffs[i] = _getAmountOut(sample, tokenIn[i], pairData.r0, pairData.r1, pairData.t0, pairData.dec0, pairData.dec1, pairData.st) * 1e18 / sample;
+            }
+            else {
+                diffs.aDiffs[i] = tokenIn[i] == pairData.t0 ? (pairData.r1 * 1e18 / pairData.dec1) * pairData.dec0 / pairData.r0 : (pairData.r0 * 1e18 / pairData.dec0) * pairData.dec1 / pairData.r1;
+            }
+            diffs.bDiffs[i] = _getAmountOut(amountIn[i], tokenIn[i], pairData.r0, pairData.r1, pairData.t0, pairData.dec0, pairData.dec1, pairData.st) * 1e18 / amountIn[i];
+        }
+        return (diffs.aDiffs, diffs.bDiffs);
+    }
+
     function getTradeDiff(uint amountIn, address tokenIn, address tokenOut, bool stable) external view returns (uint a, uint b) {
         (uint dec0, uint dec1, uint r0, uint r1, bool st, address t0,) = IPair(router.pairFor(tokenIn, tokenOut, stable)).metadata();
-        uint sample = tokenIn == t0 ? r0*dec1/r1 : r1*dec0/r0;
-        a = _getAmountOut(sample, tokenIn, r0, r1, t0, dec0, dec1, st) * 1e18 / sample;
+        if (stable) {
+            uint sample = tokenIn == t0 ? r0*dec1/r1 : r1*dec0/r0;
+            a = _getAmountOut(sample, tokenIn, r0, r1, t0, dec0, dec1, st) * 1e18 / sample;
+        }
+        else {
+            a = tokenIn == t0 ? (r1 * 1e18 / dec1) * dec0 / r0 : (r0 * 1e18 / dec0) * dec1 / r1;
+        }
         b = _getAmountOut(amountIn, tokenIn, r0, r1, t0, dec0, dec1, st) * 1e18 / amountIn;
     }
 
@@ -85,8 +124,13 @@ contract VelodromeLibrary {
             uint y = reserveB - _get_y(amountIn+reserveA, xy, reserveB);
             return y * (tokenIn == token0 ? decimals1 : decimals0) / 1e18;
         } else {
-            (uint reserveA, uint reserveB) = tokenIn == token0 ? (_reserve0, _reserve1) : (_reserve1, _reserve0);
-            return amountIn * reserveB / (reserveA + amountIn);
+            (uint reserveA, uint reserveB, uint decimalsA, uint decimalsB) = tokenIn == token0 ? (_reserve0, _reserve1, decimals0, decimals1) : (_reserve1, _reserve0, decimals1, decimals0);
+            if (decimalsA > decimalsB) {
+                return (amountIn * reserveB / (reserveA + amountIn)) * (decimalsA / decimalsB);
+            }
+            else {
+                return (amountIn * reserveB / (reserveA + amountIn)) / (decimalsB / decimalsA);
+            }
         }
     }
 
